@@ -9,7 +9,7 @@ export default function Hero() {
     <section className="relative flex min-h-[70vh] items-center md:min-h-[80vh]">
       <Image
         src="/images/hero/ibadah-utama.jpg"
-        alt="Suasana ibadah di ruang ibadah utama GBSI Cibinong"
+        alt="Jemaat GBSI Cibinong di ruang ibadah utama"
         fill
         priority
         sizes="100vw"

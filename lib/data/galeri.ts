@@ -24,63 +24,63 @@ const galeri: FotoGaleri[] = [
   // ——— Ibadah & Pujian ———
   {
     src: "/images/galeri/ibadah/ibadah-01.jpg",
-    alt: "Ibadah Hari Tuhan di ruang ibadah utama",
+    alt: "Jemaat GBSI bersama usai Ibadah Hari Tuhan",
     kategori: "ibadah",
   },
   {
     src: "/images/galeri/ibadah/ibadah-02.jpg",
-    alt: "Jemaat memuji Tuhan dalam ibadah",
+    alt: "Ibadah gabungan GBSI — Mari Mempermuliakan Nama Yesus",
     kategori: "ibadah",
   },
   {
     src: "/images/galeri/ibadah/ibadah-03.jpg",
-    alt: "Pelayanan koor GBSI Cibinong",
+    alt: "Suasana ibadah gabungan GBSI se-Indonesia",
     kategori: "ibadah",
   },
   {
     src: "/images/galeri/ibadah/ibadah-04.jpg",
-    alt: "Paduan suara melayani dalam ibadah",
+    alt: "Persekutuan doa — Mari Roh Jiwaku, Berdoalah!",
     kategori: "ibadah",
   },
   {
     src: "/images/galeri/ibadah/ibadah-05.jpg",
-    alt: "Doa bersama jemaat",
+    alt: "Foto bersama jemaat dalam ibadah",
     kategori: "ibadah",
   },
   {
     src: "/images/galeri/ibadah/ibadah-06.jpg",
-    alt: "Pujian dan penyembahan",
+    alt: "Pelayanan multimedia dalam ibadah gabungan",
     kategori: "ibadah",
   },
   // ——— Persekutuan & Acara ———
   {
     src: "/images/galeri/acara/acara-01.jpg",
-    alt: "Seminar Firman Tuhan",
+    alt: "Pengajaran Berea — Peta Zaman",
     kategori: "acara",
   },
   {
     src: "/images/galeri/acara/acara-02.jpg",
-    alt: "Persekutuan jemaat",
+    alt: "Wisuda Berea Academy Indonesia",
     kategori: "acara",
   },
   {
     src: "/images/galeri/acara/acara-03.jpg",
-    alt: "Berea Academy",
+    alt: "Foto bersama wisudawan Berea Academy",
     kategori: "acara",
   },
   {
     src: "/images/galeri/acara/acara-04.jpg",
-    alt: "Kebersamaan pelayan Tuhan",
+    alt: "Persekutuan dan pendalaman Alkitab jemaat",
     kategori: "acara",
   },
   {
     src: "/images/galeri/acara/acara-05.jpg",
-    alt: "Acara khusus jemaat",
+    alt: "Pendalaman Alkitab di rumah jemaat",
     kategori: "acara",
   },
   {
     src: "/images/galeri/acara/acara-06.jpg",
-    alt: "Foto bersama setelah acara",
+    alt: "Persekutuan keluarga di rumah jemaat",
     kategori: "acara",
   },
   // ——— Fasilitas ———
@@ -112,7 +112,7 @@ export async function getGaleri(): Promise<FotoGaleri[]> {
 
 // Cuplikan foto untuk section galeri di Beranda.
 export async function getGaleriPreview(jumlah = 6): Promise<FotoGaleri[]> {
-  return [galeri[0], galeri[2], galeri[6], galeri[9], galeri[12], galeri[3]].slice(
+  return [galeri[0], galeri[2], galeri[6], galeri[9], galeri[7], galeri[3]].slice(
     0,
     jumlah
   );
