@@ -27,9 +27,17 @@ export default async function Hero() {
         <h1 className="mt-4 max-w-2xl font-serif text-4xl font-semibold leading-tight text-white sm:text-5xl md:text-6xl">
           {site.tagline}
         </h1>
-        <p className="mt-5 max-w-xl text-lg leading-relaxed text-cream-100">
-          Mari bertumbuh bersama dalam Firman Tuhan. Kami menantikan kehadiran
-          Saudara dalam ibadah dan persekutuan di GBSI Cibinong.
+        <p className="mt-5 max-w-2xl text-base italic leading-relaxed text-cream-100 sm:text-lg">
+          “Tetapi pada malam itu juga segera saudara-saudara di situ menyuruh
+          Paulus dan Silas berangkat ke Berea. Setibanya di situ pergilah
+          mereka ke rumah ibadat orang Yahudi. Orang-orang Yahudi di kota itu
+          lebih baik hatinya dari pada orang-orang Yahudi di Tesalonika,
+          karena mereka menerima firman itu dengan segala kerelaan hati dan
+          setiap hari mereka menyelidiki Kitab Suci untuk mengetahui, apakah
+          semuanya itu benar demikian.”
+        </p>
+        <p className="mt-3 text-sm font-semibold uppercase tracking-wide text-brand-200">
+          Kisah Para Rasul 17:10-11 (TB)
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link

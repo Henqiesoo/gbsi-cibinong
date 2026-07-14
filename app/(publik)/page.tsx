@@ -24,9 +24,9 @@ export default async function BerandaPage() {
       <section className="mx-auto max-w-content px-4 py-16 sm:px-6 md:py-24">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <SectionHeading
-            kicker="Mari Beribadah"
+            kicker="Mari Sukseskan Ibadah"
             judul="Jadwal Ibadah"
-            deskripsi="Kami menantikan kehadiran Saudara. Berikut jadwal kegiatan utama setiap minggunya."
+            deskripsi="Berikut adalah jadwal kegiatan kami."
           />
           <Link
             href="/jadwal"
@@ -90,7 +90,7 @@ export default async function BerandaPage() {
           <SectionHeading
             kicker="Dokumentasi"
             judul="Galeri Kegiatan"
-            deskripsi="Sekilas kebersamaan jemaat dalam ibadah, pujian, dan persekutuan."
+            deskripsi="Berikut adalah kebersamaan kami dalam persekutuan, pelayanan, komsel pengajaran, seminar, kelas Akademi Berea, dan lecture."
           />
           <Link
             href="/galeri"
@@ -122,12 +122,15 @@ export default async function BerandaPage() {
       {/* Ajakan / CTA */}
       <section className="bg-brand-700">
         <div className="mx-auto max-w-content px-4 py-16 text-center sm:px-6 md:py-20">
-          <h2 className="mx-auto max-w-2xl font-serif text-3xl font-semibold text-white sm:text-4xl">
-            Saudara Selalu Disambut di Rumah Tuhan
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-brand-100">
-            Datang dan beribadahlah bersama kami. Bila ada pertanyaan atau
-            permohonan doa, jangan ragu untuk menghubungi kami.
+          <p className="mx-auto max-w-3xl font-serif text-xl font-medium italic leading-relaxed text-white sm:text-2xl">
+            “Tetapi saatnya akan datang dan sudah tiba sekarang, bahwa
+            penyembah-penyembah benar akan menyembah Bapa dalam roh dan
+            kebenaran; sebab Bapa menghendaki penyembah-penyembah demikian.
+            Allah itu Roh dan barangsiapa menyembah Dia, harus menyembah-Nya
+            dalam roh dan kebenaran.”
+          </p>
+          <p className="mt-4 text-sm font-semibold uppercase tracking-wide text-brand-200">
+            Yohanes 4:23-24 (TB)
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link

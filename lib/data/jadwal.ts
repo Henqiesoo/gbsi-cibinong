@@ -36,7 +36,7 @@ export async function getJadwal(): Promise<JadwalItem[]> {
 // lalu item lain sesuai urutan.
 export async function getJadwalUtama(): Promise<JadwalItem[]> {
   const semua = await getJadwal();
-  const utama = semua.find((j) => j.kegiatan.includes("Hari Tuhan"));
+  const utama = semua.find((j) => j.kegiatan.startsWith("Ibadah Hari Tuhan"));
   const sisa = semua.filter((j) => j !== utama);
   return [utama, ...sisa].filter(Boolean).slice(0, 4) as JadwalItem[];
 }

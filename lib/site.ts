@@ -4,7 +4,7 @@
 export const site = {
   namaSingkat: "GBSI Cibinong",
   namaLengkap: "Gereja Berea Sungrak Indonesia — Cabang Cibinong",
-  tagline: "Kembali kepada Firman, Hidup dalam Kasih",
+  tagline: "Mari Roh Jiwaku, Kembalilah kepada Firman!",
   deskripsi:
     "Gereja Berea Sungrak Indonesia (GBSI) Cabang Cibinong — persekutuan jemaat yang bertumbuh dalam Firman Tuhan di Cibinong, Bogor.",
   alamat:
