@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import UnduhPdfButton from "@/components/UnduhPdfButton";
 import {
   formatTanggal,
   getRenunganBySlug,
@@ -93,6 +94,10 @@ export default async function DetailRenunganPage({ params }: Props) {
           {renungan.atribusi}
         </p>
       )}
+
+      <div className="mt-8">
+        <UnduhPdfButton renungan={renungan} />
+      </div>
 
       <div className="mt-12 rounded-2xl bg-brand-50 p-6 text-center sm:p-8">
         <p className="font-serif text-lg font-semibold text-ink">

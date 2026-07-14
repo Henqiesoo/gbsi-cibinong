@@ -1,5 +1,7 @@
+import Image from "next/image";
 import Link from "next/link";
 import { navigasi, site } from "@/lib/site";
+import { watermark } from "@/lib/watermark";
 
 export default function Footer() {
   return (
@@ -55,10 +57,23 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-brand-800">
-        <p className="mx-auto max-w-content px-4 py-4 text-xs text-brand-300 sm:px-6">
-          © {new Date().getFullYear()} {site.namaLengkap}. Segala kemuliaan
-          hanya bagi Tuhan.
-        </p>
+        <div className="mx-auto flex max-w-content flex-wrap items-center justify-between gap-2 px-4 py-4 sm:px-6">
+          <p className="text-xs text-brand-300">
+            © {new Date().getFullYear()} {site.namaLengkap}. Segala kemuliaan
+            hanya bagi Tuhan.
+          </p>
+          {/* Kredit developer — logo diambil dari /public/assets/watermark/ */}
+          <p className="flex items-center gap-2 text-xs text-brand-300">
+            <Image
+              src={watermark.logo}
+              alt={`Logo ${watermark.nama}`}
+              width={24}
+              height={24}
+              className="h-6 w-6 rounded bg-white/90 object-contain p-0.5"
+            />
+            {watermark.teks}
+          </p>
+        </div>
       </div>
     </footer>
   );
