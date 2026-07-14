@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { navigasi, site } from "@/lib/site";
@@ -17,9 +18,14 @@ export default function Navbar() {
           className="flex items-center gap-2.5"
           onClick={() => setTerbuka(false)}
         >
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-600 font-serif text-lg font-bold text-white">
-            G
-          </span>
+          <Image
+            src="/images/logo-berea-indonesia.png"
+            alt="Logo Berea Indonesia"
+            width={59}
+            height={40}
+            priority
+            className="h-10 w-auto"
+          />
           <span className="leading-tight">
             <span className="block font-serif text-base font-semibold text-ink">
               {site.namaSingkat}

@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
   },
   kop: {
     fontSize: 9,
-    color: "#23747E",
+    color: "#4470C4",
     letterSpacing: 1.5,
     textTransform: "uppercase",
     marginBottom: 4,
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
   },
   kutipan: {
     borderLeftWidth: 2,
-    borderLeftColor: "#7FC8CD",
+    borderLeftColor: "#9BBAE9",
     paddingLeft: 12,
     marginBottom: 16,
   },

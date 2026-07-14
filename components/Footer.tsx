@@ -8,6 +8,13 @@ export default function Footer() {
     <footer className="mt-auto bg-brand-900 text-cream-100">
       <div className="mx-auto grid max-w-content gap-10 px-4 py-12 sm:px-6 md:grid-cols-3">
         <div>
+          <Image
+            src="/images/logo-berea-indonesia.png"
+            alt="Logo Berea Indonesia"
+            width={88}
+            height={60}
+            className="mb-4 h-14 w-auto"
+          />
           <p className="font-serif text-lg font-semibold text-white">
             {site.namaSingkat}
           </p>

@@ -48,15 +48,15 @@ function svgPlaceholder(label, w, h) {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}">
     <defs>
       <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stop-color="#D7EFF0"/>
-        <stop offset="1" stop-color="#7FC8CD"/>
+        <stop offset="0" stop-color="#E0EAF9"/>
+        <stop offset="1" stop-color="#9BBAE9"/>
       </linearGradient>
     </defs>
     <rect width="${w}" height="${h}" fill="url(#g)"/>
     <text x="50%" y="48%" text-anchor="middle" font-family="sans-serif"
-      font-size="${fontSize}" font-weight="bold" fill="#1F5F68">${aman}</text>
+      font-size="${fontSize}" font-weight="bold" fill="#365CA4">${aman}</text>
     <text x="50%" y="56%" text-anchor="middle" font-family="sans-serif"
-      font-size="${Math.round(fontSize * 0.7)}" fill="#1F5F68">Ganti file ini dengan foto asli (nama file sama)</text>
+      font-size="${Math.round(fontSize * 0.7)}" fill="#365CA4">Ganti file ini dengan foto asli (nama file sama)</text>
   </svg>`;
 }
 

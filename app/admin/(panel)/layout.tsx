@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { site } from "@/lib/site";
 
@@ -26,9 +27,13 @@ export default function AdminLayout({
       <header className="border-b border-cream-200 bg-white">
         <div className="mx-auto flex max-w-content flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <div className="flex items-center gap-2.5">
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-600 font-serif text-base font-bold text-white">
-              G
-            </span>
+            <Image
+              src="/images/logo-berea-indonesia.png"
+              alt="Logo Berea Indonesia"
+              width={47}
+              height={32}
+              className="h-8 w-auto"
+            />
             <span className="leading-tight">
               <span className="block text-sm font-semibold text-ink">
                 Panel Admin
