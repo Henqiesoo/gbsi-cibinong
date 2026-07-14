@@ -5,8 +5,8 @@
 // renungan otomatis memakai file baru tanpa perlu mengubah kode.
 
 export const watermark = {
-  nama: "Hengky",
-  teks: "Website dikembangkan oleh Hengky",
+  nama: "HENQIESOO",
+  teks: "Website developed by HENQIESOO",
   // Path publik logo — dipakai <Image> di footer maupun generator PDF.
   logo: "/assets/watermark/logo.png",
   // Posisi watermark pada PDF renungan:

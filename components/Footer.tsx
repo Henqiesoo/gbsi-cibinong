@@ -67,9 +67,9 @@ export default function Footer() {
             <Image
               src={watermark.logo}
               alt={`Logo ${watermark.nama}`}
-              width={24}
-              height={24}
-              className="h-6 w-6 rounded bg-white/90 object-contain p-0.5"
+              width={64}
+              height={40}
+              className="h-6 w-auto rounded bg-white/90 object-contain px-1 py-0.5"
             />
             {watermark.teks}
           </p>
