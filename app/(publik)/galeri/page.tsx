@@ -9,6 +9,8 @@ export const metadata: Metadata = {
   description: `Dokumentasi ibadah, persekutuan, dan fasilitas ${site.namaLengkap}.`,
 };
 
+export const revalidate = 300;
+
 export default async function GaleriPage() {
   const foto = await getGaleri();
 

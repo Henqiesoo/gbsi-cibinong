@@ -9,6 +9,8 @@ export const metadata: Metadata = {
   description: `Renungan Firman Tuhan dari ${site.namaLengkap}.`,
 };
 
+export const revalidate = 300;
+
 export default async function RenunganPage() {
   const semuaRenungan = await getSemuaRenungan();
 

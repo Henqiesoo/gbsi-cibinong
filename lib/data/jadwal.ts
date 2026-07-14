@@ -1,6 +1,8 @@
 // Data jadwal ibadah mingguan.
-// Nanti bila pindah ke Supabase: ganti isi getJadwal() dengan query,
-// tipe JadwalItem tetap sama sehingga komponen tidak perlu diubah.
+// Bila Supabase dikonfigurasi, jadwal diambil dari tabel `jadwal`
+// (bisa diedit lewat panel /admin). Bila belum, dipakai jadwal statis.
+
+import { supabaseSiap, supabaseServer } from "@/lib/supabase";
 
 export type JadwalItem = {
   hari: string;
@@ -9,7 +11,7 @@ export type JadwalItem = {
   keterangan?: string;
 };
 
-const jadwal: JadwalItem[] = [
+const jadwalStatis: JadwalItem[] = [
   { hari: "Senin–Sabtu", kegiatan: "Doa Pagi / Baca Alkitab", jam: "05:00" },
   { hari: "Rabu", kegiatan: "Ibadah Doa Tengah Minggu", jam: "19:00" },
   { hari: "Sabtu", kegiatan: "Persiapan Ibadah Hari Tuhan", jam: "19:00" },
@@ -20,10 +22,21 @@ const jadwal: JadwalItem[] = [
 ];
 
 export async function getJadwal(): Promise<JadwalItem[]> {
-  return jadwal;
+  if (supabaseSiap()) {
+    const { data, error } = await supabaseServer()
+      .from("jadwal")
+      .select("hari, kegiatan, jam")
+      .order("urutan", { ascending: true });
+    if (!error && data && data.length > 0) return data as JadwalItem[];
+  }
+  return jadwalStatis;
 }
 
-// Ringkasan untuk section preview di Beranda.
+// Ringkasan untuk section preview di Beranda: utamakan Ibadah Hari Tuhan,
+// lalu item lain sesuai urutan.
 export async function getJadwalUtama(): Promise<JadwalItem[]> {
-  return [jadwal[3], jadwal[1], jadwal[5], jadwal[0]];
+  const semua = await getJadwal();
+  const utama = semua.find((j) => j.kegiatan.includes("Hari Tuhan"));
+  const sisa = semua.filter((j) => j !== utama);
+  return [utama, ...sisa].filter(Boolean).slice(0, 4) as JadwalItem[];
 }

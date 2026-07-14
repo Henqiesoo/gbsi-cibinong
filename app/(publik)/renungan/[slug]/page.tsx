@@ -11,6 +11,8 @@ import {
 
 type Props = { params: { slug: string } };
 
+export const revalidate = 300;
+
 export async function generateStaticParams() {
   const semua = await getSemuaRenungan();
   return semua.map((r) => ({ slug: r.slug }));

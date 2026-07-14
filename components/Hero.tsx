@@ -1,14 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
+import { getHeroUrl } from "@/lib/data/pengaturan";
 import { site } from "@/lib/site";
 
-// Ganti foto hero di /public/images/hero/ibadah-utama.jpg
-// (disarankan lanskap, minimal 1600px lebar).
-export default function Hero() {
+// Foto hero bisa diganti dari panel admin (/admin/beranda). Sebelum
+// Supabase tersambung, dipakai /images/hero/ibadah-utama.jpg.
+export default async function Hero() {
+  const heroUrl = await getHeroUrl();
   return (
     <section className="relative flex min-h-[70vh] items-center md:min-h-[80vh]">
       <Image
-        src="/images/hero/ibadah-utama.jpg"
+        src={heroUrl}
         alt="Jemaat GBSI Cibinong di ruang ibadah utama"
         fill
         priority

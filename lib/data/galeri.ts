@@ -1,14 +1,14 @@
-// Data galeri foto (masih statis).
-// Foto diletakkan di /public/images/galeri/<kategori>/ — ganti file
-// placeholder dengan foto asli tanpa perlu mengubah kode ini, selama
-// nama filenya sama. Menambah foto = menambah satu entri di array.
-//
-// Nanti bila pindah ke Supabase Storage: ganti isi getGaleri() dengan
-// query, tipe FotoGaleri dipertahankan.
+// Data galeri foto.
+// Bila Supabase dikonfigurasi, foto diambil dari tabel `galeri` (dikelola
+// lewat panel /admin). Bila belum, dipakai daftar statis di bawah —
+// foto placeholder di /public/images/galeri/ tinggal ditimpa file asli.
+
+import { supabaseSiap, supabaseServer } from "@/lib/supabase";
 
 export type KategoriGaleri = "ibadah" | "acara" | "fasilitas";
 
 export type FotoGaleri = {
+  id?: string; // terisi bila berasal dari Supabase
   src: string;
   alt: string;
   kategori: KategoriGaleri;
@@ -20,7 +20,7 @@ export const labelKategori: Record<KategoriGaleri, string> = {
   fasilitas: "Fasilitas",
 };
 
-const galeri: FotoGaleri[] = [
+const galeriStatis: FotoGaleri[] = [
   // ——— Ibadah & Pujian ———
   {
     src: "/images/galeri/ibadah/ibadah-01.jpg",
@@ -106,13 +106,37 @@ const galeri: FotoGaleri[] = [
   },
 ];
 
+type BarisGaleri = {
+  id: string;
+  kategori: KategoriGaleri;
+  alt: string;
+  url: string;
+};
+
 export async function getGaleri(): Promise<FotoGaleri[]> {
-  return galeri;
+  if (supabaseSiap()) {
+    const { data, error } = await supabaseServer()
+      .from("galeri")
+      .select("*")
+      .order("created_at", { ascending: false });
+    if (!error && data && data.length > 0) {
+      return (data as BarisGaleri[]).map((b) => ({
+        id: b.id,
+        src: b.url,
+        alt: b.alt,
+        kategori: b.kategori,
+      }));
+    }
+  }
+  return galeriStatis;
 }
 
 // Cuplikan foto untuk section galeri di Beranda.
 export async function getGaleriPreview(jumlah = 6): Promise<FotoGaleri[]> {
-  return [galeri[0], galeri[2], galeri[6], galeri[9], galeri[7], galeri[3]].slice(
+  const semua = await getGaleri();
+  if (semua !== galeriStatis) return semua.slice(0, jumlah);
+  // Pilihan tetap untuk data statis
+  return [semua[0], semua[2], semua[6], semua[9], semua[7], semua[3]].slice(
     0,
     jumlah
   );

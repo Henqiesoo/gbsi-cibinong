@@ -69,7 +69,7 @@ export default function Footer() {
               alt={`Logo ${watermark.nama}`}
               width={64}
               height={40}
-              className="h-6 w-auto rounded bg-white/90 object-contain px-1 py-0.5"
+              className="h-5 w-auto object-contain opacity-80 brightness-0 invert"
             />
             {watermark.teks}
           </p>

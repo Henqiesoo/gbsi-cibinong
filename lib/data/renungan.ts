@@ -1,11 +1,12 @@
-// Data renungan (masih statis).
-// Nanti bila pindah ke Supabase: ganti isi getSemuaRenungan() dan
-// getRenunganBySlug() dengan query — tipe Renungan dipertahankan.
-//
-// Sumber renungan: Khotbah Pdt Kim Ki Dong — bahasa disesuaikan untuk
-// pembaca web umum, isi teologis dijaga sesuai sumber asli.
+// Data renungan.
+// Bila Supabase sudah dikonfigurasi (lihat lib/supabase.ts), data diambil
+// dari tabel `renungan` sehingga pengurus gereja bisa menambah/mengubah
+// lewat panel /admin. Bila belum, dipakai data statis bawaan di bawah.
+
+import { supabaseSiap, supabaseServer } from "@/lib/supabase";
 
 export type Renungan = {
+  id?: string; // terisi bila berasal dari Supabase
   slug: string;
   judul: string;
   tanggal: string; // ISO date, contoh: "2026-07-05"
@@ -17,7 +18,10 @@ export type Renungan = {
   atribusi?: string; // atribusi sumber — jangan dihapus
 };
 
-const daftarRenungan: Renungan[] = [
+// ——— Data statis bawaan (fallback sebelum Supabase disambungkan) ———
+// Sumber renungan: Khotbah Pdt Kim Ki Dong — bahasa disesuaikan untuk
+// pembaca web umum, isi teologis dijaga sesuai sumber asli.
+const renunganStatis: Renungan[] = [
   {
     slug: "apa-itu-berkat-yang-sesungguhnya",
     judul: "Apa Itu Berkat yang Sesungguhnya?",
@@ -77,8 +81,46 @@ const daftarRenungan: Renungan[] = [
   },
 ];
 
+// ——— Pemetaan baris Supabase → tipe Renungan ———
+type BarisRenungan = {
+  id: string;
+  slug: string;
+  judul: string;
+  tanggal: string;
+  ayat: string | null;
+  kutipan_ayat: string | null;
+  cuplikan: string;
+  thumbnail: string | null;
+  isi: string[];
+  atribusi: string | null;
+};
+
+function dariBaris(b: BarisRenungan): Renungan {
+  return {
+    id: b.id,
+    slug: b.slug,
+    judul: b.judul,
+    tanggal: b.tanggal,
+    ayat: b.ayat ?? undefined,
+    kutipanAyat: b.kutipan_ayat ?? undefined,
+    cuplikan: b.cuplikan,
+    thumbnail: b.thumbnail || "/images/renungan/renungan-01.jpg",
+    isi: Array.isArray(b.isi) ? b.isi : [],
+    atribusi: b.atribusi ?? undefined,
+  };
+}
+
 export async function getSemuaRenungan(): Promise<Renungan[]> {
-  return [...daftarRenungan].sort((a, b) => b.tanggal.localeCompare(a.tanggal));
+  if (supabaseSiap()) {
+    const { data, error } = await supabaseServer()
+      .from("renungan")
+      .select("*")
+      .order("tanggal", { ascending: false });
+    if (!error && data) return (data as BarisRenungan[]).map(dariBaris);
+  }
+  return [...renunganStatis].sort((a, b) =>
+    b.tanggal.localeCompare(a.tanggal)
+  );
 }
 
 export async function getRenunganTerbaru(jumlah = 3): Promise<Renungan[]> {
@@ -89,7 +131,16 @@ export async function getRenunganTerbaru(jumlah = 3): Promise<Renungan[]> {
 export async function getRenunganBySlug(
   slug: string
 ): Promise<Renungan | undefined> {
-  return daftarRenungan.find((r) => r.slug === slug);
+  if (supabaseSiap()) {
+    const { data, error } = await supabaseServer()
+      .from("renungan")
+      .select("*")
+      .eq("slug", slug)
+      .maybeSingle();
+    if (!error && data) return dariBaris(data as BarisRenungan);
+    return undefined;
+  }
+  return renunganStatis.find((r) => r.slug === slug);
 }
 
 export function formatTanggal(iso: string): string {

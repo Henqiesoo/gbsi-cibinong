@@ -7,6 +7,8 @@ import { getGaleriPreview } from "@/lib/data/galeri";
 import { getJadwalUtama } from "@/lib/data/jadwal";
 import { getRenunganTerbaru } from "@/lib/data/renungan";
 
+export const revalidate = 300;
+
 export default async function BerandaPage() {
   const [jadwalUtama, renunganTerbaru, galeriPreview] = await Promise.all([
     getJadwalUtama(),

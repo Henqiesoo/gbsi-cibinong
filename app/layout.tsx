@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import { Lora, Plus_Jakarta_Sans } from "next/font/google";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import { site } from "@/lib/site";
 import "./globals.css";
 
@@ -30,11 +28,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="id" className={`${jakarta.variable} ${lora.variable}`}>
-      <body className="flex min-h-screen flex-col font-sans">
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <Footer />
-      </body>
+      <body className="flex min-h-screen flex-col font-sans">{children}</body>
     </html>
   );
 }
