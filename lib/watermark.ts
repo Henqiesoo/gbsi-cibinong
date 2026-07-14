@@ -6,7 +6,7 @@
 
 export const watermark = {
   nama: "HENQIESOO",
-  teks: "Website developed by HENQIESOO",
+  teks: "Designed & developed by HENQIESOO",
   // Path publik logo — dipakai <Image> di footer maupun generator PDF.
   logo: "/assets/watermark/logo.png",
   // Posisi watermark pada PDF renungan:
