@@ -51,11 +51,20 @@ export default async function DetailRenunganPage({ params }: Props) {
       </Link>
 
       <p className="mt-8 text-sm font-semibold uppercase tracking-wide text-brand-600">
-        {formatTanggal(renungan.tanggal)} · {renungan.ayat}
+        {formatTanggal(renungan.tanggal)}
+        {renungan.ayat ? ` · ${renungan.ayat}` : ""}
       </p>
       <h1 className="mt-3 font-serif text-3xl font-semibold leading-tight text-ink sm:text-4xl">
         {renungan.judul}
       </h1>
+
+      {renungan.kutipanAyat && (
+        <blockquote className="mt-6 border-l-4 border-brand-300 pl-5">
+          <p className="font-serif text-lg italic leading-relaxed text-ink/80">
+            {renungan.kutipanAyat}
+          </p>
+        </blockquote>
+      )}
 
       <figure className="relative mt-8 aspect-[16/9] overflow-hidden rounded-2xl bg-cream-200">
         <Image
@@ -78,6 +87,12 @@ export default async function DetailRenunganPage({ params }: Props) {
           </p>
         ))}
       </div>
+
+      {renungan.atribusi && (
+        <p className="mt-8 border-t border-cream-200 pt-5 text-sm italic text-ink/60">
+          {renungan.atribusi}
+        </p>
+      )}
 
       <div className="mt-12 rounded-2xl bg-brand-50 p-6 text-center sm:p-8">
         <p className="font-serif text-lg font-semibold text-ink">

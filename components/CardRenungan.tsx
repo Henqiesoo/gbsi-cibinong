@@ -19,7 +19,8 @@ export default function CardRenungan({ renungan }: { renungan: Renungan }) {
       </Link>
       <div className="flex flex-1 flex-col p-6">
         <p className="text-xs font-medium uppercase tracking-wide text-brand-600">
-          {formatTanggal(renungan.tanggal)} · {renungan.ayat}
+          {formatTanggal(renungan.tanggal)}
+          {renungan.ayat ? ` · ${renungan.ayat}` : ""}
         </p>
         <h3 className="mt-2 font-serif text-xl font-semibold leading-snug text-ink">
           <Link

@@ -1,59 +1,79 @@
-// Data renungan (masih statis / dummy).
+// Data renungan (masih statis).
 // Nanti bila pindah ke Supabase: ganti isi getSemuaRenungan() dan
 // getRenunganBySlug() dengan query — tipe Renungan dipertahankan.
+//
+// Sumber renungan: Khotbah Pdt Kim Ki Dong — bahasa disesuaikan untuk
+// pembaca web umum, isi teologis dijaga sesuai sumber asli.
 
 export type Renungan = {
   slug: string;
   judul: string;
   tanggal: string; // ISO date, contoh: "2026-07-05"
-  ayat: string;
+  ayat?: string; // referensi ayat singkat untuk meta card
+  kutipanAyat?: string; // kutipan ayat pembuka (ditampilkan italic)
   cuplikan: string;
   thumbnail: string;
   isi: string[]; // paragraf-paragraf
+  atribusi?: string; // atribusi sumber — jangan dihapus
 };
 
 const daftarRenungan: Renungan[] = [
   {
-    slug: "mari-roh-jiwaku-kembalilah",
-    judul: "Mari, Roh Jiwaku, Kembalilah kepada Tuhan",
-    tanggal: "2026-07-05",
-    ayat: "Mazmur 116:7",
+    slug: "apa-itu-berkat-yang-sesungguhnya",
+    judul: "Apa Itu Berkat yang Sesungguhnya?",
+    tanggal: "2026-07-12",
     cuplikan:
-      "Di tengah kesibukan dan kelelahan hidup, jiwa kita mudah mengembara jauh dari Tuhan. Firman hari ini mengajak kita pulang: kembali kepada ketenangan yang hanya ditemukan di dalam Dia.",
+      "Banyak dari kita membayangkan berkat sebagai kesuksesan duniawi: pekerjaan lancar, usaha maju, hidup berkecukupan. Namun makna berkat yang sesungguhnya jauh lebih dalam dari itu — berkat berarti menjadi milik Allah.",
     thumbnail: "/images/renungan/renungan-01.jpg",
     isi: [
-      "“Kembalilah tenang, hai jiwaku, sebab TUHAN telah berbuat baik kepadamu.” (Mazmur 116:7). Pemazmur menulis kalimat ini bukan dalam keadaan nyaman, melainkan setelah melewati kesesakan yang berat. Justru di sanalah ia belajar bahwa tempat pulang bagi jiwanya bukan keadaan yang membaik, melainkan Tuhan sendiri.",
-      "Kehidupan di sekitar kita bergerak cepat — pekerjaan, keluarga, dan berbagai kekhawatiran menarik jiwa kita ke banyak arah. Tanpa sadar, roh jiwa kita mengembara: tubuh hadir dalam ibadah, tetapi hati sibuk di tempat lain. Firman Tuhan hari ini memanggil kita untuk pulang.",
-      "Mari mengambil waktu setiap pagi untuk membaca Firman dan berdoa, membiarkan jiwa kita kembali menemukan perhentian di dalam Tuhan. Ia telah berbuat baik kepada kita — dan kebaikan-Nya tidak pernah berubah.",
+      "Kita sering mendengar ucapan “Tuhan Yesus memberkatimu” — tapi pernahkah kita berhenti sejenak dan bertanya, apa sebenarnya arti berkat itu?",
+      "Banyak dari kita membayangkan berkat sebagai kesuksesan duniawi: pekerjaan lancar, usaha maju, hidup berkecukupan. Namun makna berkat yang sesungguhnya jauh lebih dalam dari itu. Berkat berarti menjadi milik Allah. Ketika kita meminta berkat bagi seseorang, kita sesungguhnya sedang mendoakan agar orang itu sepenuhnya menjadi kepunyaan Allah.",
+      "Ketika seseorang benar-benar menjadi milik Allah, ia menerima sukacita-Nya, kemuliaan-Nya, dan kuasa-Nya. Dan karena ia sudah menjadi milik-Nya, apa pun yang ia minta dalam nama Tuhan, Allah akan mengerjakannya.",
+      "Pertanyaannya bagi kita: sudahkah kita benar-benar menerima berkat itu? Jika sudah, apa bentuknya dalam hidup kita sehari-hari?",
+      "Berkat yang sejati berwujud inspirasi dari Allah. Ketika seseorang menerima inspirasi ini, ia mampu berdoa dengan sungguh, mampu memberitakan firman dengan berani, mampu menjadi saksi Kristus di tengah pergumulan hidupnya. Orang yang menerima berkat sejati akan tahu dengan pasti — bukan sekadar merasa — bahwa dirinya adalah milik Allah.",
+      "Berkat bukan tentang seberapa banyak yang kita miliki, tetapi seberapa utuh kita menjadi kepunyaan Allah. Mari kita periksa hati kita: apakah kita mengejar berkat sebagai kesuksesan tubuh, atau kita rindu sungguh menjadi milik Allah seutuhnya?",
     ],
+    atribusi: "Diringkas dari Khotbah Pdt Kim Ki Dong, Seri Berkat",
   },
   {
-    slug: "berakar-dalam-firman",
-    judul: "Berakar dalam Firman",
-    tanggal: "2026-06-21",
-    ayat: "Mazmur 1:2-3",
+    slug: "ibadah-yang-penuh-roh-kudus",
+    judul: "Ibadah yang Sungguh-Sungguh Penuh Roh Kudus",
+    tanggal: "2026-06-28",
+    ayat: "Kisah Para Rasul 2:38",
+    kutipanAyat:
+      "“Bertobatlah kalian masing-masing, dan berilah dirimu dibaptis dalam nama Yesus... kamu akan menerima Roh Kudus.” (Kisah Para Rasul 2:38)",
     cuplikan:
-      "Pohon yang ditanam di tepi aliran air tidak takut musim panas. Demikian juga orang yang merenungkan Firman siang dan malam — akarnya dalam, hidupnya berbuah pada musimnya.",
+      "Ibadah kita sejatinya bukan sekadar rutinitas mingguan. Ibadah yang benar adalah ibadah yang penuh dengan kehadiran Roh Kudus — bukan hanya saat berkumpul di gereja, tetapi dalam seluruh hidup kita sepanjang minggu.",
     thumbnail: "/images/renungan/renungan-02.jpg",
     isi: [
-      "Mazmur 1 menggambarkan orang benar seperti pohon yang ditanam di tepi aliran air: daunnya tidak layu dan ia menghasilkan buah pada musimnya. Rahasianya bukan pada kekuatan pohon itu sendiri, melainkan pada tempat ia berakar.",
-      "Kesukaannya ialah Taurat TUHAN, dan ia merenungkannya siang dan malam. Membaca Alkitab bukan sekadar rutinitas — ia adalah cara kita menancapkan akar ke sumber air kehidupan, sehingga ketika musim kering datang, kita tetap berdiri.",
-      "Mulailah dari yang sederhana: satu perikop setiap pagi, direnungkan sungguh-sungguh sepanjang hari. Tuhan yang setia akan menumbuhkan dan memberi buah pada waktunya.",
+      "Ibadah kita sejatinya bukan sekadar rutinitas mingguan. Alkitab menunjukkan bahwa ibadah yang benar adalah ibadah yang penuh dengan kehadiran Roh Kudus — bukan hanya pada saat kita berkumpul di gereja, tetapi dalam seluruh hidup kita sepanjang minggu.",
+      "Roh Kudus masuk ke dalam hati yang bertobat, hati yang menerima firman, dan hati yang taat. Ia bukan hiasan atau pelengkap dalam hidup rohani kita — Ia adalah Roh Allah sendiri yang ingin berdiam dengan nyaman di dalam diri kita, sama seperti Ia berdiam di sorga.",
+      "Ada sebuah kebenaran yang perlu kita renungkan dalam-dalam: banyak orang Kristen tampak kudus pada hari Minggu, memuji dengan sepenuh hati, lalu mulai Senin hidup dengan pikiran dan keinginannya sendiri — meninggalkan firman, menikmati dunia tanpa mengingat Tuhan. Padahal, kita adalah Bait Allah bukan hanya sehari dalam seminggu, melainkan setiap hari.",
+      "Ibadah yang sungguh-sungguh sukses bukan diukur dari satu jam kita duduk di bangku gereja, melainkan dari kemenangan iman kita sepanjang minggu. Orang yang menang dalam kehidupan sehari-harinya, itulah yang benar-benar mampu mensukseskan ibadahnya pada hari Tuhan.",
+      "Mari kita undang Roh Kudus memenuhi bukan hanya ibadah kita di gereja, tetapi seluruh hari-hari kita — pekerjaan kita, rumah tangga kita, dan setiap keputusan yang kita ambil.",
     ],
+    atribusi:
+      "Diringkas dari Khotbah “Ibadah yang Penuh dengan Roh Kudus”, Kisah Para Rasul 10:44-48",
   },
   {
-    slug: "mengucap-syukur-dalam-segala-hal",
-    judul: "Mengucap Syukur dalam Segala Hal",
-    tanggal: "2026-06-07",
-    ayat: "1 Tesalonika 5:18",
+    slug: "menjaga-pemimpin-rohani",
+    judul: "Menjaga dan Menghormati Pemimpin Rohani",
+    tanggal: "2026-06-14",
+    ayat: "Kisah Para Rasul 20:28",
+    kutipanAyat:
+      "“Karena itu jagalah dirimu dan jagalah seluruh kawanan, karena Roh Kudus telah menetapkan kamu menjadi penilik jemaat Allah.” (Kisah Para Rasul 20:28)",
     cuplikan:
-      "Bersyukur mudah diucapkan saat keadaan baik. Tetapi Firman berkata: mengucap syukurlah dalam segala hal — sebab itulah yang dikehendaki Allah di dalam Kristus Yesus bagi kita.",
+      "Allah mendirikan dan memelihara gereja-Nya melalui pemimpin rohani yang diangkat bukan oleh manusia, melainkan oleh Roh Kudus sendiri. Bagaimana seharusnya kita memandang dan menjaga mereka?",
     thumbnail: "/images/renungan/renungan-03.jpg",
     isi: [
-      "“Mengucap syukurlah dalam segala hal, sebab itulah yang dikehendaki Allah di dalam Kristus Yesus bagi kamu.” (1 Tesalonika 5:18). Perhatikan: Firman tidak berkata “atas segala hal”, melainkan “dalam segala hal” — di tengah keadaan apa pun, ada alasan untuk bersyukur karena Kristus.",
-      "Ucapan syukur mengubah cara kita memandang hidup. Ia memindahkan pandangan kita dari besarnya masalah kepada besarnya Tuhan. Jemaat yang bersyukur adalah jemaat yang kuat, sebab sukacita Tuhan menjadi kekuatannya.",
-      "Hari ini, sebelum menyampaikan permohonan, mulailah doa dengan mengucap syukur. Hitunglah kebaikan Tuhan satu per satu — dan biarlah hati kita dipenuhi damai sejahtera-Nya.",
+      "Alkitab mengajarkan sesuatu yang mendalam tentang bagaimana Allah mendirikan dan memelihara gereja-Nya: melalui pemimpin rohani yang diangkat bukan oleh manusia, melainkan oleh Roh Kudus sendiri.",
+      "Ketika kita memandang seorang gembala atau pemimpin gereja, mudah bagi kita untuk hanya melihatnya sebagai manusia biasa — dengan segala kekurangan dan kesalahannya. Namun Alkitab mengajak kita memandang dengan mata rohani: di balik kemanusiaannya, ia dipercayakan Allah tugas menjaga jiwa-jiwa yang telah ditebus dengan darah Kristus.",
+      "Firman Tuhan mengingatkan dengan tegas: jangan menyusahkan pemimpin yang menuntun kita, sebab jika demikian, roh jiwa kita sendiri yang tidak mendapat keuntungan. Ini bukan soal membuat pemimpin gereja kebal kritik, melainkan soal menjaga hati kita sendiri agar tidak jatuh dalam sikap meremehkan apa yang telah Allah tetapkan.",
+      "Ada gambaran yang indah dalam Alkitab: ketika gembala terpukul atau diabaikan, kawanan domba akan tercerai-berai. Sebaliknya, ketika jemaat menjaga dan menghormati pemimpinnya, gereja bertumbuh kuat dan bersatu.",
+      "Mari kita mendoakan para pemimpin rohani kita — bukan dengan sikap menuntut kesempurnaan, tetapi dengan hati yang mendukung mereka menjalankan tugas yang Allah percayakan.",
     ],
+    atribusi:
+      "Diringkas dari Khotbah “Penilik yang Diangkat Roh Kudus”, Kisah Para Rasul 20:23-35",
   },
 ];
 
