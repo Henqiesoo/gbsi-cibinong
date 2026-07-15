@@ -136,11 +136,21 @@ export default function TentangPage() {
         />
 
         <div className="mt-10 rounded-2xl border border-brand-200 bg-brand-50 p-8 text-center">
-          <p className="text-sm font-semibold uppercase tracking-wide text-brand-600">
+          {/* Ganti foto: timpa /public/images/tentang/koordinator.jpg */}
+          <span className="relative mx-auto block h-28 w-28 overflow-hidden rounded-full border-4 border-white shadow-md">
+            <Image
+              src="/images/tentang/koordinator.jpg"
+              alt="Ev. Peterus Daniel Imanuel, S.H."
+              fill
+              sizes="112px"
+              className="object-cover"
+            />
+          </span>
+          <p className="mt-4 text-sm font-semibold uppercase tracking-wide text-brand-600">
             Koordinator
           </p>
           <p className="mt-2 font-serif text-2xl font-semibold text-ink">
-            Ev. Peterus Daniel Imanuel, S.Th.
+            Ev. Peterus Daniel Imanuel, S.H.
           </p>
         </div>
 
