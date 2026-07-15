@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 export default async function AdminJadwalPage({
   searchParams,
 }: {
-  searchParams: { ok?: string; err?: string };
+  searchParams: { ok?: string; err?: string; detail?: string };
 }) {
   const jadwal = await getJadwal();
   const teksAwal = jadwal
@@ -18,7 +18,7 @@ export default async function AdminJadwalPage({
       <h1 className="font-serif text-3xl font-semibold text-ink">
         Jadwal Ibadah
       </h1>
-      <Pemberitahuan ok={searchParams.ok} err={searchParams.err} />
+      <Pemberitahuan ok={searchParams.ok} err={searchParams.err} detail={searchParams.detail} />
 
       <form
         action="/api/admin/jadwal"

@@ -1,6 +1,6 @@
 import { revalidatePath } from "next/cache";
 import { type NextRequest } from "next/server";
-import { redirectKe } from "@/lib/admin-util";
+import { redirectGagal, redirectKe } from "@/lib/admin-util";
 import { ambilFieldRenungan } from "@/lib/renungan-form";
 import { supabaseSiap, supabaseServer } from "@/lib/supabase";
 
@@ -13,6 +13,7 @@ export async function POST(
 ) {
   if (!supabaseSiap()) return redirectKe(req, "/admin/renungan?err=supabase");
 
+  try {
   const form = await req.formData();
   const f = await ambilFieldRenungan(form);
   if (!f.judul || !f.tanggal || f.isi.length === 0) {
@@ -42,11 +43,18 @@ export async function POST(
     .update(perubahan)
     .eq("id", params.id);
   if (error) {
-    return redirectKe(req, `/admin/renungan/${params.id}/edit?err=simpan`);
+    return redirectGagal(
+      req,
+      `/admin/renungan/${params.id}/edit`,
+      error.message
+    );
   }
 
   revalidatePath("/");
   revalidatePath("/renungan");
   if (lama?.slug) revalidatePath(`/renungan/${lama.slug}`);
   return redirectKe(req, "/admin/renungan?ok=1");
+  } catch (e) {
+    return redirectGagal(req, `/admin/renungan/${params.id}/edit`, e);
+  }
 }

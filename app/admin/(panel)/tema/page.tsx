@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 export default async function AdminTemaPage({
   searchParams,
 }: {
-  searchParams: { ok?: string; err?: string };
+  searchParams: { ok?: string; err?: string; detail?: string };
 }) {
   const tema = await getTemaTahunan();
 
@@ -21,7 +21,7 @@ export default async function AdminTemaPage({
         awal tahun — moto gereja &ldquo;Mari Roh Jiwaku, Kembalilah kepada
         Firman!&rdquo; tetap di footer dan tidak ikut berubah.
       </p>
-      <Pemberitahuan ok={searchParams.ok} err={searchParams.err} />
+      <Pemberitahuan ok={searchParams.ok} err={searchParams.err} detail={searchParams.detail} />
 
       <form
         action="/api/admin/tema"

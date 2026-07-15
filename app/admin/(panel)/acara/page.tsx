@@ -11,7 +11,7 @@ const kelasInput =
 export default async function AdminAcaraPage({
   searchParams,
 }: {
-  searchParams: { ok?: string; err?: string };
+  searchParams: { ok?: string; err?: string; detail?: string };
 }) {
   const semua = await getSemuaAcara();
 
@@ -26,7 +26,7 @@ export default async function AdminAcaraPage({
           Acara; yang sudah lewat otomatis masuk Arsip Acara.
         </p>
       </div>
-      <Pemberitahuan ok={searchParams.ok} err={searchParams.err} />
+      <Pemberitahuan ok={searchParams.ok} err={searchParams.err} detail={searchParams.detail} />
 
       <form
         action="/api/admin/acara"

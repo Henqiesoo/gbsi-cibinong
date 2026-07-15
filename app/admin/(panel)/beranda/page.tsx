@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 export default async function AdminBerandaPage({
   searchParams,
 }: {
-  searchParams: { ok?: string; err?: string };
+  searchParams: { ok?: string; err?: string; detail?: string };
 }) {
   const heroSekarang = await getHeroUrl();
 
@@ -20,7 +20,7 @@ export default async function AdminBerandaPage({
         Foto besar yang tampil di bagian atas halaman depan. Disarankan foto
         lanskap (melebar) ruang ibadah, minimal lebar 1600 piksel.
       </p>
-      <Pemberitahuan ok={searchParams.ok} err={searchParams.err} />
+      <Pemberitahuan ok={searchParams.ok} err={searchParams.err} detail={searchParams.detail} />
 
       <figure className="overflow-hidden rounded-2xl border border-cream-200">
         <img

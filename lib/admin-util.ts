@@ -8,6 +8,21 @@ export function redirectKe(req: NextRequest, tujuan: string): NextResponse {
   return NextResponse.redirect(new URL(tujuan, req.url), 303);
 }
 
+// Redirect gagal-simpan dengan pesan error asli (dipotong) agar
+// penyebabnya terlihat di banner admin.
+export function redirectGagal(
+  req: NextRequest,
+  path: string,
+  e: unknown
+): NextResponse {
+  const pesan =
+    e instanceof Error ? e.message : typeof e === "string" ? e : String(e);
+  return redirectKe(
+    req,
+    `${path}?err=simpan&detail=${encodeURIComponent(pesan.slice(0, 200))}`
+  );
+}
+
 export function slugify(teks: string): string {
   return teks
     .toLowerCase()

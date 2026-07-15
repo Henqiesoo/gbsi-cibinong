@@ -17,7 +17,7 @@ const kelasArea =
 export default async function AdminTentangPage({
   searchParams,
 }: {
-  searchParams: { ok?: string; err?: string };
+  searchParams: { ok?: string; err?: string; detail?: string };
 }) {
   const [sejarahTersimpan, strukturTersimpan, struktur, fotoPengurus] =
     await Promise.all([
@@ -41,7 +41,7 @@ export default async function AdminTentangPage({
         Sejarah gereja dan struktur kepengurusan pada halaman{" "}
         <em>Tentang Kami</em> diedit dari sini.
       </p>
-      <Pemberitahuan ok={searchParams.ok} err={searchParams.err} />
+      <Pemberitahuan ok={searchParams.ok} err={searchParams.err} detail={searchParams.detail} />
 
       <form
         action="/api/admin/tentang"

@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 export default async function AdminJadwalTugasPage({
   searchParams,
 }: {
-  searchParams: { ok?: string; err?: string };
+  searchParams: { ok?: string; err?: string; detail?: string };
 }) {
   const daftar = await getJadwalTugas();
 
@@ -23,7 +23,7 @@ export default async function AdminJadwalTugasPage({
           otomatis diberi watermark saat diunggah.
         </p>
       </div>
-      <Pemberitahuan ok={searchParams.ok} err={searchParams.err} />
+      <Pemberitahuan ok={searchParams.ok} err={searchParams.err} detail={searchParams.detail} />
 
       <form
         action="/api/admin/jadwal-tugas"

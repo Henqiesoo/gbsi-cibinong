@@ -10,14 +10,14 @@ const kelasInput =
 export default async function AdminGaleriPage({
   searchParams,
 }: {
-  searchParams: { ok?: string; err?: string };
+  searchParams: { ok?: string; err?: string; detail?: string };
 }) {
   const foto = await getGaleri();
 
   return (
     <div className="space-y-8">
       <h1 className="font-serif text-3xl font-semibold text-ink">Galeri</h1>
-      <Pemberitahuan ok={searchParams.ok} err={searchParams.err} />
+      <Pemberitahuan ok={searchParams.ok} err={searchParams.err} detail={searchParams.detail} />
 
       {/* Form unggah */}
       <form

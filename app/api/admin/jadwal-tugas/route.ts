@@ -1,6 +1,6 @@
 import { revalidatePath } from "next/cache";
 import { type NextRequest } from "next/server";
-import { redirectKe } from "@/lib/admin-util";
+import { redirectGagal, redirectKe } from "@/lib/admin-util";
 import { tambahWatermark } from "@/lib/gambar";
 import { supabaseSiap, supabaseServer, uploadKeStorage } from "@/lib/supabase";
 
@@ -25,19 +25,23 @@ export async function POST(req: NextRequest) {
     return redirectKe(req, "/admin/jadwal-tugas?err=format");
   }
 
-  const buf = Buffer.from(await file.arrayBuffer());
-  const berWatermark = await tambahWatermark(buf);
-  const url = await uploadKeStorage(
-    `jadwal-tugas/${Date.now()}.jpg`,
-    berWatermark,
-    "image/jpeg"
-  );
+  try {
+    const buf = Buffer.from(await file.arrayBuffer());
+    const berWatermark = await tambahWatermark(buf);
+    const url = await uploadKeStorage(
+      `jadwal-tugas/${Date.now()}.jpg`,
+      berWatermark,
+      "image/jpeg"
+    );
 
-  const { error } = await supabaseServer()
-    .from("jadwal_tugas")
-    .insert({ judul, url });
-  if (error) return redirectKe(req, "/admin/jadwal-tugas?err=simpan");
+    const { error } = await supabaseServer()
+      .from("jadwal_tugas")
+      .insert({ judul, url });
+    if (error) return redirectGagal(req, "/admin/jadwal-tugas", error.message);
 
-  revalidatePath("/jadwal");
-  return redirectKe(req, "/admin/jadwal-tugas?ok=1");
+    revalidatePath("/jadwal");
+    return redirectKe(req, "/admin/jadwal-tugas?ok=1");
+  } catch (e) {
+    return redirectGagal(req, "/admin/jadwal-tugas", e);
+  }
 }

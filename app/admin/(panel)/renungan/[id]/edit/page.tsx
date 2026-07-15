@@ -11,7 +11,7 @@ export default async function AdminRenunganEditPage({
   searchParams,
 }: {
   params: { id: string };
-  searchParams: { err?: string };
+  searchParams: { err?: string; detail?: string };
 }) {
   if (!supabaseSiap()) notFound();
 
@@ -40,7 +40,7 @@ export default async function AdminRenunganEditPage({
       <h1 className="font-serif text-3xl font-semibold text-ink">
         Edit Renungan
       </h1>
-      <Pemberitahuan err={searchParams.err} />
+      <Pemberitahuan err={searchParams.err} detail={searchParams.detail} />
       <FormRenungan action={`/api/admin/renungan/${params.id}`} awal={awal} />
     </div>
   );

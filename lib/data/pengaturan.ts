@@ -19,7 +19,10 @@ export async function getPengaturan(
 }
 
 export async function setPengaturan(kunci: string, nilai: string) {
-  await supabaseServer().from("pengaturan").upsert({ kunci, nilai });
+  const { error } = await supabaseServer()
+    .from("pengaturan")
+    .upsert({ kunci, nilai });
+  if (error) throw new Error(error.message);
 }
 
 export async function getHeroUrl(): Promise<string> {

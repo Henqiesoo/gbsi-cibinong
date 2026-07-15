@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 export default async function AdminRenunganPage({
   searchParams,
 }: {
-  searchParams: { ok?: string; err?: string };
+  searchParams: { ok?: string; err?: string; detail?: string };
 }) {
   const semua = await getSemuaRenungan();
 
@@ -23,7 +23,7 @@ export default async function AdminRenunganPage({
         </Link>
       </div>
 
-      <Pemberitahuan ok={searchParams.ok} err={searchParams.err} />
+      <Pemberitahuan ok={searchParams.ok} err={searchParams.err} detail={searchParams.detail} />
 
       <ul className="space-y-3">
         {semua.map((r) => (

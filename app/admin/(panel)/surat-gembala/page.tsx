@@ -12,7 +12,7 @@ const kelasInput =
 export default async function AdminSuratGembalaPage({
   searchParams,
 }: {
-  searchParams: { ok?: string; err?: string };
+  searchParams: { ok?: string; err?: string; detail?: string };
 }) {
   const semua = await getSemuaSurat();
 
@@ -28,7 +28,7 @@ export default async function AdminSuratGembalaPage({
           <em>Baca teks dari foto</em> — hasilnya tinggal dirapikan.
         </p>
       </div>
-      <Pemberitahuan ok={searchParams.ok} err={searchParams.err} />
+      <Pemberitahuan ok={searchParams.ok} err={searchParams.err} detail={searchParams.detail} />
 
       <form
         action="/api/admin/surat-gembala"

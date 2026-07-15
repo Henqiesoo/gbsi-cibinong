@@ -1,6 +1,6 @@
 import { revalidatePath } from "next/cache";
 import { type NextRequest } from "next/server";
-import { redirectKe } from "@/lib/admin-util";
+import { redirectGagal, redirectKe } from "@/lib/admin-util";
 import { setPengaturan } from "@/lib/data/pengaturan";
 import { supabaseSiap } from "@/lib/supabase";
 
@@ -18,10 +18,14 @@ export async function POST(req: NextRequest) {
     return redirectKe(req, "/admin/tentang?err=lengkapi");
   }
 
-  await setPengaturan("sejarah_teks", sejarah);
-  await setPengaturan("struktur_teks", struktur);
-  if (periode) await setPengaturan("struktur_periode", periode);
+  try {
+    await setPengaturan("sejarah_teks", sejarah);
+    await setPengaturan("struktur_teks", struktur);
+    if (periode) await setPengaturan("struktur_periode", periode);
 
-  revalidatePath("/tentang");
-  return redirectKe(req, "/admin/tentang?ok=1");
+    revalidatePath("/tentang");
+    return redirectKe(req, "/admin/tentang?ok=1");
+  } catch (e) {
+    return redirectGagal(req, "/admin/tentang", e);
+  }
 }

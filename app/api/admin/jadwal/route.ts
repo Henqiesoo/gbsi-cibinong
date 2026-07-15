@@ -1,6 +1,6 @@
 import { revalidatePath } from "next/cache";
 import { type NextRequest } from "next/server";
-import { redirectKe } from "@/lib/admin-util";
+import { redirectGagal, redirectKe } from "@/lib/admin-util";
 import { supabaseSiap, supabaseServer } from "@/lib/supabase";
 
 export const runtime = "nodejs";
@@ -31,7 +31,13 @@ export async function POST(req: NextRequest) {
     .delete()
     .gte("urutan", 0);
   const { error: errIsi } = await sb.from("jadwal").insert(baris);
-  if (errHapus || errIsi) return redirectKe(req, "/admin/jadwal?err=simpan");
+  if (errHapus || errIsi) {
+    return redirectGagal(
+      req,
+      "/admin/jadwal",
+      (errHapus ?? errIsi)!.message
+    );
+  }
 
   revalidatePath("/");
   revalidatePath("/jadwal");

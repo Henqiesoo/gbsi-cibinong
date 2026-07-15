@@ -1,8 +1,95 @@
 import Link from "next/link";
 import { adminSiap } from "@/lib/admin-auth";
-import { supabaseSiap } from "@/lib/supabase";
+import { BUCKET, supabaseSiap, supabaseServer } from "@/lib/supabase";
 
 export const dynamic = "force-dynamic";
+
+// ——— Pemeriksaan kesiapan database ———
+
+const TABEL_WAJIB = [
+  "renungan",
+  "galeri",
+  "jadwal",
+  "jadwal_tugas",
+  "pengaturan",
+  "acara",
+  "surat_gembala",
+  "foto_pengurus",
+];
+
+type HasilCek = { nama: string; ok: boolean; pesan?: string };
+
+// Jenis key dari JWT Supabase ("service_role" yang benar; "anon" salah).
+function jenisKey(): string | null {
+  const k = process.env.SUPABASE_SERVICE_ROLE_KEY ?? "";
+  const bagian = k.split(".");
+  if (bagian.length !== 3) return null; // format key baru (bukan JWT)
+  try {
+    const payload = JSON.parse(
+      Buffer.from(bagian[1], "base64").toString("utf8")
+    );
+    return typeof payload.role === "string" ? payload.role : null;
+  } catch {
+    return null;
+  }
+}
+
+// Batasi tiap pemeriksaan maks 5 detik agar Dasbor tak menggantung
+// bila Supabase lambat/tak terjangkau.
+async function denganBatasWaktu<T>(
+  janji: PromiseLike<T>,
+  gagal: T
+): Promise<T> {
+  const batas = new Promise<T>((resolve) =>
+    setTimeout(() => resolve(gagal), 5000)
+  );
+  return Promise.race([Promise.resolve(janji).catch(() => gagal), batas]);
+}
+
+async function cekDatabase(): Promise<{
+  tabel: HasilCek[];
+  bucket: HasilCek;
+  role: string | null;
+}> {
+  const sb = supabaseServer();
+
+  const cekTabel = TABEL_WAJIB.map((t) =>
+    denganBatasWaktu(
+      sb
+        .from(t)
+        .select("*", { head: true, count: "exact" })
+        .limit(1)
+        .abortSignal(AbortSignal.timeout(4500))
+        .then(({ error }) => ({
+          nama: t,
+          ok: !error,
+          pesan: error?.message?.slice(0, 120),
+        })),
+      { nama: t, ok: false, pesan: "tidak merespons (timeout)" }
+    )
+  );
+
+  const cekBucket = denganBatasWaktu(
+    sb.storage
+      .getBucket(BUCKET)
+      .then(({ data, error }) => ({
+        nama: `storage bucket "${BUCKET}"`,
+        ok: Boolean(data) && !error,
+        pesan: error?.message?.slice(0, 120),
+      })),
+    {
+      nama: `storage bucket "${BUCKET}"`,
+      ok: false,
+      pesan: "tidak merespons (timeout)",
+    }
+  );
+
+  const [tabel, bucket] = await Promise.all([
+    Promise.all(cekTabel),
+    cekBucket,
+  ]);
+  return { tabel, bucket, role: jenisKey() };
+}
 
 const fitur = [
   {
@@ -52,8 +139,12 @@ const fitur = [
   },
 ];
 
-export default function AdminDasborPage() {
+export default async function AdminDasborPage() {
   const sbSiap = supabaseSiap();
+  const cek = sbSiap ? await cekDatabase() : null;
+  const adaMasalah =
+    cek && (cek.tabel.some((t) => !t.ok) || !cek.bucket.ok ||
+      (cek.role !== null && cek.role !== "service_role"));
 
   return (
     <div className="space-y-8">
@@ -98,6 +189,67 @@ export default function AdminDasborPage() {
           </p>
         </div>
       </div>
+
+      {/* Pemeriksaan database — tampil bila Supabase tersambung */}
+      {cek && (
+        <div
+          className={`rounded-2xl border p-6 ${
+            adaMasalah
+              ? "border-amber-300 bg-amber-50"
+              : "border-cream-200 bg-white"
+          }`}
+        >
+          <h2 className="font-serif text-xl font-semibold text-ink">
+            Pemeriksaan Database
+          </h2>
+
+          {cek.role !== null && cek.role !== "service_role" && (
+            <p className="mt-3 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+              <strong>Key yang terpasang adalah &ldquo;{cek.role}&rdquo;, bukan
+              service_role.</strong> Buka Supabase → Project Settings → API,
+              salin <em>service_role</em> key (bagian &ldquo;Project API
+              keys&rdquo;, yang bertanda rahasia), tempel ke variabel{" "}
+              <code className="font-mono">SUPABASE_SERVICE_ROLE_KEY</code> di
+              Vercel, lalu deploy ulang. Tanpa itu semua penyimpanan akan
+              gagal.
+            </p>
+          )}
+
+          <ul className="mt-4 grid gap-1.5 sm:grid-cols-2">
+            {[...cek.tabel, cek.bucket].map((h) => (
+              <li key={h.nama} className="flex items-start gap-2 text-sm">
+                <span className={h.ok ? "text-emerald-600" : "text-red-600"}>
+                  {h.ok ? "✓" : "✗"}
+                </span>
+                <span className="min-w-0">
+                  <code className="font-mono text-ink">{h.nama}</code>
+                  {!h.ok && h.pesan && (
+                    <span className="block text-xs text-red-600">
+                      {h.pesan}
+                    </span>
+                  )}
+                </span>
+              </li>
+            ))}
+          </ul>
+
+          {adaMasalah ? (
+            <p className="mt-4 text-sm leading-relaxed text-ink/80">
+              Ada bagian database yang belum siap (tanda ✗). Perbaikannya:
+              buka <strong>Supabase → SQL Editor</strong>, jalankan seluruh isi
+              file <code className="font-mono">supabase/schema.sql</code>{" "}
+              <em>versi terbaru</em> dari repository (aman dijalankan
+              berulang — tabel yang sudah ada tidak tersentuh), lalu muat
+              ulang halaman ini.
+            </p>
+          ) : (
+            <p className="mt-4 text-sm text-emerald-700">
+              Semua tabel dan penyimpanan siap — seluruh fitur admin dapat
+              digunakan.
+            </p>
+          )}
+        </div>
+      )}
 
       {!sbSiap && (
         <div className="rounded-2xl border border-cream-200 bg-white p-6">

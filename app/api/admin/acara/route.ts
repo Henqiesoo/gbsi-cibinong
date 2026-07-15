@@ -1,6 +1,6 @@
 import { revalidatePath } from "next/cache";
 import { type NextRequest } from "next/server";
-import { redirectKe } from "@/lib/admin-util";
+import { redirectGagal, redirectKe } from "@/lib/admin-util";
 import { prosesFotoUpload } from "@/lib/gambar";
 import { supabaseSiap, supabaseServer, uploadKeStorage } from "@/lib/supabase";
 
@@ -16,27 +16,31 @@ export async function POST(req: NextRequest) {
   const tema = String(form.get("tema") ?? "").trim();
   if (!judul || !tanggal) return redirectKe(req, "/admin/acara?err=lengkapi");
 
-  let poster: string | null = null;
-  const file = form.get("poster");
-  if (file instanceof File && file.size > 0) {
-    const buf = Buffer.from(await file.arrayBuffer());
-    const jadi = await prosesFotoUpload(buf, 1200);
-    poster = await uploadKeStorage(
-      `acara/${Date.now()}.jpg`,
-      jadi,
-      "image/jpeg"
-    );
+  try {
+    let poster: string | null = null;
+    const file = form.get("poster");
+    if (file instanceof File && file.size > 0) {
+      const buf = Buffer.from(await file.arrayBuffer());
+      const jadi = await prosesFotoUpload(buf, 1200);
+      poster = await uploadKeStorage(
+        `acara/${Date.now()}.jpg`,
+        jadi,
+        "image/jpeg"
+      );
+    }
+
+    const { error } = await supabaseServer().from("acara").insert({
+      judul,
+      tanggal,
+      tema: tema || null,
+      poster,
+    });
+    if (error) return redirectGagal(req, "/admin/acara", error.message);
+
+    revalidatePath("/");
+    revalidatePath("/acara");
+    return redirectKe(req, "/admin/acara?ok=1");
+  } catch (e) {
+    return redirectGagal(req, "/admin/acara", e);
   }
-
-  const { error } = await supabaseServer().from("acara").insert({
-    judul,
-    tanggal,
-    tema: tema || null,
-    poster,
-  });
-  if (error) return redirectKe(req, "/admin/acara?err=simpan");
-
-  revalidatePath("/");
-  revalidatePath("/acara");
-  return redirectKe(req, "/admin/acara?ok=1");
 }

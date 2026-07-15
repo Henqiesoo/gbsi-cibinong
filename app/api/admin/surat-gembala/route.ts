@@ -1,6 +1,6 @@
 import { revalidatePath } from "next/cache";
 import { type NextRequest } from "next/server";
-import { redirectKe, slugUnik } from "@/lib/admin-util";
+import { redirectGagal, redirectKe, slugUnik } from "@/lib/admin-util";
 import { prosesFotoUpload } from "@/lib/gambar";
 import { supabaseSiap, supabaseServer, uploadKeStorage } from "@/lib/supabase";
 
@@ -23,29 +23,33 @@ export async function POST(req: NextRequest) {
     return redirectKe(req, "/admin/surat-gembala?err=lengkapi");
   }
 
-  let gambar: string | null = null;
-  const file = form.get("gambar");
-  if (file instanceof File && file.size > 0) {
-    const buf = Buffer.from(await file.arrayBuffer());
-    const jadi = await prosesFotoUpload(buf, 1400);
-    gambar = await uploadKeStorage(
-      `surat-gembala/${Date.now()}.jpg`,
-      jadi,
-      "image/jpeg"
-    );
+  try {
+    let gambar: string | null = null;
+    const file = form.get("gambar");
+    if (file instanceof File && file.size > 0) {
+      const buf = Buffer.from(await file.arrayBuffer());
+      const jadi = await prosesFotoUpload(buf, 1400);
+      gambar = await uploadKeStorage(
+        `surat-gembala/${Date.now()}.jpg`,
+        jadi,
+        "image/jpeg"
+      );
+    }
+
+    const slug = await slugUnik(judul, "surat_gembala");
+    const { error } = await supabaseServer().from("surat_gembala").insert({
+      slug,
+      judul,
+      tanggal,
+      isi,
+      gambar,
+    });
+    if (error) return redirectGagal(req, "/admin/surat-gembala", error.message);
+
+    revalidatePath("/surat-gembala");
+    revalidatePath(`/surat-gembala/${slug}`);
+    return redirectKe(req, "/admin/surat-gembala?ok=1");
+  } catch (e) {
+    return redirectGagal(req, "/admin/surat-gembala", e);
   }
-
-  const slug = await slugUnik(judul, "surat_gembala");
-  const { error } = await supabaseServer().from("surat_gembala").insert({
-    slug,
-    judul,
-    tanggal,
-    isi,
-    gambar,
-  });
-  if (error) return redirectKe(req, "/admin/surat-gembala?err=simpan");
-
-  revalidatePath("/surat-gembala");
-  revalidatePath(`/surat-gembala/${slug}`);
-  return redirectKe(req, "/admin/surat-gembala?ok=1");
 }
