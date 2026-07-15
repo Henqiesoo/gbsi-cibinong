@@ -18,6 +18,8 @@ semua pengelolaan dilakukan lewat browser.
 
 | Menu | Fungsi |
 |---|---|
+| **Tema Tahunan** | Ganti teks tema yang tampil besar di halaman depan (tiap awal tahun) + poster tema (opsional). Moto "Mari Roh Jiwaku, Kembalilah kepada Firman!" di footer tidak ikut berubah. |
+| **Acara & Seminar** | Umumkan acara dengan tanggal, tema, dan poster. Acara mendatang tampil di Beranda & halaman Acara; yang sudah lewat otomatis masuk Arsip. |
 | **Renungan** | Tulis renungan baru, edit, atau hapus. Paragraf dipisah baris kosong; thumbnail bisa diunggah. |
 | **Galeri** | Unggah foto ke kategori Ibadah & Pujian / Persekutuan & Acara / Fasilitas, atau hapus foto. |
 | **Foto Beranda** | Ganti foto besar di halaman depan (disarankan foto melebar, ≥1600px). |

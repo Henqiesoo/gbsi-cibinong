@@ -10,6 +10,8 @@ export const metadata: Metadata = {
 
 const menu = [
   { label: "Dasbor", href: "/admin" },
+  { label: "Tema Tahunan", href: "/admin/tema" },
+  { label: "Acara", href: "/admin/acara" },
   { label: "Renungan", href: "/admin/renungan" },
   { label: "Galeri", href: "/admin/galeri" },
   { label: "Foto Beranda", href: "/admin/beranda" },

@@ -1,12 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getHeroUrl } from "@/lib/data/pengaturan";
-import { site } from "@/lib/site";
+import { getHeroUrl, getTemaTahunan } from "@/lib/data/pengaturan";
 
-// Foto hero bisa diganti dari panel admin (/admin/beranda). Sebelum
-// Supabase tersambung, dipakai /images/hero/ibadah-utama.jpg.
+// Foto hero & teks tema tahunan bisa diganti dari panel admin
+// (/admin/beranda dan /admin/tema).
 export default async function Hero() {
-  const heroUrl = await getHeroUrl();
+  const [heroUrl, tema] = await Promise.all([getHeroUrl(), getTemaTahunan()]);
   return (
     <section className="relative flex min-h-[70vh] items-center md:min-h-[80vh]">
       <Image
@@ -24,8 +23,11 @@ export default async function Hero() {
         <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-200">
           Gereja Berea Sungrak Indonesia · Cabang Cibinong
         </p>
-        <h1 className="mt-4 max-w-2xl font-serif text-4xl font-semibold leading-tight text-white sm:text-5xl md:text-6xl">
-          {site.tagline}
+        <p className="mt-5 inline-block rounded-full bg-brand-500/30 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-brand-100 backdrop-blur">
+          Tema Tahun Ini
+        </p>
+        <h1 className="mt-3 max-w-2xl font-serif text-4xl font-semibold leading-tight text-white sm:text-5xl md:text-6xl">
+          {tema.teks}
         </h1>
         <p className="mt-5 max-w-2xl text-base italic leading-relaxed text-cream-100 sm:text-lg">
           “Tetapi pada malam itu juga segera saudara-saudara di situ menyuruh

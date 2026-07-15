@@ -1,24 +1,69 @@
 import Image from "next/image";
 import Link from "next/link";
+import CardAcara from "@/components/CardAcara";
 import CardRenungan from "@/components/CardRenungan";
 import Hero from "@/components/Hero";
 import SectionHeading from "@/components/SectionHeading";
+import { getAcaraMendatang } from "@/lib/data/acara";
 import { getGaleriPreview } from "@/lib/data/galeri";
 import { getJadwalUtama } from "@/lib/data/jadwal";
+import { getTemaTahunan } from "@/lib/data/pengaturan";
 import { getRenunganTerbaru } from "@/lib/data/renungan";
 
 export const revalidate = 300;
 
 export default async function BerandaPage() {
-  const [jadwalUtama, renunganTerbaru, galeriPreview] = await Promise.all([
-    getJadwalUtama(),
-    getRenunganTerbaru(3),
-    getGaleriPreview(6),
-  ]);
+  const [jadwalUtama, renunganTerbaru, galeriPreview, acaraMendatang, tema] =
+    await Promise.all([
+      getJadwalUtama(),
+      getRenunganTerbaru(3),
+      getGaleriPreview(6),
+      getAcaraMendatang(),
+      getTemaTahunan(),
+    ]);
 
   return (
     <>
       <Hero />
+
+      {/* Poster tema tahunan (tampil bila diunggah lewat panel admin) */}
+      {tema.poster && (
+        <section className="mx-auto max-w-content px-4 pt-16 sm:px-6 md:pt-24">
+          <figure className="mx-auto max-w-3xl overflow-hidden rounded-2xl border border-cream-200 bg-white shadow-sm">
+            <Image
+              src={tema.poster}
+              alt={`Poster tema: ${tema.teks}`}
+              width={1200}
+              height={800}
+              className="h-auto w-full"
+            />
+          </figure>
+        </section>
+      )}
+
+      {/* Acara & seminar mendatang (otomatis tersembunyi bila kosong) */}
+      {acaraMendatang.length > 0 && (
+        <section className="mx-auto max-w-content px-4 pt-16 sm:px-6 md:pt-24">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <SectionHeading
+              kicker="Jangan Lewatkan"
+              judul="Acara & Seminar"
+              deskripsi="Kegiatan yang akan datang — mari hadir dan ajak keluarga."
+            />
+            <Link
+              href="/acara"
+              className="text-sm font-semibold text-brand-600 hover:text-brand-700 hover:underline"
+            >
+              Semua acara →
+            </Link>
+          </div>
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {acaraMendatang.slice(0, 3).map((a) => (
+              <CardAcara key={a.id} acara={a} />
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Preview jadwal ibadah */}
       <section className="mx-auto max-w-content px-4 py-16 sm:px-6 md:py-24">

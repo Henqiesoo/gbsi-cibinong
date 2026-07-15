@@ -46,6 +46,15 @@ create table if not exists pengaturan (
   nilai text not null
 );
 
+create table if not exists acara (
+  id uuid primary key default gen_random_uuid(),
+  judul text not null,
+  tema text,
+  tanggal date not null,
+  poster text,
+  created_at timestamptz not null default now()
+);
+
 -- ——— Keamanan ———
 -- RLS diaktifkan tanpa policy publik: tabel hanya bisa diakses lewat
 -- server (service role) — yaitu melalui panel admin berpassword.
@@ -55,6 +64,7 @@ alter table galeri enable row level security;
 alter table jadwal enable row level security;
 alter table jadwal_tugas enable row level security;
 alter table pengaturan enable row level security;
+alter table acara enable row level security;
 
 -- ——— Storage ———
 -- Bucket "publik" untuk semua file (foto galeri, hero, thumbnail

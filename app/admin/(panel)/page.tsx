@@ -6,6 +6,16 @@ export const dynamic = "force-dynamic";
 
 const fitur = [
   {
+    href: "/admin/tema",
+    judul: "Tema Tahunan",
+    deskripsi: "Ganti teks tema di halaman depan tiap tahun (+ poster).",
+  },
+  {
+    href: "/admin/acara",
+    judul: "Acara & Seminar",
+    deskripsi: "Umumkan acara dengan poster; arsip tersimpan otomatis.",
+  },
+  {
     href: "/admin/renungan",
     judul: "Renungan",
     deskripsi: "Tulis, ubah, atau hapus renungan mingguan.",
