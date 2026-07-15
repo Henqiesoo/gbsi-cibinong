@@ -57,7 +57,7 @@ create table if not exists acara (
 
 create table if not exists foto_pengurus (
   id uuid primary key default gen_random_uuid(),
-  unit text unique not null,
+  nama text unique not null,
   url text not null,
   created_at timestamptz not null default now()
 );

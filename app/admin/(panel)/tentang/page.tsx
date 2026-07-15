@@ -4,6 +4,7 @@ import { getPengaturan } from "@/lib/data/pengaturan";
 import {
   SEJARAH_DEFAULT,
   STRUKTUR_DEFAULT,
+  daftarNamaPengurus,
   getDaftarFotoPengurus,
   getStruktur,
 } from "@/lib/data/tentang";
@@ -25,11 +26,8 @@ export default async function AdminTentangPage({
       getStruktur(),
       getDaftarFotoPengurus(),
     ]);
-  // Unit yang bisa diberi foto: Koordinator + unit mandiri + bidang.
-  const pilihanUnit = [
-    "Koordinator",
-    ...struktur.unit.map((u) => u.nama),
-  ];
+  // Semua orang dalam struktur bisa diberi foto (satu foto per orang).
+  const pilihanNama = daftarNamaPengurus(struktur.unit);
   // Tampilkan teks tersimpan; bila belum ada, tampilkan bawaan.
   const sejarahAwal = sejarahTersimpan || SEJARAH_DEFAULT;
   const strukturAwal = strukturTersimpan || STRUKTUR_DEFAULT;
@@ -120,8 +118,10 @@ export default async function AdminTentangPage({
             Foto Pengurus
           </h2>
           <p className="mt-1 text-sm text-ink/60">
-            Unggah foto untuk Koordinator, Penasehat, atau ketua bidang.
-            Unit tanpa foto ditampilkan sebagai lingkaran inisial.
+            Satu foto per orang — semua {pilihanNama.length} pengurus dalam
+            struktur bisa diberi foto. Orang yang melayani di beberapa unit
+            otomatis memakai foto yang sama. Tanpa foto, tampil lingkaran
+            inisial.
           </p>
         </div>
 
@@ -132,18 +132,18 @@ export default async function AdminTentangPage({
           className="flex flex-wrap items-end gap-3"
         >
           <div className="min-w-48 flex-1">
-            <label htmlFor="unit" className="block text-sm font-semibold text-ink">
-              Unit
+            <label htmlFor="nama" className="block text-sm font-semibold text-ink">
+              Nama pengurus
             </label>
             <select
-              id="unit"
-              name="unit"
+              id="nama"
+              name="nama"
               required
               className="mt-2 w-full rounded-xl border border-cream-300 bg-white px-4 py-3 text-base text-ink focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/30"
             >
-              {pilihanUnit.map((u) => (
-                <option key={u} value={u}>
-                  {u}
+              {pilihanNama.map((n) => (
+                <option key={n} value={n}>
+                  {n}
                 </option>
               ))}
             </select>
@@ -178,10 +178,10 @@ export default async function AdminTentangPage({
               >
                 <img
                   src={f.url}
-                  alt={f.unit}
+                  alt={f.nama}
                   className="mx-auto h-16 w-16 rounded-full object-cover"
                 />
-                <p className="mt-2 text-sm font-medium text-ink">{f.unit}</p>
+                <p className="mt-2 text-sm font-medium text-ink">{f.nama}</p>
                 <form
                   action={`/api/admin/foto-pengurus/${f.id}/hapus`}
                   method="post"

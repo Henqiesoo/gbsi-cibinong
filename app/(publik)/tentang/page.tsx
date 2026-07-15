@@ -2,7 +2,13 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import PageHeader from "@/components/PageHeader";
 import SectionHeading from "@/components/SectionHeading";
-import { getFotoPengurus, getSejarah, getStruktur } from "@/lib/data/tentang";
+import {
+  KOORDINATOR,
+  getFotoPengurus,
+  getSejarah,
+  getStruktur,
+  pisahNama,
+} from "@/lib/data/tentang";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -42,7 +48,13 @@ const misi = [
   "Membangun persekutuan jemaat yang saling menguatkan. (Placeholder)",
 ];
 
-// Avatar bulat: foto bila ada, bila tidak inisial nama.
+const ukuranAvatar = {
+  besar: { kelas: "h-28 w-28 border-4 text-4xl", sizes: "112px" },
+  kecil: { kelas: "h-16 w-16 border-2 text-xl", sizes: "64px" },
+  mini: { kelas: "h-10 w-10 border-2 text-sm", sizes: "40px" },
+} as const;
+
+// Avatar bulat satu orang: foto bila ada, bila tidak inisial nama.
 function Avatar({
   foto,
   nama,
@@ -50,22 +62,20 @@ function Avatar({
 }: {
   foto?: string;
   nama: string;
-  ukuran: "besar" | "kecil";
+  ukuran: keyof typeof ukuranAvatar;
 }) {
-  const kelas =
-    ukuran === "besar"
-      ? "h-28 w-28 border-4 text-4xl"
-      : "h-16 w-16 border-2 text-xl";
+  const u = ukuranAvatar[ukuran];
   if (foto) {
     return (
       <span
-        className={`relative mx-auto block overflow-hidden rounded-full border-white shadow-md ${kelas}`}
+        title={nama}
+        className={`relative block shrink-0 overflow-hidden rounded-full border-white shadow-md ${u.kelas}`}
       >
         <Image
           src={foto}
           alt={nama}
           fill
-          sizes={ukuran === "besar" ? "112px" : "64px"}
+          sizes={u.sizes}
           className="object-cover"
         />
       </span>
@@ -73,9 +83,37 @@ function Avatar({
   }
   return (
     <span
-      className={`mx-auto flex items-center justify-center rounded-full border-white bg-brand-100 font-serif font-bold text-brand-700 shadow-md ${kelas}`}
+      title={nama}
+      className={`flex shrink-0 items-center justify-center rounded-full border-white bg-brand-100 font-serif font-bold text-brand-700 shadow-md ${u.kelas}`}
     >
       {nama.replace(/^(Ev|Idt|Dc|Bp|Ibu)\.?\s+/i, "").charAt(0).toUpperCase()}
+    </span>
+  );
+}
+
+// Deretan avatar untuk satu unit — satu avatar per orang (unit berdua
+// otomatis tampil dua foto berdampingan).
+function DeretAvatar({
+  pengurus,
+  fotoMap,
+  ukuran,
+}: {
+  pengurus: string;
+  fotoMap: Record<string, string>;
+  ukuran: keyof typeof ukuranAvatar;
+}) {
+  const orang = pisahNama(pengurus);
+  if (orang.length === 0) return null;
+  return (
+    <span className="flex justify-center -space-x-2">
+      {orang.map((n) => (
+        <Avatar
+          key={n}
+          nama={n}
+          foto={fotoMap[n.toLowerCase()]}
+          ukuran={ukuran}
+        />
+      ))}
     </span>
   );
 }
@@ -88,7 +126,6 @@ export default async function TentangPage() {
   ]);
   const unitMandiri = struktur.unit.filter((u) => !u.bidang);
   const bidang = struktur.unit.filter((u) => u.bidang);
-  const fotoUnit = (nama: string) => fotoPengurus[nama.toLowerCase()];
 
   return (
     <>
@@ -188,18 +225,21 @@ export default async function TentangPage() {
 
           {/* Koordinator — paling atas */}
           <div className="mx-auto mt-10 max-w-md rounded-2xl border border-brand-200 bg-brand-50 p-8 text-center">
-            <Avatar
-              foto={
-                fotoUnit("Koordinator") ?? "/images/tentang/koordinator.jpg"
-              }
-              nama="Ev. Peterus Daniel Imanuel, S.H."
-              ukuran="besar"
-            />
+            <span className="flex justify-center">
+              <Avatar
+                foto={
+                  fotoPengurus[KOORDINATOR.nama.toLowerCase()] ??
+                  "/images/tentang/koordinator.jpg"
+                }
+                nama={KOORDINATOR.nama}
+                ukuran="besar"
+              />
+            </span>
             <p className="mt-4 text-sm font-semibold uppercase tracking-wide text-brand-600">
-              Koordinator
+              {KOORDINATOR.jabatan}
             </p>
             <p className="mt-2 font-serif text-2xl font-semibold text-ink">
-              Ev. Peterus Daniel Imanuel, S.H.
+              {KOORDINATOR.nama}
             </p>
           </div>
 
@@ -211,9 +251,9 @@ export default async function TentangPage() {
                   key={u.nama}
                   className="rounded-2xl border border-cream-200 bg-white p-8 text-center"
                 >
-                  <Avatar
-                    foto={fotoUnit(u.nama)}
-                    nama={u.pengurus || u.nama}
+                  <DeretAvatar
+                    pengurus={u.pengurus || u.nama}
+                    fotoMap={fotoPengurus}
                     ukuran="besar"
                   />
                   <p className="mt-4 text-sm font-semibold uppercase tracking-wide text-brand-600">
@@ -227,16 +267,16 @@ export default async function TentangPage() {
             </div>
           )}
 
-          {/* Bidang-bidang */}
+          {/* Bidang-bidang — setiap orang (termasuk sub-unit) berfoto */}
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {bidang.map((b) => (
               <div
                 key={b.nama}
                 className="rounded-2xl border border-cream-200 bg-white p-6 text-center shadow-sm"
               >
-                <Avatar
-                  foto={fotoUnit(b.nama)}
-                  nama={b.pengurus || b.nama}
+                <DeretAvatar
+                  pengurus={b.pengurus || b.nama}
+                  fotoMap={fotoPengurus}
                   ukuran="kecil"
                 />
                 <p className="mt-3 text-xs font-semibold uppercase tracking-wide text-brand-600">
@@ -246,15 +286,24 @@ export default async function TentangPage() {
                   {b.pengurus}
                 </p>
                 {b.sub.length > 0 && (
-                  <ul className="mt-4 space-y-2 border-t border-cream-200 pt-4">
+                  <ul className="mt-4 space-y-3 border-t border-cream-200 pt-4">
                     {b.sub.map((s) => (
-                      <li key={s.nama} className="text-sm leading-snug">
-                        <span className="font-medium text-ink">{s.nama}</span>
-                        {s.pengurus && (
-                          <span className="block text-ink/60">
-                            {s.pengurus}
+                      <li key={s.nama} className="flex items-center gap-3">
+                        <DeretAvatar
+                          pengurus={s.pengurus || s.nama}
+                          fotoMap={fotoPengurus}
+                          ukuran="mini"
+                        />
+                        <span className="min-w-0 text-left text-sm leading-snug">
+                          <span className="block font-medium text-ink">
+                            {s.nama}
                           </span>
-                        )}
+                          {s.pengurus && (
+                            <span className="block text-ink/60">
+                              {s.pengurus}
+                            </span>
+                          )}
+                        </span>
                       </li>
                     ))}
                   </ul>

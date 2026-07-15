@@ -98,17 +98,42 @@ export async function getStruktur(): Promise<{
 }
 
 // ——— Foto pengurus ———
-// Foto per unit (Koordinator, Penasehat, tiap bidang) yang diunggah dari
-// panel admin. Kunci pencocokan: nama unit (huruf kecil).
+// Foto per ORANG (bukan per unit) yang diunggah dari panel admin.
+// Kunci pencocokan: nama orang persis seperti tertulis di struktur
+// (huruf besar/kecil diabaikan). Orang yang melayani di beberapa unit
+// otomatis memakai foto yang sama.
 
-export type FotoPengurus = { id: string; unit: string; url: string };
+export const KOORDINATOR = {
+  jabatan: "Koordinator",
+  nama: "Ev. Peterus Daniel Imanuel, S.H.",
+};
+
+// "Rachel & Fransiska" → ["Rachel", "Fransiska"]
+export function pisahNama(pengurus: string): string[] {
+  return pengurus
+    .split(/\s*[&,]\s*/)
+    .map((n) => n.trim())
+    .filter(Boolean);
+}
+
+// Semua nama orang dalam struktur (urut kemunculan, tanpa duplikat).
+export function daftarNamaPengurus(unit: UnitStruktur[]): string[] {
+  const nama: string[] = [KOORDINATOR.nama];
+  for (const u of unit) {
+    for (const n of pisahNama(u.pengurus)) nama.push(n);
+    for (const s of u.sub) for (const n of pisahNama(s.pengurus)) nama.push(n);
+  }
+  return Array.from(new Set(nama));
+}
+
+export type FotoPengurus = { id: string; nama: string; url: string };
 
 export async function getDaftarFotoPengurus(): Promise<FotoPengurus[]> {
   if (!supabaseSiap()) return [];
   const { data, error } = await supabaseServer()
     .from("foto_pengurus")
-    .select("id, unit, url")
-    .order("unit");
+    .select("id, nama, url")
+    .order("nama");
   if (error || !data) return [];
   return data as FotoPengurus[];
 }
@@ -116,6 +141,6 @@ export async function getDaftarFotoPengurus(): Promise<FotoPengurus[]> {
 export async function getFotoPengurus(): Promise<Record<string, string>> {
   const daftar = await getDaftarFotoPengurus();
   const peta: Record<string, string> = {};
-  for (const f of daftar) peta[f.unit.toLowerCase()] = f.url;
+  for (const f of daftar) peta[f.nama.toLowerCase()] = f.url;
   return peta;
 }

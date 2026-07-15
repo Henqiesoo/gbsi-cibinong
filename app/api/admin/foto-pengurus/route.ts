@@ -6,15 +6,15 @@ import { supabaseSiap, supabaseServer, uploadKeStorage } from "@/lib/supabase";
 
 export const runtime = "nodejs";
 
-// Unggah/ganti foto pengurus untuk satu unit (Koordinator, Penasehat,
-// atau bidang). Foto lama unit yang sama otomatis diganti.
+// Unggah/ganti foto seorang pengurus (dikenali dari namanya di struktur).
+// Foto lama orang yang sama otomatis diganti.
 export async function POST(req: NextRequest) {
   if (!supabaseSiap()) return redirectKe(req, "/admin/tentang?err=supabase");
 
   const form = await req.formData();
-  const unit = String(form.get("unit") ?? "").trim();
+  const nama = String(form.get("nama") ?? "").trim();
   const file = form.get("foto");
-  if (!unit || !(file instanceof File) || file.size === 0) {
+  if (!nama || !(file instanceof File) || file.size === 0) {
     return redirectKe(req, "/admin/tentang?err=lengkapi");
   }
 
@@ -30,11 +30,11 @@ export async function POST(req: NextRequest) {
   const { data: lama } = await sb
     .from("foto_pengurus")
     .select("url")
-    .eq("unit", unit)
+    .eq("nama", nama)
     .maybeSingle();
   const { error } = await sb
     .from("foto_pengurus")
-    .upsert({ unit, url }, { onConflict: "unit" });
+    .upsert({ nama, url }, { onConflict: "nama" });
   if (error) return redirectKe(req, "/admin/tentang?err=simpan");
   if (lama?.url) await hapusDariStorage(lama.url);
 
