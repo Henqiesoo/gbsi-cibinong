@@ -118,6 +118,8 @@ type OpsiPdf = {
   // URL absolut (browser) atau path file (Node) menuju logo watermark.
   logoSrc: string;
   posisi?: PosisiWatermarkPdf;
+  // Label jenis dokumen pada baris meta (bawaan: "Renungan").
+  label?: string;
 };
 
 export function buatDokumenRenungan(renungan: Renungan, opsi: OpsiPdf) {
@@ -139,7 +141,7 @@ export function buatDokumenRenungan(renungan: Renungan, opsi: OpsiPdf) {
 
         <Text style={styles.kop}>{site.namaLengkap}</Text>
         <Text style={styles.meta}>
-          Renungan · {formatTanggal(renungan.tanggal)}
+          {opsi.label ?? "Renungan"} · {formatTanggal(renungan.tanggal)}
           {renungan.ayat ? ` · ${renungan.ayat}` : ""}
         </Text>
 

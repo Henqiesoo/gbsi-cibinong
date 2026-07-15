@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import UnduhPdfSuratButton from "@/components/UnduhPdfSuratButton";
 import { getSemuaSurat, getSuratBySlug } from "@/lib/data/surat-gembala";
 import { formatTanggal } from "@/lib/data/renungan";
 
@@ -62,6 +63,10 @@ export default async function DetailSuratGembalaPage({ params }: Props) {
             {paragraf}
           </p>
         ))}
+      </div>
+
+      <div className="mt-8">
+        <UnduhPdfSuratButton surat={surat} />
       </div>
 
       {surat.gambar && (
