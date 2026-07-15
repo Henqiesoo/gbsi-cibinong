@@ -4,6 +4,7 @@
 // isi bawaan hasil transkripsi dokumen resmi gereja.
 
 import { getPengaturan } from "@/lib/data/pengaturan";
+import { supabaseSiap, supabaseServer } from "@/lib/supabase";
 
 // ——— Sejarah (paragraf dipisah baris kosong) ———
 
@@ -94,4 +95,27 @@ export async function getStruktur(): Promise<{
     periode: periode || STRUKTUR_PERIODE_DEFAULT,
     unit: parseStruktur(teks || STRUKTUR_DEFAULT),
   };
+}
+
+// ——— Foto pengurus ———
+// Foto per unit (Koordinator, Penasehat, tiap bidang) yang diunggah dari
+// panel admin. Kunci pencocokan: nama unit (huruf kecil).
+
+export type FotoPengurus = { id: string; unit: string; url: string };
+
+export async function getDaftarFotoPengurus(): Promise<FotoPengurus[]> {
+  if (!supabaseSiap()) return [];
+  const { data, error } = await supabaseServer()
+    .from("foto_pengurus")
+    .select("id, unit, url")
+    .order("unit");
+  if (error || !data) return [];
+  return data as FotoPengurus[];
+}
+
+export async function getFotoPengurus(): Promise<Record<string, string>> {
+  const daftar = await getDaftarFotoPengurus();
+  const peta: Record<string, string> = {};
+  for (const f of daftar) peta[f.unit.toLowerCase()] = f.url;
+  return peta;
 }

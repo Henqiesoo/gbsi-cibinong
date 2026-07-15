@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import PageHeader from "@/components/PageHeader";
 import SectionHeading from "@/components/SectionHeading";
-import { getSejarah, getStruktur } from "@/lib/data/tentang";
+import { getFotoPengurus, getSejarah, getStruktur } from "@/lib/data/tentang";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -42,10 +42,53 @@ const misi = [
   "Membangun persekutuan jemaat yang saling menguatkan. (Placeholder)",
 ];
 
+// Avatar bulat: foto bila ada, bila tidak inisial nama.
+function Avatar({
+  foto,
+  nama,
+  ukuran,
+}: {
+  foto?: string;
+  nama: string;
+  ukuran: "besar" | "kecil";
+}) {
+  const kelas =
+    ukuran === "besar"
+      ? "h-28 w-28 border-4 text-4xl"
+      : "h-16 w-16 border-2 text-xl";
+  if (foto) {
+    return (
+      <span
+        className={`relative mx-auto block overflow-hidden rounded-full border-white shadow-md ${kelas}`}
+      >
+        <Image
+          src={foto}
+          alt={nama}
+          fill
+          sizes={ukuran === "besar" ? "112px" : "64px"}
+          className="object-cover"
+        />
+      </span>
+    );
+  }
+  return (
+    <span
+      className={`mx-auto flex items-center justify-center rounded-full border-white bg-brand-100 font-serif font-bold text-brand-700 shadow-md ${kelas}`}
+    >
+      {nama.replace(/^(Ev|Idt|Dc|Bp|Ibu)\.?\s+/i, "").charAt(0).toUpperCase()}
+    </span>
+  );
+}
+
 export default async function TentangPage() {
-  const [sejarah, struktur] = await Promise.all([getSejarah(), getStruktur()]);
+  const [sejarah, struktur, fotoPengurus] = await Promise.all([
+    getSejarah(),
+    getStruktur(),
+    getFotoPengurus(),
+  ]);
   const unitMandiri = struktur.unit.filter((u) => !u.bidang);
   const bidang = struktur.unit.filter((u) => u.bidang);
+  const fotoUnit = (nama: string) => fotoPengurus[nama.toLowerCase()];
 
   return (
     <>
@@ -143,48 +186,60 @@ export default async function TentangPage() {
             deskripsi={`Struktur kepengurusan GBSI Cibinong periode ${struktur.periode}.`}
           />
 
-          <div className="mt-10 grid gap-4 sm:grid-cols-2">
-            <div className="rounded-2xl border border-brand-200 bg-brand-50 p-8 text-center">
-              {/* Ganti foto: timpa /public/images/tentang/koordinator.jpg */}
-              <span className="relative mx-auto block h-28 w-28 overflow-hidden rounded-full border-4 border-white shadow-md">
-                <Image
-                  src="/images/tentang/koordinator.jpg"
-                  alt="Ev. Peterus Daniel Imanuel, S.H."
-                  fill
-                  sizes="112px"
-                  className="object-cover"
-                />
-              </span>
-              <p className="mt-4 text-sm font-semibold uppercase tracking-wide text-brand-600">
-                Koordinator
-              </p>
-              <p className="mt-2 font-serif text-2xl font-semibold text-ink">
-                Ev. Peterus Daniel Imanuel, S.H.
-              </p>
-            </div>
-
-            {unitMandiri.map((u) => (
-              <div
-                key={u.nama}
-                className="flex flex-col items-center justify-center rounded-2xl border border-cream-200 bg-white p-8 text-center"
-              >
-                <p className="text-sm font-semibold uppercase tracking-wide text-brand-600">
-                  {u.nama}
-                </p>
-                <p className="mt-2 font-serif text-xl font-semibold text-ink">
-                  {u.pengurus}
-                </p>
-              </div>
-            ))}
+          {/* Koordinator — paling atas */}
+          <div className="mx-auto mt-10 max-w-md rounded-2xl border border-brand-200 bg-brand-50 p-8 text-center">
+            <Avatar
+              foto={
+                fotoUnit("Koordinator") ?? "/images/tentang/koordinator.jpg"
+              }
+              nama="Ev. Peterus Daniel Imanuel, S.H."
+              ukuran="besar"
+            />
+            <p className="mt-4 text-sm font-semibold uppercase tracking-wide text-brand-600">
+              Koordinator
+            </p>
+            <p className="mt-2 font-serif text-2xl font-semibold text-ink">
+              Ev. Peterus Daniel Imanuel, S.H.
+            </p>
           </div>
 
+          {/* Penasehat & unit mandiri lain — di bawah koordinator */}
+          {unitMandiri.length > 0 && (
+            <div className="mx-auto mt-4 grid max-w-md gap-4">
+              {unitMandiri.map((u) => (
+                <div
+                  key={u.nama}
+                  className="rounded-2xl border border-cream-200 bg-white p-8 text-center"
+                >
+                  <Avatar
+                    foto={fotoUnit(u.nama)}
+                    nama={u.pengurus || u.nama}
+                    ukuran="besar"
+                  />
+                  <p className="mt-4 text-sm font-semibold uppercase tracking-wide text-brand-600">
+                    {u.nama}
+                  </p>
+                  <p className="mt-2 font-serif text-xl font-semibold text-ink">
+                    {u.pengurus}
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Bidang-bidang */}
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {bidang.map((b) => (
               <div
                 key={b.nama}
-                className="rounded-2xl border border-cream-200 bg-white p-6 shadow-sm"
+                className="rounded-2xl border border-cream-200 bg-white p-6 text-center shadow-sm"
               >
-                <p className="text-xs font-semibold uppercase tracking-wide text-brand-600">
+                <Avatar
+                  foto={fotoUnit(b.nama)}
+                  nama={b.pengurus || b.nama}
+                  ukuran="kecil"
+                />
+                <p className="mt-3 text-xs font-semibold uppercase tracking-wide text-brand-600">
                   {b.nama}
                 </p>
                 <p className="mt-1 font-serif text-lg font-semibold leading-snug text-ink">

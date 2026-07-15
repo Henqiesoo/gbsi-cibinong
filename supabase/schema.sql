@@ -55,6 +55,13 @@ create table if not exists acara (
   created_at timestamptz not null default now()
 );
 
+create table if not exists foto_pengurus (
+  id uuid primary key default gen_random_uuid(),
+  unit text unique not null,
+  url text not null,
+  created_at timestamptz not null default now()
+);
+
 create table if not exists surat_gembala (
   id uuid primary key default gen_random_uuid(),
   slug text unique not null,
@@ -76,6 +83,7 @@ alter table jadwal_tugas enable row level security;
 alter table pengaturan enable row level security;
 alter table acara enable row level security;
 alter table surat_gembala enable row level security;
+alter table foto_pengurus enable row level security;
 
 -- ——— Storage ———
 -- Bucket "publik" untuk semua file (foto galeri, hero, thumbnail
