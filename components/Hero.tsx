@@ -24,7 +24,7 @@ export default async function Hero() {
           Gereja Berea Sungrak Indonesia · Cabang Cibinong
         </p>
         <p className="mt-5 inline-block rounded-full bg-brand-500/30 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-brand-100 backdrop-blur">
-          Tema Tahun Ini
+          {tema.label}
         </p>
         <h1 className="mt-3 max-w-2xl font-serif text-4xl font-semibold leading-tight text-white sm:text-5xl md:text-6xl">
           {tema.teks}

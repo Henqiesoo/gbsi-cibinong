@@ -160,6 +160,39 @@ export default function KontakPage() {
             </div>
           </div>
         </div>
+
+        {/* Konseling & doa pribadi */}
+        <div className="mt-10 rounded-2xl border border-brand-200 bg-brand-50 p-8 sm:p-10">
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-brand-600">
+              Pelayanan Pribadi
+            </p>
+            <h2 className="mt-2 font-serif text-3xl font-semibold text-ink">
+              Konseling &amp; Doa Pribadi
+            </h2>
+            <p className="mt-4 text-base leading-relaxed text-ink/70">
+              Sedang bergumul, membutuhkan teman bercerita, atau ingin
+              didoakan secara pribadi? Para pelayan Tuhan di GBSI Cibinong
+              siap mendampingi Saudara — baik untuk konseling pribadi,
+              keluarga, maupun permohonan doa. Seluruh percakapan dijaga
+              kerahasiaannya.
+            </p>
+            <a
+              href={`${site.whatsappHref}?text=${encodeURIComponent(
+                "Syalom, saya ingin membuat janji konseling / doa pribadi."
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-6 inline-block rounded-full bg-brand-600 px-8 py-3.5 text-base font-semibold text-white transition-colors hover:bg-brand-500"
+            >
+              Buat Janji Konseling via WhatsApp
+            </a>
+            <p className="mt-3 text-sm text-ink/50">
+              Waktu konseling akan disepakati bersama setelah Saudara
+              menghubungi kami.
+            </p>
+          </div>
+        </div>
       </section>
     </>
   );

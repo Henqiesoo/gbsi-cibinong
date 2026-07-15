@@ -26,6 +26,7 @@ export const navigasi = [
   { label: "Tentang Kami", href: "/tentang" },
   { label: "Jadwal Ibadah", href: "/jadwal" },
   { label: "Acara", href: "/acara" },
+  { label: "Surat Gembala", href: "/surat-gembala" },
   { label: "Renungan", href: "/renungan" },
   { label: "Galeri", href: "/galeri" },
   { label: "Kontak", href: "/kontak" },

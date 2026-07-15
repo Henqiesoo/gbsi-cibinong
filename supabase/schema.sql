@@ -55,6 +55,16 @@ create table if not exists acara (
   created_at timestamptz not null default now()
 );
 
+create table if not exists surat_gembala (
+  id uuid primary key default gen_random_uuid(),
+  slug text unique not null,
+  judul text not null,
+  tanggal date not null,
+  isi jsonb not null default '[]'::jsonb,
+  gambar text,
+  created_at timestamptz not null default now()
+);
+
 -- ——— Keamanan ———
 -- RLS diaktifkan tanpa policy publik: tabel hanya bisa diakses lewat
 -- server (service role) — yaitu melalui panel admin berpassword.
@@ -65,6 +75,7 @@ alter table jadwal enable row level security;
 alter table jadwal_tugas enable row level security;
 alter table pengaturan enable row level security;
 alter table acara enable row level security;
+alter table surat_gembala enable row level security;
 
 -- ——— Storage ———
 -- Bucket "publik" untuk semua file (foto galeri, hero, thumbnail

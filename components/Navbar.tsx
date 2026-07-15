@@ -47,7 +47,7 @@ export default function Navbar() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                  className={`whitespace-nowrap rounded-full px-3 py-2 text-sm font-medium transition-colors ${
                     aktif
                       ? "bg-brand-600 text-white"
                       : "text-ink hover:bg-brand-50 hover:text-brand-700"

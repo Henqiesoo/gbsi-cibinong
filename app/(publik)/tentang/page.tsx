@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import PageHeader from "@/components/PageHeader";
 import SectionHeading from "@/components/SectionHeading";
+import { getSejarah, getStruktur } from "@/lib/data/tentang";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -9,9 +10,10 @@ export const metadata: Metadata = {
   description: `Sejarah, visi & misi, serta struktur pelayanan ${site.namaLengkap}.`,
 };
 
-// ——— Konten di bawah ini adalah placeholder yang mudah diedit ———
+export const revalidate = 300;
 
-const sejarah = [
+// Garis besar perjalanan (dari Gereja Sungrak Korea hingga Cibinong).
+const perjalanan = [
   {
     periode: "1969 · Seoul, Korea",
     judul: "Gereja Sungrak Berdiri",
@@ -20,18 +22,18 @@ const sejarah = [
   {
     periode: "Masuk ke Indonesia",
     judul: "Gereja Berea Sungrak Indonesia",
-    isi: "Melalui pelayanan Pdt. Yohana Kho, pengajaran Berea dan pelayanan Gereja Sungrak dibawa masuk ke Indonesia, hingga berdirilah Gereja Berea Sungrak Indonesia (GBSI) yang melayani jemaat di berbagai kota.", // TODO: lengkapi tahun & detail sejarah
+    isi: "Melalui pelayanan Pdt. Yohana Kho, pengajaran Berea dan pelayanan Gereja Sungrak dibawa masuk ke Indonesia, hingga berdirilah Gereja Berea Sungrak Indonesia (GBSI) yang melayani jemaat di berbagai kota, dengan Gereja Pusat di Karawaci, Tangerang.",
   },
   {
-    periode: "GBSI Cabang Cibinong",
-    judul: "Pelayanan di Cibinong",
-    isi: "GBSI Cabang Cibinong hadir untuk melayani jemaat di wilayah Cibinong dan sekitarnya — bertekun dalam doa pagi setiap hari, ibadah Hari Tuhan, dan pendalaman Firman melalui Berea Academy.", // TODO: lengkapi tahun berdiri & kisah singkat cabang
+    periode: "30 September 2007",
+    judul: "GBSI Cabang Cibinong",
+    isi: "Berawal dari komsel keluarga, GBSI Cabang Cibinong melaksanakan ibadah perdananya dan terus bertumbuh melayani jemaat di wilayah Cibinong dan sekitarnya hingga hari ini.",
   },
 ];
 
-// TODO: Visi & Misi masih placeholder — akan diisi manual.
+// Visi dari dokumen sejarah gereja; misi masih placeholder.
 const visi =
-  "Menjadi gereja yang berakar dalam Firman Tuhan dan menjadi berkat bagi Cibinong dan sekitarnya. (Placeholder — akan diisi)";
+  "Kembali kepada Alkitab — mendorong jemaat untuk kembali sepenuhnya kepada Alkitab, dengan otoritas tertinggi Roh Kudus di dalam nama Tuhan Yesus Kristus: selalu setia, taat, dan tunduk kepada Roh Kudus.";
 
 const misi = [
   "Membawa jemaat kembali kepada Firman Tuhan. (Placeholder)",
@@ -40,27 +42,11 @@ const misi = [
   "Membangun persekutuan jemaat yang saling menguatkan. (Placeholder)",
 ];
 
-// TODO: nama divisi masih placeholder — sesuaikan dengan struktur asli.
-const divisiPelayanan = [
-  {
-    nama: "Divisi Ibadah & Pujian",
-    deskripsi: "Pelayanan ibadah, musik, dan koor.",
-  },
-  {
-    nama: "Divisi Doa",
-    deskripsi: "Doa pagi dan ibadah doa tengah minggu.",
-  },
-  {
-    nama: "Divisi Pengajaran",
-    deskripsi: "Berea Academy dan pendalaman Alkitab.",
-  },
-  {
-    nama: "Divisi Persekutuan & Diakonia",
-    deskripsi: "Persekutuan jemaat dan pelayanan kasih.",
-  },
-];
+export default async function TentangPage() {
+  const [sejarah, struktur] = await Promise.all([getSejarah(), getStruktur()]);
+  const unitMandiri = struktur.unit.filter((u) => !u.bidang);
+  const bidang = struktur.unit.filter((u) => u.bidang);
 
-export default function TentangPage() {
   return (
     <>
       <PageHeader
@@ -69,16 +55,16 @@ export default function TentangPage() {
         deskripsi="Bagian dari keluarga besar Gereja Berea Sungrak Indonesia — persekutuan jemaat yang rindu kembali kepada Firman Tuhan."
       />
 
-      {/* Sejarah */}
+      {/* Perjalanan */}
       <section className="mx-auto max-w-content px-4 py-16 sm:px-6 md:py-24">
         <SectionHeading
           kicker="Perjalanan Kami"
-          judul="Sejarah GBSI"
-          deskripsi="Dari Seoul hingga Cibinong — Tuhan menuntun langkah demi langkah."
+          judul="Dari Seoul hingga Cibinong"
+          deskripsi="Tuhan menuntun langkah demi langkah."
         />
 
         <ol className="relative mt-12 space-y-10 border-l-2 border-brand-200 pl-6 sm:pl-8">
-          {sejarah.map((babak) => (
+          {perjalanan.map((babak) => (
             <li key={babak.judul} className="relative">
               <span className="absolute -left-[31px] top-1.5 h-4 w-4 rounded-full border-4 border-cream-50 bg-brand-600 sm:-left-[39px]" />
               <p className="text-sm font-semibold uppercase tracking-wide text-brand-600">
@@ -95,84 +81,137 @@ export default function TentangPage() {
         </ol>
       </section>
 
-      {/* Visi & Misi */}
+      {/* Sejarah lengkap cabang (bisa diedit dari panel admin) */}
       <section className="bg-cream-100">
         <div className="mx-auto max-w-content px-4 py-16 sm:px-6 md:py-24">
-          <SectionHeading kicker="Arah Pelayanan" judul="Visi & Misi" />
-          <div className="mt-10 grid gap-6 md:grid-cols-2">
-            <div className="rounded-2xl border border-cream-200 bg-white p-8 shadow-sm">
-              <h3 className="font-serif text-xl font-semibold text-brand-700">
-                Visi
-              </h3>
-              <p className="mt-3 text-base leading-relaxed text-ink/80">
-                {visi}
+          <SectionHeading
+            kicker="Kisah Kami"
+            judul="Sejarah GBSI Cibinong"
+          />
+          <div className="mt-8 max-w-3xl space-y-5">
+            {sejarah.map((paragraf) => (
+              <p
+                key={paragraf.slice(0, 40)}
+                className="text-base leading-relaxed text-ink/80"
+              >
+                {paragraf}
               </p>
-            </div>
-            <div className="rounded-2xl border border-cream-200 bg-white p-8 shadow-sm">
-              <h3 className="font-serif text-xl font-semibold text-brand-700">
-                Misi
-              </h3>
-              <ul className="mt-3 space-y-3">
-                {misi.map((item, i) => (
-                  <li key={item} className="flex gap-3 text-base leading-relaxed text-ink/80">
-                    <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-50 text-xs font-bold text-brand-700">
-                      {i + 1}
-                    </span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Struktur pelayanan */}
+      {/* Visi & Misi */}
       <section className="mx-auto max-w-content px-4 py-16 sm:px-6 md:py-24">
-        <SectionHeading
-          kicker="Pelayan Tuhan"
-          judul="Struktur Pelayanan"
-          deskripsi="Pelayanan GBSI Cibinong dikoordinasikan bersama dalam beberapa divisi."
-        />
-
-        <div className="mt-10 rounded-2xl border border-brand-200 bg-brand-50 p-8 text-center">
-          {/* Ganti foto: timpa /public/images/tentang/koordinator.jpg */}
-          <span className="relative mx-auto block h-28 w-28 overflow-hidden rounded-full border-4 border-white shadow-md">
-            <Image
-              src="/images/tentang/koordinator.jpg"
-              alt="Ev. Peterus Daniel Imanuel, S.H."
-              fill
-              sizes="112px"
-              className="object-cover"
-            />
-          </span>
-          <p className="mt-4 text-sm font-semibold uppercase tracking-wide text-brand-600">
-            Koordinator
-          </p>
-          <p className="mt-2 font-serif text-2xl font-semibold text-ink">
-            Ev. Peterus Daniel Imanuel, S.H.
-          </p>
+        <SectionHeading kicker="Arah Pelayanan" judul="Visi & Misi" />
+        <div className="mt-10 grid gap-6 md:grid-cols-2">
+          <div className="rounded-2xl border border-cream-200 bg-white p-8 shadow-sm">
+            <h3 className="font-serif text-xl font-semibold text-brand-700">
+              Visi
+            </h3>
+            <p className="mt-3 text-base leading-relaxed text-ink/80">
+              {visi}
+            </p>
+          </div>
+          <div className="rounded-2xl border border-cream-200 bg-white p-8 shadow-sm">
+            <h3 className="font-serif text-xl font-semibold text-brand-700">
+              Misi
+            </h3>
+            <ul className="mt-3 space-y-3">
+              {misi.map((item, i) => (
+                <li
+                  key={item}
+                  className="flex gap-3 text-base leading-relaxed text-ink/80"
+                >
+                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-50 text-xs font-bold text-brand-700">
+                    {i + 1}
+                  </span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
+      </section>
 
-        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {divisiPelayanan.map((divisi) => (
-            <div
-              key={divisi.nama}
-              className="rounded-2xl border border-cream-200 bg-white p-6 shadow-sm"
-            >
-              <h3 className="font-serif text-lg font-semibold leading-snug text-ink">
-                {divisi.nama}
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-ink/60">
-                {divisi.deskripsi}
+      {/* Struktur kepengurusan (bisa diedit dari panel admin) */}
+      <section className="bg-cream-100">
+        <div className="mx-auto max-w-content px-4 py-16 sm:px-6 md:py-24">
+          <SectionHeading
+            kicker="Pelayan Tuhan"
+            judul="Struktur Kepengurusan"
+            deskripsi={`Struktur kepengurusan GBSI Cibinong periode ${struktur.periode}.`}
+          />
+
+          <div className="mt-10 grid gap-4 sm:grid-cols-2">
+            <div className="rounded-2xl border border-brand-200 bg-brand-50 p-8 text-center">
+              {/* Ganti foto: timpa /public/images/tentang/koordinator.jpg */}
+              <span className="relative mx-auto block h-28 w-28 overflow-hidden rounded-full border-4 border-white shadow-md">
+                <Image
+                  src="/images/tentang/koordinator.jpg"
+                  alt="Ev. Peterus Daniel Imanuel, S.H."
+                  fill
+                  sizes="112px"
+                  className="object-cover"
+                />
+              </span>
+              <p className="mt-4 text-sm font-semibold uppercase tracking-wide text-brand-600">
+                Koordinator
+              </p>
+              <p className="mt-2 font-serif text-2xl font-semibold text-ink">
+                Ev. Peterus Daniel Imanuel, S.H.
               </p>
             </div>
-          ))}
+
+            {unitMandiri.map((u) => (
+              <div
+                key={u.nama}
+                className="flex flex-col items-center justify-center rounded-2xl border border-cream-200 bg-white p-8 text-center"
+              >
+                <p className="text-sm font-semibold uppercase tracking-wide text-brand-600">
+                  {u.nama}
+                </p>
+                <p className="mt-2 font-serif text-xl font-semibold text-ink">
+                  {u.pengurus}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {bidang.map((b) => (
+              <div
+                key={b.nama}
+                className="rounded-2xl border border-cream-200 bg-white p-6 shadow-sm"
+              >
+                <p className="text-xs font-semibold uppercase tracking-wide text-brand-600">
+                  {b.nama}
+                </p>
+                <p className="mt-1 font-serif text-lg font-semibold leading-snug text-ink">
+                  {b.pengurus}
+                </p>
+                {b.sub.length > 0 && (
+                  <ul className="mt-4 space-y-2 border-t border-cream-200 pt-4">
+                    {b.sub.map((s) => (
+                      <li key={s.nama} className="text-sm leading-snug">
+                        <span className="font-medium text-ink">{s.nama}</span>
+                        {s.pengurus && (
+                          <span className="block text-ink/60">
+                            {s.pengurus}
+                          </span>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Foto jemaat & plakat */}
-      <section className="mx-auto max-w-content px-4 pb-16 sm:px-6 md:pb-24">
+      <section className="mx-auto max-w-content px-4 py-16 sm:px-6 md:py-24">
         <div className="grid gap-4 md:grid-cols-2">
           {/* Ganti foto di /public/images/tentang/ */}
           <figure className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-cream-200">

@@ -13,9 +13,11 @@ export async function POST(req: NextRequest) {
 
   const form = await req.formData();
   const teks = String(form.get("teks") ?? "").trim();
+  const label = String(form.get("label") ?? "").trim();
   if (!teks) return redirectKe(req, "/admin/tema?err=lengkapi");
 
   await setPengaturan("tema_teks", teks);
+  if (label) await setPengaturan("tema_label", label);
 
   const posterLama = await getPengaturan("tema_poster");
   const hapusPoster = form.get("hapus_poster") === "1";

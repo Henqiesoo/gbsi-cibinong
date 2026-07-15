@@ -43,6 +43,20 @@ export default async function AdminTemaPage({
           />
         </div>
 
+        <div>
+          <label htmlFor="label" className="block text-sm font-semibold text-ink">
+            Label kecil di atas tema
+          </label>
+          <input
+            id="label"
+            name="label"
+            type="text"
+            defaultValue={tema.label}
+            placeholder="contoh: Tema Tahun 2026 atau Tema Periode 2026/2027"
+            className="mt-2 w-full rounded-xl border border-cream-300 bg-white px-4 py-3 text-base text-ink placeholder:text-ink/40 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/30"
+          />
+        </div>
+
         {tema.poster && (
           <figure className="overflow-hidden rounded-xl border border-cream-200">
             <img src={tema.poster} alt="Poster tema saat ini" className="w-full" />

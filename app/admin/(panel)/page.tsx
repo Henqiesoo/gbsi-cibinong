@@ -16,9 +16,19 @@ const fitur = [
     deskripsi: "Umumkan acara dengan poster; arsip tersimpan otomatis.",
   },
   {
+    href: "/admin/surat-gembala",
+    judul: "Surat Gembala",
+    deskripsi: "Ketik atau baca otomatis dari foto surat (OCR).",
+  },
+  {
     href: "/admin/renungan",
     judul: "Renungan",
     deskripsi: "Tulis, ubah, atau hapus renungan mingguan.",
+  },
+  {
+    href: "/admin/tentang",
+    judul: "Halaman Tentang",
+    deskripsi: "Edit sejarah gereja dan struktur kepengurusan.",
   },
   {
     href: "/admin/galeri",

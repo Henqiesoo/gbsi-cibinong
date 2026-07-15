@@ -19,13 +19,17 @@ export function slugify(teks: string): string {
     .slice(0, 80);
 }
 
-// Buat slug unik untuk tabel renungan (tambah -2, -3, ... bila bentrok).
-export async function slugUnik(judul: string, kecualiId?: string) {
-  const dasar = slugify(judul) || "renungan";
+// Buat slug unik pada tabel tertentu (tambah -2, -3, ... bila bentrok).
+export async function slugUnik(
+  judul: string,
+  tabel = "renungan",
+  kecualiId?: string
+) {
+  const dasar = slugify(judul) || tabel;
   const sb = supabaseServer();
   let kandidat = dasar;
   for (let n = 2; n < 50; n++) {
-    let q = sb.from("renungan").select("id").eq("slug", kandidat);
+    let q = sb.from(tabel).select("id").eq("slug", kandidat);
     if (kecualiId) q = q.neq("id", kecualiId);
     const { data } = await q.maybeSingle();
     if (!data) return kandidat;

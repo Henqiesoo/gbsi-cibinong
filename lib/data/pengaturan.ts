@@ -31,13 +31,19 @@ export async function getHeroUrl(): Promise<string> {
 // tampil sebagai banner di Beranda. Keduanya diganti lewat /admin/tema.
 
 const TEMA_DEFAULT = "Mari Roh Jiwaku, Peliharalah Gereja!";
+const TEMA_LABEL_DEFAULT = "Tema Tahun 2026";
 
-export type TemaTahunan = { teks: string; poster?: string };
+export type TemaTahunan = { teks: string; label: string; poster?: string };
 
 export async function getTemaTahunan(): Promise<TemaTahunan> {
-  const [teks, poster] = await Promise.all([
+  const [teks, label, poster] = await Promise.all([
     getPengaturan("tema_teks"),
+    getPengaturan("tema_label"),
     getPengaturan("tema_poster"),
   ]);
-  return { teks: teks || TEMA_DEFAULT, poster: poster || undefined };
+  return {
+    teks: teks || TEMA_DEFAULT,
+    label: label || TEMA_LABEL_DEFAULT,
+    poster: poster || undefined,
+  };
 }
