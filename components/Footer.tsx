@@ -60,6 +60,32 @@ export default function Footer() {
               </a>
             </p>
           </address>
+          <div className="mt-5 flex items-center gap-3">
+            <a
+              href={site.instagramUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram GBSI Cibinong"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-cream-100 transition-colors hover:bg-white/20 hover:text-white"
+            >
+              <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
+                <rect x="3" y="3" width="18" height="18" rx="5" />
+                <circle cx="12" cy="12" r="4" />
+                <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none" />
+              </svg>
+            </a>
+            <a
+              href={site.youtubeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="YouTube GBSI Cibinong"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-cream-100 transition-colors hover:bg-white/20 hover:text-white"
+            >
+              <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M23 12s0-3.8-.5-5.6c-.3-1-1-1.8-2-2C18.7 4 12 4 12 4s-6.7 0-8.5.4c-1 .3-1.7 1-2 2C1 8.2 1 12 1 12s0 3.8.5 5.6c.3 1 1 1.8 2 2 1.8.4 8.5.4 8.5.4s6.7 0 8.5-.4c1-.3 1.7-1 2-2 .5-1.8.5-5.6.5-5.6zM9.8 15.5v-7l6 3.5-6 3.5z" />
+              </svg>
+            </a>
+          </div>
         </div>
       </div>
 
@@ -67,7 +93,7 @@ export default function Footer() {
         <div className="mx-auto flex max-w-content flex-wrap items-center justify-between gap-2 px-4 py-4 sm:px-6">
           <p className="text-xs text-brand-300">
             © {new Date().getFullYear()} {site.namaLengkap}. Segala kemuliaan
-            hanya bagi Tuhan.
+            hanya bagi Tuhan Yesus.
           </p>
           {/* Kredit developer — logo diambil dari /public/assets/watermark/ */}
           <p className="flex items-center gap-2 text-xs text-brand-300">

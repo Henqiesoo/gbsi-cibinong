@@ -17,6 +17,8 @@ export const site = {
     "https://www.google.com/maps?q=Jalan+Tapos+No+403+Kranji+Ciriung+Cibinong+Bogor&output=embed",
   mapsLinkUrl:
     "https://www.google.com/maps/search/?api=1&query=Jalan+Tapos+No+403+Kranji+Ciriung+Cibinong+Bogor",
+  instagramUrl: "https://www.instagram.com/gbsi_cibinong",
+  youtubeUrl: "https://www.youtube.com/@gbsicibinong7053",
 };
 
 export const navigasi = [

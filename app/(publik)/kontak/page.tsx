@@ -87,6 +87,50 @@ export default function KontakPage() {
                   </a>
                 </div>
               </div>
+
+              <div className="flex gap-4">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700">
+                  <svg
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={1.8}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M13.2 10.8a4 4 0 015.7 0l2 2a4 4 0 01-5.7 5.7l-1-1M10.8 13.2a4 4 0 01-5.7 0l-2-2a4 4 0 015.7-5.7l1 1"
+                    />
+                  </svg>
+                </span>
+                <div>
+                  <h2 className="font-serif text-lg font-semibold text-ink">
+                    Media Sosial
+                  </h2>
+                  <p className="mt-1 space-x-4">
+                    <a
+                      href={site.instagramUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-semibold text-brand-600 hover:underline"
+                    >
+                      Instagram
+                    </a>
+                    <a
+                      href={site.youtubeUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-semibold text-brand-600 hover:underline"
+                    >
+                      YouTube
+                    </a>
+                  </p>
+                  <p className="mt-1 text-sm text-ink/60">
+                    Ikuti kabar dan tayangan ibadah GBSI Cibinong.
+                  </p>
+                </div>
+              </div>
             </div>
 
             {/* Google Maps */}
