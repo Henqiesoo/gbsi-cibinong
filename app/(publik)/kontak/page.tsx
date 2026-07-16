@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import KontakForm from "@/components/KontakForm";
+import LinkInstagram from "@/components/LinkInstagram";
 import PageHeader from "@/components/PageHeader";
 import { site } from "@/lib/site";
 
@@ -109,14 +110,9 @@ export default function KontakPage() {
                     Media Sosial
                   </h2>
                   <p className="mt-1 space-x-4">
-                    <a
-                      href={site.instagramUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-semibold text-brand-600 hover:underline"
-                    >
+                    <LinkInstagram className="font-semibold text-brand-600 hover:underline">
                       Instagram
-                    </a>
+                    </LinkInstagram>
                     <a
                       href={site.youtubeUrl}
                       target="_blank"

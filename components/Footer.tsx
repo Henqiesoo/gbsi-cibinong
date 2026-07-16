@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import LinkInstagram from "@/components/LinkInstagram";
 import { navigasi, site } from "@/lib/site";
 import { watermark } from "@/lib/watermark";
 
@@ -61,11 +62,8 @@ export default function Footer() {
             </p>
           </address>
           <div className="mt-5 flex items-center gap-3">
-            <a
-              href={site.instagramUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Instagram GBSI Cibinong"
+            <LinkInstagram
+              ariaLabel="Instagram GBSI Cibinong"
               className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-cream-100 transition-colors hover:bg-white/20 hover:text-white"
             >
               <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
@@ -73,7 +71,7 @@ export default function Footer() {
                 <circle cx="12" cy="12" r="4" />
                 <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none" />
               </svg>
-            </a>
+            </LinkInstagram>
             <a
               href={site.youtubeUrl}
               target="_blank"
