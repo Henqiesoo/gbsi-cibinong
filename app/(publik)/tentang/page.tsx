@@ -5,8 +5,11 @@ import SectionHeading from "@/components/SectionHeading";
 import {
   KOORDINATOR,
   getFotoPengurus,
+  getFotoTentang,
+  getMisi,
   getSejarah,
   getStruktur,
+  getVisi,
   pisahNama,
 } from "@/lib/data/tentang";
 import { site } from "@/lib/site";
@@ -35,17 +38,6 @@ const perjalanan = [
     judul: "GBSI Cabang Cibinong",
     isi: "Berawal dari komsel keluarga, GBSI Cabang Cibinong melaksanakan ibadah perdananya dan terus bertumbuh melayani jemaat di wilayah Cibinong dan sekitarnya hingga hari ini.",
   },
-];
-
-// Visi dari dokumen sejarah gereja; misi masih placeholder.
-const visi =
-  "Kembali kepada Alkitab — mendorong jemaat untuk kembali sepenuhnya kepada Alkitab, dengan otoritas tertinggi Roh Kudus di dalam nama Tuhan Yesus Kristus: selalu setia, taat, dan tunduk kepada Roh Kudus.";
-
-const misi = [
-  "Membawa jemaat kembali kepada Firman Tuhan. (Placeholder)",
-  "Membina jemaat melalui pengajaran Berea. (Placeholder)",
-  "Menjangkau jiwa-jiwa melalui kesaksian dan pelayanan kasih. (Placeholder)",
-  "Membangun persekutuan jemaat yang saling menguatkan. (Placeholder)",
 ];
 
 const ukuranAvatar = {
@@ -119,11 +111,15 @@ function DeretAvatar({
 }
 
 export default async function TentangPage() {
-  const [sejarah, struktur, fotoPengurus] = await Promise.all([
-    getSejarah(),
-    getStruktur(),
-    getFotoPengurus(),
-  ]);
+  const [sejarah, struktur, fotoPengurus, visi, misi, fotoTentang] =
+    await Promise.all([
+      getSejarah(),
+      getStruktur(),
+      getFotoPengurus(),
+      getVisi(),
+      getMisi(),
+      getFotoTentang(),
+    ]);
   const unitMandiri = struktur.unit.filter((u) => !u.bidang);
   const bidang = struktur.unit.filter((u) => u.bidang);
 
@@ -314,13 +310,12 @@ export default async function TentangPage() {
         </div>
       </section>
 
-      {/* Foto jemaat & plakat */}
+      {/* Foto jemaat & plakat (bisa diganti dari panel admin) */}
       <section className="mx-auto max-w-content px-4 py-16 sm:px-6 md:py-24">
         <div className="grid gap-4 md:grid-cols-2">
-          {/* Ganti foto di /public/images/tentang/ */}
           <figure className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-cream-200">
             <Image
-              src="/images/tentang/jemaat.jpg"
+              src={fotoTentang.jemaat}
               alt="Jemaat GBSI Cibinong"
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
@@ -329,7 +324,7 @@ export default async function TentangPage() {
           </figure>
           <figure className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-cream-200">
             <Image
-              src="/images/tentang/plakat-gbsi.jpg"
+              src={fotoTentang.plakat}
               alt="Plakat GBSI Cabang Cibinong"
               fill
               sizes="(max-width: 768px) 100vw, 50vw"

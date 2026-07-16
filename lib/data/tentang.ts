@@ -24,6 +24,54 @@ export async function getSejarah(): Promise<string[]> {
     .filter(Boolean);
 }
 
+// ——— Visi & Misi ———
+// Visi: satu teks utuh. Misi: satu butir per baris.
+
+export const VISI_DEFAULT =
+  "Kembali kepada Alkitab — mendorong jemaat untuk kembali sepenuhnya kepada Alkitab, dengan otoritas tertinggi Roh Kudus di dalam nama Tuhan Yesus Kristus: selalu setia, taat, dan tunduk kepada Roh Kudus.";
+
+export const MISI_DEFAULT = `Membawa jemaat kembali kepada Firman Tuhan.
+Membina jemaat melalui pengajaran Berea.
+Menjangkau jiwa-jiwa melalui kesaksian dan pelayanan kasih.
+Membangun persekutuan jemaat yang saling menguatkan.`;
+
+export async function getVisi(): Promise<string> {
+  const teks = (await getPengaturan("visi_teks")) || VISI_DEFAULT;
+  return teks.replace(/\s+/g, " ").trim();
+}
+
+export async function getMisi(): Promise<string[]> {
+  const teks = (await getPengaturan("misi_teks")) || MISI_DEFAULT;
+  return teks
+    .split("\n")
+    .map((b) => b.trim())
+    .filter(Boolean);
+}
+
+// ——— Foto halaman Tentang (jemaat & plakat) ———
+// Diganti dari panel admin; bila belum pernah diganti, dipakai foto
+// statis bawaan di /public/images/tentang/.
+
+export const FOTO_TENTANG_STATIS = {
+  jemaat: "/images/tentang/jemaat.jpg",
+  plakat: "/images/tentang/plakat-gbsi.jpg",
+} as const;
+
+export type JenisFotoTentang = keyof typeof FOTO_TENTANG_STATIS;
+
+export async function getFotoTentang(): Promise<
+  Record<JenisFotoTentang, string>
+> {
+  const [jemaat, plakat] = await Promise.all([
+    getPengaturan("tentang_foto_jemaat"),
+    getPengaturan("tentang_foto_plakat"),
+  ]);
+  return {
+    jemaat: jemaat || FOTO_TENTANG_STATIS.jemaat,
+    plakat: plakat || FOTO_TENTANG_STATIS.plakat,
+  };
+}
+
 // ——— Struktur kepengurusan ———
 // Format teks (satu baris per unit):
 //   Nama Unit | Pengurus          → unit mandiri (mis. Penasehat)

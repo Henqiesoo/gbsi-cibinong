@@ -2,10 +2,13 @@
 import Pemberitahuan from "@/components/admin/Pemberitahuan";
 import { getPengaturan } from "@/lib/data/pengaturan";
 import {
+  MISI_DEFAULT,
   SEJARAH_DEFAULT,
   STRUKTUR_DEFAULT,
+  VISI_DEFAULT,
   daftarNamaPengurus,
   getDaftarFotoPengurus,
+  getFotoTentang,
   getStruktur,
 } from "@/lib/data/tentang";
 
@@ -19,18 +22,44 @@ export default async function AdminTentangPage({
 }: {
   searchParams: { ok?: string; err?: string; detail?: string };
 }) {
-  const [sejarahTersimpan, strukturTersimpan, struktur, fotoPengurus] =
-    await Promise.all([
-      getPengaturan("sejarah_teks"),
-      getPengaturan("struktur_teks"),
-      getStruktur(),
-      getDaftarFotoPengurus(),
-    ]);
+  const [
+    sejarahTersimpan,
+    strukturTersimpan,
+    visiTersimpan,
+    misiTersimpan,
+    struktur,
+    fotoPengurus,
+    fotoTentang,
+  ] = await Promise.all([
+    getPengaturan("sejarah_teks"),
+    getPengaturan("struktur_teks"),
+    getPengaturan("visi_teks"),
+    getPengaturan("misi_teks"),
+    getStruktur(),
+    getDaftarFotoPengurus(),
+    getFotoTentang(),
+  ]);
   // Semua orang dalam struktur bisa diberi foto (satu foto per orang).
   const pilihanNama = daftarNamaPengurus(struktur.unit);
   // Tampilkan teks tersimpan; bila belum ada, tampilkan bawaan.
   const sejarahAwal = sejarahTersimpan || SEJARAH_DEFAULT;
   const strukturAwal = strukturTersimpan || STRUKTUR_DEFAULT;
+  const visiAwal = visiTersimpan || VISI_DEFAULT;
+  const misiAwal = misiTersimpan || MISI_DEFAULT;
+  const daftarFotoHalaman = [
+    {
+      jenis: "jemaat",
+      judul: "Foto Jemaat",
+      keterangan: "Foto kiri di bagian bawah halaman Tentang.",
+      url: fotoTentang.jemaat,
+    },
+    {
+      jenis: "plakat",
+      judul: "Foto Plakat GBSI",
+      keterangan: "Foto kanan di bagian bawah halaman Tentang.",
+      url: fotoTentang.plakat,
+    },
+  ];
 
   return (
     <div className="max-w-3xl space-y-6">
@@ -38,8 +67,8 @@ export default async function AdminTentangPage({
         Halaman Tentang
       </h1>
       <p className="text-ink/70">
-        Sejarah gereja dan struktur kepengurusan pada halaman{" "}
-        <em>Tentang Kami</em> diedit dari sini.
+        Sejarah, visi &amp; misi, struktur kepengurusan, serta foto pada
+        halaman <em>Tentang Kami</em> diedit dari sini.
       </p>
       <Pemberitahuan ok={searchParams.ok} err={searchParams.err} detail={searchParams.detail} />
 
@@ -61,6 +90,40 @@ export default async function AdminTentangPage({
             rows={14}
             required
             defaultValue={sejarahAwal}
+            className={kelasArea}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="visi" className="block text-sm font-semibold text-ink">
+            Visi
+          </label>
+          <p className="mt-1 text-sm text-ink/60">
+            Satu teks utuh, tampil di kotak &ldquo;Visi&rdquo;.
+          </p>
+          <textarea
+            id="visi"
+            name="visi"
+            rows={4}
+            required
+            defaultValue={visiAwal}
+            className={kelasArea}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="misi" className="block text-sm font-semibold text-ink">
+            Misi
+          </label>
+          <p className="mt-1 text-sm text-ink/60">
+            Satu butir misi per baris — nomornya dibuat otomatis di website.
+          </p>
+          <textarea
+            id="misi"
+            name="misi"
+            rows={6}
+            required
+            defaultValue={misiAwal}
             className={kelasArea}
           />
         </div>
@@ -197,6 +260,61 @@ export default async function AdminTentangPage({
             ))}
           </ul>
         )}
+      </div>
+
+      {/* Foto jemaat & plakat di bagian bawah halaman Tentang */}
+      <div className="space-y-4 rounded-2xl border border-cream-200 bg-white p-6">
+        <div>
+          <h2 className="font-serif text-xl font-semibold text-ink">
+            Foto Halaman Tentang
+          </h2>
+          <p className="mt-1 text-sm text-ink/60">
+            Dua foto besar di bagian bawah halaman <em>Tentang Kami</em>{" "}
+            (foto jemaat dan foto plakat GBSI). Disarankan foto melebar
+            (lanskap), minimal lebar 1200 piksel.
+          </p>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          {daftarFotoHalaman.map((f) => (
+            <div
+              key={f.jenis}
+              className="space-y-3 rounded-xl border border-cream-200 p-4"
+            >
+              <img
+                src={f.url}
+                alt={f.judul}
+                className="aspect-[4/3] w-full rounded-lg object-cover"
+              />
+              <div>
+                <p className="text-sm font-semibold text-ink">{f.judul}</p>
+                <p className="text-xs text-ink/60">{f.keterangan}</p>
+              </div>
+              <form
+                action="/api/admin/tentang/foto"
+                method="post"
+                encType="multipart/form-data"
+                className="space-y-2"
+              >
+                <input type="hidden" name="jenis" value={f.jenis} />
+                <input
+                  name="foto"
+                  type="file"
+                  accept="image/*"
+                  required
+                  aria-label={`Pilih foto pengganti ${f.judul}`}
+                  className="w-full text-sm text-ink/70 file:mr-3 file:rounded-full file:border-0 file:bg-brand-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-brand-700"
+                />
+                <button
+                  type="submit"
+                  className="rounded-full bg-brand-600 px-5 py-2 text-sm font-semibold text-white hover:bg-brand-500"
+                >
+                  Ganti Foto
+                </button>
+              </form>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

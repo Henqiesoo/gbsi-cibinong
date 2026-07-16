@@ -116,7 +116,8 @@ const fitur = [
   {
     href: "/admin/tentang",
     judul: "Halaman Tentang",
-    deskripsi: "Edit sejarah gereja dan struktur kepengurusan.",
+    deskripsi:
+      "Edit sejarah, visi & misi, struktur kepengurusan, dan foto.",
   },
   {
     href: "/admin/galeri",

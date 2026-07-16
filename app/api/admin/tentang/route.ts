@@ -6,7 +6,7 @@ import { supabaseSiap } from "@/lib/supabase";
 
 export const runtime = "nodejs";
 
-// Simpan sejarah + struktur kepengurusan halaman Tentang.
+// Simpan sejarah + visi & misi + struktur kepengurusan halaman Tentang.
 export async function POST(req: NextRequest) {
   if (!supabaseSiap()) return redirectKe(req, "/admin/tentang?err=supabase");
 
@@ -14,13 +14,17 @@ export async function POST(req: NextRequest) {
   const sejarah = String(form.get("sejarah") ?? "").trim();
   const struktur = String(form.get("struktur") ?? "").trim();
   const periode = String(form.get("periode") ?? "").trim();
-  if (!sejarah || !struktur) {
+  const visi = String(form.get("visi") ?? "").trim();
+  const misi = String(form.get("misi") ?? "").trim();
+  if (!sejarah || !struktur || !visi || !misi) {
     return redirectKe(req, "/admin/tentang?err=lengkapi");
   }
 
   try {
     await setPengaturan("sejarah_teks", sejarah);
     await setPengaturan("struktur_teks", struktur);
+    await setPengaturan("visi_teks", visi);
+    await setPengaturan("misi_teks", misi);
     if (periode) await setPengaturan("struktur_periode", periode);
 
     revalidatePath("/tentang");
