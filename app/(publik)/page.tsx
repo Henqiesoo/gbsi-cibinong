@@ -9,25 +9,33 @@ import SectionHeading from "@/components/SectionHeading";
 import { getAcaraMendatang } from "@/lib/data/acara";
 import { getGaleriPreview } from "@/lib/data/galeri";
 import { getJadwalUtama } from "@/lib/data/jadwal";
+import { getMusikAktif } from "@/lib/data/musik";
 import { getTemaTahunan } from "@/lib/data/pengaturan";
 import { getRenunganTerbaru } from "@/lib/data/renungan";
 
 export const revalidate = 300;
 
 export default async function BerandaPage() {
-  const [jadwalUtama, renunganTerbaru, galeriPreview, acaraMendatang, tema] =
-    await Promise.all([
-      getJadwalUtama(),
-      getRenunganTerbaru(3),
-      getGaleriPreview(6),
-      getAcaraMendatang(),
-      getTemaTahunan(),
-    ]);
+  const [
+    jadwalUtama,
+    renunganTerbaru,
+    galeriPreview,
+    acaraMendatang,
+    tema,
+    musikSrc,
+  ] = await Promise.all([
+    getJadwalUtama(),
+    getRenunganTerbaru(3),
+    getGaleriPreview(6),
+    getAcaraMendatang(),
+    getTemaTahunan(),
+    getMusikAktif(),
+  ]);
 
   return (
     <>
       {/* Musik latar hanya di Beranda — berhenti saat pindah halaman */}
-      <BackgroundMusic />
+      <BackgroundMusic src={musikSrc} />
       <Hero />
 
       {/* Poster tema tahunan (tampil bila diunggah lewat panel admin) */}

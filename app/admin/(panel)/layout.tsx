@@ -18,6 +18,7 @@ const menu = [
   { label: "Foto Beranda", href: "/admin/beranda" },
   { label: "Jadwal Ibadah", href: "/admin/jadwal" },
   { label: "Jadwal Tugas", href: "/admin/jadwal-tugas" },
+  { label: "Musik", href: "/admin/musik" },
   { label: "Tentang", href: "/admin/tentang" },
 ];
 

@@ -24,7 +24,6 @@ import { useEffect, useRef, useState } from "react";
 // - Bila file /audio/latar.mp3 belum ada (error saat memuat), tombol
 //   tidak ditampilkan sama sekali.
 
-const SUMBER_MUSIK = "/audio/latar.mp3";
 const VOLUME = 0.35; // 35% — tenang, tidak mengganggu
 const KUNCI_PREF = "musik_pref"; // "on" | "mute"
 
@@ -34,14 +33,18 @@ type Status =
   | "senyap" // dimute/diblokir → tombol putar
   | "tiada"; // file tidak ada → sembunyikan kontrol
 
-export default function BackgroundMusic() {
+export default function BackgroundMusic({
+  src = "/audio/latar.mp3", // lagu aktif dari panel admin (/admin/musik)
+}: {
+  src?: string;
+}) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [status, setStatus] = useState<Status>("memuat");
   // Autoplay yang diblokir browser diberi ajakan yang lebih jelas.
   const [diblokir, setDiblokir] = useState(false);
 
   useEffect(() => {
-    const audio = new Audio(SUMBER_MUSIK);
+    const audio = new Audio(src);
     audio.loop = true;
     audio.volume = VOLUME;
     audio.preload = "auto";
@@ -72,7 +75,7 @@ export default function BackgroundMusic() {
       audio.src = "";
       audioRef.current = null;
     };
-  }, []);
+  }, [src]);
 
   const alih = () => {
     const audio = audioRef.current;

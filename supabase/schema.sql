@@ -62,6 +62,13 @@ create table if not exists foto_pengurus (
   created_at timestamptz not null default now()
 );
 
+create table if not exists musik (
+  id uuid primary key default gen_random_uuid(),
+  judul text not null,
+  url text not null,
+  created_at timestamptz not null default now()
+);
+
 create table if not exists surat_gembala (
   id uuid primary key default gen_random_uuid(),
   slug text unique not null,
@@ -84,6 +91,7 @@ alter table pengaturan enable row level security;
 alter table acara enable row level security;
 alter table surat_gembala enable row level security;
 alter table foto_pengurus enable row level security;
+alter table musik enable row level security;
 
 -- ——— Storage ———
 -- Bucket "publik" untuk semua file (foto galeri, hero, thumbnail

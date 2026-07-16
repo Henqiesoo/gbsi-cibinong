@@ -15,6 +15,7 @@ const TABEL_WAJIB = [
   "acara",
   "surat_gembala",
   "foto_pengurus",
+  "musik",
 ];
 
 type HasilCek = { nama: string; ok: boolean; pesan?: string };
@@ -136,6 +137,11 @@ const fitur = [
     href: "/admin/jadwal-tugas",
     judul: "Jadwal Tugas",
     deskripsi: "Unggah jadwal tugas pelayanan (bisa diunduh jemaat).",
+  },
+  {
+    href: "/admin/musik",
+    judul: "Musik Latar",
+    deskripsi: "Unggah & pilih lagu yang diputar di Beranda.",
   },
 ];
 
