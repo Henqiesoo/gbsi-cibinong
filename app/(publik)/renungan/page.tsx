@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import CardRenungan from "@/components/CardRenungan";
+import FadeIn from "@/components/FadeIn";
 import PageHeader from "@/components/PageHeader";
 import { getSemuaRenungan } from "@/lib/data/renungan";
 import { site } from "@/lib/site";
@@ -24,8 +25,10 @@ export default async function RenunganPage() {
 
       <section className="mx-auto max-w-content px-4 py-12 sm:px-6 md:py-16">
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {semuaRenungan.map((renungan) => (
-            <CardRenungan key={renungan.slug} renungan={renungan} />
+          {semuaRenungan.map((renungan, i) => (
+            <FadeIn key={renungan.slug} delay={(i % 3) * 70}>
+              <CardRenungan renungan={renungan} />
+            </FadeIn>
           ))}
         </div>
       </section>

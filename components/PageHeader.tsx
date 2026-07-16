@@ -1,3 +1,5 @@
+import FadeIn from "@/components/FadeIn";
+
 // Kepala halaman untuk halaman-halaman selain Beranda.
 export default function PageHeader({
   kicker,
@@ -10,7 +12,7 @@ export default function PageHeader({
 }) {
   return (
     <section className="border-b border-cream-200 bg-cream-100">
-      <div className="mx-auto max-w-content px-4 py-14 sm:px-6 md:py-20">
+      <FadeIn className="mx-auto max-w-content px-4 py-14 sm:px-6 md:py-20">
         <p className="text-sm font-semibold uppercase tracking-[0.18em] text-brand-600">
           {kicker}
         </p>
@@ -22,7 +24,7 @@ export default function PageHeader({
             {deskripsi}
           </p>
         )}
-      </div>
+      </FadeIn>
     </section>
   );
 }

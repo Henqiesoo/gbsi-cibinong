@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import FadeIn from "@/components/FadeIn";
 import { getHeroUrl, getTemaTahunan } from "@/lib/data/pengaturan";
 
 // Foto hero & teks tema tahunan bisa diganti dari panel admin
@@ -20,6 +21,7 @@ export default async function Hero() {
       <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/50 to-ink/30" />
 
       <div className="relative mx-auto w-full max-w-content px-4 py-20 sm:px-6">
+        <FadeIn>
         <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-200">
           Gereja Berea Sungrak Indonesia · Cabang Cibinong
         </p>
@@ -55,6 +57,7 @@ export default async function Hero() {
             Hubungi Kami
           </Link>
         </div>
+        </FadeIn>
       </div>
     </section>
   );

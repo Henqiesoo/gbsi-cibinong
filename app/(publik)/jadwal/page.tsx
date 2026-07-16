@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import FadeIn from "@/components/FadeIn";
 import JadwalTable from "@/components/JadwalTable";
 import PageHeader from "@/components/PageHeader";
 import SectionHeading from "@/components/SectionHeading";
@@ -30,7 +31,9 @@ export default async function JadwalPage() {
       />
 
       <section className="mx-auto max-w-content px-4 py-12 sm:px-6 md:py-16">
-        <JadwalTable jadwal={jadwal} />
+        <FadeIn>
+          <JadwalTable jadwal={jadwal} />
+        </FadeIn>
 
         {/* Jadwal tugas pelayanan (diunggah pengurus lewat panel admin) */}
         {jadwalTugas.length > 0 && (

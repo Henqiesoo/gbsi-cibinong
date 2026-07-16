@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import FadeIn from "@/components/FadeIn";
 import GaleriGrid from "@/components/GaleriGrid";
 import PageHeader from "@/components/PageHeader";
 import { getGaleri } from "@/lib/data/galeri";
@@ -23,7 +24,9 @@ export default async function GaleriPage() {
       />
 
       <section className="mx-auto max-w-content px-4 py-12 sm:px-6 md:py-16">
-        <GaleriGrid foto={foto} />
+        <FadeIn>
+          <GaleriGrid foto={foto} />
+        </FadeIn>
       </section>
     </>
   );

@@ -28,7 +28,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="id" className={`${jakarta.variable} ${lora.variable}`}>
-      <body className="flex min-h-screen flex-col font-sans">{children}</body>
+      <body className="flex min-h-screen flex-col font-sans">
+        {/* Tanpa JavaScript, elemen fade-in tetap langsung terlihat */}
+        <noscript>
+          <style>{`.fade-mula{opacity:1!important;transform:none!important}`}</style>
+        </noscript>
+        {children}
+      </body>
     </html>
   );
 }

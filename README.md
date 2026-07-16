@@ -27,6 +27,7 @@ nama file tetap sama**, tanpa perlu mengubah kode:
 | `public/images/galeri/acara/` | foto seminar, persekutuan | `acara-01.jpg` … `acara-06.jpg` |
 | `public/images/galeri/fasilitas/` | foto ruangan/venue | `fasilitas-01.jpg` … `fasilitas-04.jpg` |
 | `public/images/renungan/` | thumbnail artikel renungan | `renungan-01.jpg` … `renungan-03.jpg` |
+| `public/audio/` | musik latar Beranda (saat ini berisi MP3 senyap sebagai placeholder) | `latar.mp3` |
 
 Menambah foto galeri: taruh file baru di folder kategorinya, lalu tambahkan
 satu entri di `lib/data/galeri.ts`.
