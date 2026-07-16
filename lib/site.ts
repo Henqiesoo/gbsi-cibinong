@@ -17,7 +17,10 @@ export const site = {
     "https://www.google.com/maps?q=Jalan+Tapos+No+403+Kranji+Ciriung+Cibinong+Bogor&output=embed",
   mapsLinkUrl:
     "https://www.google.com/maps/search/?api=1&query=Jalan+Tapos+No+403+Kranji+Ciriung+Cibinong+Bogor",
-  instagramUrl: "https://www.instagram.com/gbsi_cibinong",
+  // Link share resmi dari tombol "Bagikan profil" Instagram (dengan kode
+  // igsh) — link polos tanpa kode ini kadang dibuka aplikasi Instagram
+  // Android ke akun sendiri, bukan ke profil GBSI.
+  instagramUrl: "https://www.instagram.com/gbsi_cibinong?igsh=MTF0ZGF6djJiejZ4eA==",
   youtubeUrl: "https://www.youtube.com/@gbsicibinong7053",
 };
 
