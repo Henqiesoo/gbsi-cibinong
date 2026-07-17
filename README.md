@@ -1,67 +1,101 @@
-# Website GBSI Cibinong
+# 💐 Undangan Pernikahan Digital
 
-Website Gereja Berea Sungrak Indonesia (GBSI) Cabang Cibinong.
-Dibangun dengan **Next.js 14 (App Router) + TypeScript + Tailwind CSS**.
-Semua konten masih statis (belum memakai database).
+Website undangan pernikahan digital — **Next.js 14 (App Router) + Tailwind CSS + Supabase**, siap deploy ke **Vercel**. Mobile-first (dioptimalkan untuk tamu yang membuka dari WhatsApp di HP).
 
-## Menjalankan secara lokal
+## ✨ Fitur
+
+- **Cover personal per tamu** via URL slug — `/invite/[slug]`, nama tamu diambil dari tabel `guests`
+- **Countdown timer** menuju tanggal acara
+- **Detail acara** akad & resepsi: tanggal, waktu, lokasi + embed Google Maps
+- **Galeri foto** grid responsif dengan lightbox (navigasi swipe/panah/keyboard)
+- **RSVP** — konfirmasi hadir/tidak + jumlah tamu, tersimpan ke tabel `rsvp` (bisa diubah ulang)
+- **Wall ucapan & doa** — realtime via Supabase Realtime
+- **Amplop digital** — nomor rekening dengan tombol salin + QRIS
+- **Panel admin** di `/admin` (dilindungi password): rekap RSVP, statistik kehadiran, tambah tamu + salin link undangan, export CSV
+
+Tema warna: **Sage Green · Cream · Champagne Gold** — font serif *Playfair Display* & script *Great Vibes* untuk nama pasangan.
+
+## 🚀 Setup
+
+### 1. Siapkan Supabase
+
+1. Buat project baru di [supabase.com](https://supabase.com)
+2. Buka **SQL Editor**, salin seluruh isi [`supabase/schema.sql`](supabase/schema.sql), lalu **Run**.
+   Ini membuat tabel `guests`, `rsvp`, `ucapan` beserta RLS policy, mengaktifkan realtime untuk `ucapan`, dan mengisi 3 tamu contoh.
+3. Catat kredensial dari **Project Settings → API**:
+   - `Project URL`
+   - `anon public` key
+   - `service_role` key (rahasia — hanya untuk server)
+
+### 2. Konfigurasi environment
+
+```bash
+cp .env.example .env.local
+```
+
+Isi `.env.local`:
+
+| Variabel | Keterangan |
+|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | Project URL Supabase |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Anon public key |
+| `SUPABASE_SERVICE_ROLE_KEY` | Service role key (dipakai panel admin & export CSV di server) |
+| `ADMIN_PASSWORD` | Password login `/admin` |
+
+### 3. Sesuaikan data pernikahan
+
+Semua data (nama pasangan, orang tua, tanggal, lokasi & embed Google Maps, rekening, ayat) ada di **satu file**: [`lib/wedding-config.ts`](lib/wedding-config.ts).
+
+- **Foto galeri**: ganti file placeholder di `public/gallery/` dengan foto asli (lalu sesuaikan daftar `gallery` di config).
+- **QRIS**: ganti `public/qris.svg` dengan gambar QRIS asli (mis. `qris.jpg`, lalu ubah `gift.qrisImage`).
+- **Embed Google Maps**: buka Google Maps → Share → Embed a map → salin URL `src` iframe ke `mapsEmbedUrl`.
+
+### 4. Jalankan lokal
 
 ```bash
 npm install
 npm run dev
 ```
 
-Buka http://localhost:3000.
+Buka:
 
-## Mengganti foto placeholder dengan foto asli
+- `http://localhost:3000` — undangan umum (tanpa nama tamu)
+- `http://localhost:3000/invite/budi-santoso` — contoh undangan personal
+- `http://localhost:3000/admin` — panel admin
 
-Semua foto berada di `public/images/`. Saat ini berisi gambar placeholder
-bergradasi teal dengan label — **cukup timpa file-nya dengan foto asli,
-nama file tetap sama**, tanpa perlu mengubah kode:
+## ☁️ Deploy ke Vercel
 
-| Folder | Isi | Nama file |
-|---|---|---|
-| `public/images/hero/` | 1 foto ruang ibadah utama (lanskap, ≥1600px) | `ibadah-utama.jpg` |
-| `public/images/tentang/` | foto jemaat & plakat GBSI | `jemaat.jpg`, `plakat-gbsi.jpg` |
-| `public/images/galeri/ibadah/` | foto ibadah, pujian, koor | `ibadah-01.jpg` … `ibadah-06.jpg` |
-| `public/images/galeri/acara/` | foto seminar, persekutuan | `acara-01.jpg` … `acara-06.jpg` |
-| `public/images/galeri/fasilitas/` | foto ruangan/venue | `fasilitas-01.jpg` … `fasilitas-04.jpg` |
-| `public/images/renungan/` | thumbnail artikel renungan | `renungan-01.jpg` … `renungan-03.jpg` |
-| `public/audio/` | musik latar Beranda (saat ini berisi MP3 senyap sebagai placeholder) | `latar.mp3` |
+1. Push repo ini ke GitHub
+2. Di [vercel.com](https://vercel.com) → **Add New Project** → import repo (framework otomatis terdeteksi: Next.js)
+3. Tambahkan **Environment Variables** (keempat variabel di atas) di pengaturan project
+4. **Deploy** 🎉
 
-Menambah foto galeri: taruh file baru di folder kategorinya, lalu tambahkan
-satu entri di `lib/data/galeri.ts`.
+## 📱 Membagikan undangan via WhatsApp
 
-Bila ada placeholder yang terhapus, jalankan `npm run placeholders`
-(tidak akan menimpa foto asli yang sudah ada).
-
-## Mengedit konten
-
-Semua teks dan data dipusatkan agar mudah diedit:
-
-- **Kontak, alamat, WhatsApp, navigasi** → `lib/site.ts`
-- **Jadwal ibadah** → `lib/data/jadwal.ts`
-- **Renungan** (judul, tanggal, isi) → `lib/data/renungan.ts`
-- **Daftar foto galeri** → `lib/data/galeri.ts`
-- **Sejarah, Visi & Misi, struktur pelayanan** (masih placeholder,
-  ditandai `TODO`) → `app/tentang/page.tsx`
-
-## Struktur proyek
+Tambah tamu dari panel `/admin` (atau via SQL), lalu klik **Salin link**. Contoh pesan:
 
 ```
-app/            → halaman (App Router): /, /tentang, /jadwal,
-                  /renungan, /renungan/[slug], /galeri, /kontak
-components/     → Navbar, Footer, Hero, CardRenungan, JadwalTable,
-                  GaleriGrid (tab + lightbox), KontakForm, dst.
-lib/            → data statis & info situs (siap dipindah ke Supabase)
-public/images/  → semua foto
-scripts/        → pembuat gambar placeholder
+Kepada Yth. Bapak Budi Santoso & Keluarga
+
+Dengan memohon rahmat Tuhan YME, kami mengundang
+Bapak/Ibu ke acara pernikahan kami:
+
+✨ Raka & Nadia ✨
+Sabtu, 12 September 2026
+
+Buka undangan lengkap di sini:
+https://domain-anda.vercel.app/invite/budi-santoso
+
+Merupakan suatu kehormatan apabila
+Bapak/Ibu berkenan hadir. 🙏
 ```
 
-## Rencana ke depan (belum dikerjakan)
+## 🗂 Skema Database
 
-- **Supabase**: fungsi data di `lib/data/*.ts` sudah dibuat `async` dengan
-  tipe yang tetap — nanti tinggal mengganti isi fungsi (mis. `getSemuaRenungan`)
-  dengan query Supabase tanpa menyentuh komponen/halaman.
-- **Form kontak**: saat ini meneruskan pesan lewat WhatsApp (tanpa backend).
-- **Deploy**: dilakukan manual ke Vercel setelah review lokal.
+```
+guests : id, nama, slug (unique), jumlah_tamu_max, created_at
+rsvp   : id, guest_id (FK, unique), status (hadir/tidak_hadir), jumlah_hadir, catatan, created_at
+ucapan : id, nama, pesan, created_at
+```
+
+Keamanan: RLS aktif — browser (anon key) hanya bisa membaca `guests`/`ucapan` dan mengirim RSVP/ucapan. Rekap RSVP dibaca lewat service role key di server (panel admin), tidak pernah diekspos ke browser.

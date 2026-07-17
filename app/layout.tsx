@@ -1,40 +1,41 @@
-import type { Metadata } from "next";
-import { Lora, Plus_Jakarta_Sans } from "next/font/google";
-import { site } from "@/lib/site";
+import type { Metadata, Viewport } from "next";
+import { Great_Vibes, Playfair_Display, Plus_Jakarta_Sans } from "next/font/google";
+import { weddingConfig } from "@/lib/wedding-config";
 import "./globals.css";
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-playfair",
+});
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-jakarta",
 });
 
-const lora = Lora({
+const greatVibes = Great_Vibes({
+  weight: "400",
   subsets: ["latin"],
-  variable: "--font-lora",
+  variable: "--font-great-vibes",
 });
 
+const { groom, bride } = weddingConfig.couple;
+
 export const metadata: Metadata = {
-  title: {
-    default: `${site.namaSingkat} — ${site.tagline}`,
-    template: `%s — ${site.namaSingkat}`,
-  },
-  description: site.deskripsi,
+  title: `Undangan Pernikahan ${groom.nickname} & ${bride.nickname}`,
+  description: `Dengan penuh sukacita, kami mengundang Anda ke pernikahan ${groom.nickname} & ${bride.nickname} — ${weddingConfig.eventDateLabel}.`,
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#414D38",
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="id" className={`${jakarta.variable} ${lora.variable}`}>
-      <body className="flex min-h-screen flex-col font-sans">
-        {/* Tanpa JavaScript, elemen fade-in tetap langsung terlihat */}
-        <noscript>
-          <style>{`.fade-mula{opacity:1!important;transform:none!important}`}</style>
-        </noscript>
-        {children}
-      </body>
+    <html lang="id" className={`${playfair.variable} ${jakarta.variable} ${greatVibes.variable}`}>
+      <body className="bg-cream-50 font-sans text-sage-800 antialiased">{children}</body>
     </html>
   );
 }

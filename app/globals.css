@@ -2,37 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities {
-  /* Animasi fade-in (dipakai components/FadeIn.tsx) */
-  .fade-mula {
-    opacity: 0;
-    transform: translateY(16px);
-    transition:
-      opacity 0.5s ease-out,
-      transform 0.5s ease-out;
-  }
-  .fade-tampil {
-    opacity: 1;
-    transform: none;
-  }
-  /* Hormati preferensi aksesibilitas: tanpa animasi, langsung tampil */
-  @media (prefers-reduced-motion: reduce) {
-    .fade-mula {
-      opacity: 1;
-      transform: none;
-      transition: none;
-    }
-  }
+html {
+  scroll-behavior: smooth;
 }
 
-@layer base {
-  html {
-    scroll-behavior: smooth;
-  }
+/* Scrollbar tipis yang serasi dengan tema */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: theme("colors.sage.300");
+  border-radius: 9999px;
+}
 
-  body {
-    @apply bg-cream-50 text-ink antialiased;
-    /* Ukuran dasar sedikit lebih besar — mayoritas pengunjung via HP */
-    font-size: 17px;
+@layer components {
+  .section-title {
+    @apply font-serif text-3xl text-sage-700 md:text-4xl;
+  }
+  .section-subtitle {
+    @apply mx-auto mt-3 max-w-md text-sm leading-relaxed text-sage-500;
+  }
+  .card {
+    @apply rounded-2xl border border-cream-200 bg-white/80 shadow-sm backdrop-blur;
+  }
+  .input {
+    @apply w-full rounded-xl border border-cream-200 bg-white px-4 py-3 text-sm text-sage-800 outline-none transition placeholder:text-sage-300 focus:border-gold-400 focus:ring-2 focus:ring-gold-300/40;
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-sage-600 px-6 py-3 text-sm font-semibold text-cream-50 shadow-md transition hover:bg-sage-700 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60;
+  }
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-gold-400 px-5 py-2.5 text-sm font-medium text-gold-600 transition hover:bg-gold-400/10 active:scale-95;
   }
 }

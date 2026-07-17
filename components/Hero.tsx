@@ -1,64 +1,28 @@
-import Image from "next/image";
-import Link from "next/link";
-import FadeIn from "@/components/FadeIn";
-import { getHeroUrl, getTemaTahunan } from "@/lib/data/pengaturan";
+import { weddingConfig } from "@/lib/wedding-config";
+import Ornament from "@/components/Ornament";
 
-// Foto hero & teks tema tahunan bisa diganti dari panel admin
-// (/admin/beranda dan /admin/tema).
-export default async function Hero() {
-  const [heroUrl, tema] = await Promise.all([getHeroUrl(), getTemaTahunan()]);
+export default function Hero() {
+  const { groom, bride } = weddingConfig.couple;
+  const { quote } = weddingConfig;
+
   return (
-    <section className="relative flex min-h-[70vh] items-center md:min-h-[80vh]">
-      <Image
-        src={heroUrl}
-        alt="Jemaat GBSI Cibinong di ruang ibadah utama"
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover"
-      />
-      {/* Overlay gelap tipis supaya teks tetap terbaca */}
-      <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/50 to-ink/30" />
+    <section className="px-6 pb-16 pt-20 text-center">
+      <p className="text-xs uppercase tracking-[0.35em] text-gold-500">Undangan Pernikahan</p>
 
-      <div className="relative mx-auto w-full max-w-content px-4 py-20 sm:px-6">
-        <FadeIn>
-        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-200">
-          Gereja Berea Sungrak Indonesia · Cabang Cibinong
-        </p>
-        <p className="mt-5 inline-block rounded-full bg-brand-500/30 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-brand-100 backdrop-blur">
-          {tema.label}
-        </p>
-        <h1 className="mt-3 max-w-2xl font-serif text-4xl font-semibold leading-tight text-white sm:text-5xl md:text-6xl">
-          {tema.teks}
-        </h1>
-        <p className="mt-5 max-w-2xl text-base italic leading-relaxed text-cream-100 sm:text-lg">
-          “Tetapi pada malam itu juga segera saudara-saudara di situ menyuruh
-          Paulus dan Silas berangkat ke Berea. Setibanya di situ pergilah
-          mereka ke rumah ibadat orang Yahudi. Orang-orang Yahudi di kota itu
-          lebih baik hatinya dari pada orang-orang Yahudi di Tesalonika,
-          karena mereka menerima firman itu dengan segala kerelaan hati dan
-          setiap hari mereka menyelidiki Kitab Suci untuk mengetahui, apakah
-          semuanya itu benar demikian.”
-        </p>
-        <p className="mt-3 text-sm font-semibold uppercase tracking-wide text-brand-200">
-          Kisah Para Rasul 17:10-11 (TB)
-        </p>
-        <div className="mt-8 flex flex-wrap gap-3">
-          <Link
-            href="/jadwal"
-            className="rounded-full bg-brand-500 px-7 py-3.5 text-base font-semibold text-white shadow-lg transition-colors hover:bg-brand-400"
-          >
-            Jadwal Ibadah
-          </Link>
-          <Link
-            href="/kontak"
-            className="rounded-full border border-white/60 bg-white/10 px-7 py-3.5 text-base font-semibold text-white backdrop-blur transition-colors hover:bg-white/20"
-          >
-            Hubungi Kami
-          </Link>
-        </div>
-        </FadeIn>
-      </div>
+      <h1 className="mt-6 font-script text-6xl leading-tight text-sage-700 md:text-7xl">
+        {groom.nickname} &amp; {bride.nickname}
+      </h1>
+
+      <p className="mt-4 font-serif text-lg text-sage-500">{weddingConfig.eventDateLabel}</p>
+
+      <Ornament className="mx-auto mt-8 w-40 text-gold-400" />
+
+      <blockquote className="mx-auto mt-10 max-w-md">
+        <p className="text-sm italic leading-relaxed text-sage-500">&ldquo;{quote.text}&rdquo;</p>
+        <footer className="mt-3 text-xs font-semibold tracking-wide text-gold-500">
+          {quote.source}
+        </footer>
+      </blockquote>
     </section>
   );
 }
