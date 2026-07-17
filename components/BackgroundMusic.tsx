@@ -11,10 +11,13 @@ import { useEffect, useRef, useState } from "react";
 // promise `audio.play()`:
 //   - resolve  → autoplay berhasil → tampilkan tombol kecil
 //                mute/unmute di pojok kanan bawah
-//   - reject   → autoplay diblokir → tampilkan tombol "Putar musik"
-//                yang jelas; musik mulai setelah pengguna menekannya
+//   - reject   → autoplay diblokir → pasang pendengar sekali-pakai
+//                di document: pada SENTUHAN/KLIK PERTAMA di mana pun
+//                pada halaman, musik langsung diputar (terasa otomatis
+//                bagi pengunjung). Tombol "Putar musik" tetap tampil
+//                sampai musik benar-benar berbunyi.
 // Kebijakan ini bisa berubah antar versi browser — bila perilaku
-// aneh muncul, periksa bagian percobaanAutoplay() di bawah.
+// aneh muncul, periksa bagian percobaan autoplay di bawah.
 //
 // Perilaku lain:
 // - Komponen ini hanya dipasang di halaman Beranda; berpindah halaman
@@ -52,6 +55,28 @@ export default function BackgroundMusic({
 
     audio.addEventListener("error", () => setStatus("tiada"));
 
+    // Autoplay diblokir → mulai pada interaksi pertama di mana pun.
+    // Ketukan pada tombol musik sendiri dikecualikan agar tidak
+    // bertabrakan dengan onClick tombol (main lalu langsung pause).
+    const mulaiSaatInteraksi = (e: Event) => {
+      if ((e.target as Element | null)?.closest?.("[data-musik]")) {
+        lepasPendengar();
+        return;
+      }
+      audio
+        .play()
+        .then(() => {
+          setDiblokir(false);
+          setStatus("main");
+          lepasPendengar();
+        })
+        .catch(() => {});
+    };
+    const lepasPendengar = () => {
+      document.removeEventListener("pointerdown", mulaiSaatInteraksi);
+      document.removeEventListener("keydown", mulaiSaatInteraksi);
+    };
+
     const pref = sessionStorage.getItem(KUNCI_PREF);
     if (pref === "mute") {
       // Pengguna pernah mematikan musik di sesi ini — hormati, jangan
@@ -63,14 +88,17 @@ export default function BackgroundMusic({
         .play()
         .then(() => setStatus("main"))
         .catch(() => {
-          // Autoplay diblokir browser — tunggu ketukan pengguna.
+          // Autoplay diblokir browser — mulai pada ketukan pertama.
           setDiblokir(true);
           setStatus((s) => (s === "tiada" ? s : "senyap"));
+          document.addEventListener("pointerdown", mulaiSaatInteraksi);
+          document.addEventListener("keydown", mulaiSaatInteraksi);
         });
     }
 
     // Berhenti total saat meninggalkan Beranda (unmount).
     return () => {
+      lepasPendengar();
       audio.pause();
       audio.src = "";
       audioRef.current = null;
@@ -104,6 +132,7 @@ export default function BackgroundMusic({
   return (
     <button
       type="button"
+      data-musik
       onClick={alih}
       aria-label={status === "main" ? "Matikan musik latar" : "Putar musik latar"}
       className={`fixed bottom-5 right-5 z-40 flex items-center gap-2 rounded-full shadow-lg transition-colors ${
