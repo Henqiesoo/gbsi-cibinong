@@ -55,21 +55,34 @@ export default function BackgroundMusic({
 
     audio.addEventListener("error", () => setStatus("tiada"));
 
-    // Autoplay diblokir → mulai pada interaksi pertama di mana pun.
-    // PENTING: pakai kejadian AKHIR gerakan (pointerup/touchend/click),
-    // bukan pointerdown — di layar sentuh, izin autoplay dari browser
-    // baru diberikan saat jari DIANGKAT; pada pointerdown (awal
-    // sentuhan) play() masih ditolak. Bila play() tetap ditolak
-    // (mis. sentuhan yang ternyata scroll), pendengar dibiarkan
-    // terpasang agar ketukan berikutnya mencoba lagi.
-    // Ketukan pada tombol musik sendiri dikecualikan agar tidak
-    // bertabrakan dengan onClick tombol (main lalu langsung pause).
-    const KEJADIAN = ["pointerup", "touchend", "keydown", "click"] as const;
+    // Autoplay diblokir → coba lagi pada SETIAP interaksi: ketukan,
+    // klik, tombol keyboard, maupun gerakan layar (scroll/usapan/roda
+    // mouse). Browser hanya meloloskan play() pada interaksi yang ia
+    // anggap "persetujuan pengguna" (umumnya ketukan/klik; sebagian
+    // browser Android juga meloloskan usapan) — percobaan yang ditolak
+    // tidak berefek apa-apa, jadi pendengar dibiarkan terpasang dan
+    // terus mencoba sampai berhasil.
+    // PENTING: pakai kejadian AKHIR gerakan (pointerup/touchend), bukan
+    // pointerdown — di layar sentuh, izin autoplay baru diberikan saat
+    // jari DIANGKAT. Ketukan pada tombol musik sendiri dikecualikan
+    // agar tidak bertabrakan dengan onClick tombol.
+    const KEJADIAN = [
+      "pointerup",
+      "touchend",
+      "keydown",
+      "click",
+      "scroll",
+      "touchmove",
+      "wheel",
+    ] as const;
+    let sedangMencoba = false; // satu percobaan play() pada satu waktu
     const mulaiSaatInteraksi = (e: Event) => {
       if ((e.target as Element | null)?.closest?.("[data-musik]")) {
         lepasPendengar();
         return;
       }
+      if (sedangMencoba) return;
+      sedangMencoba = true;
       audio
         .play()
         .then(() => {
@@ -77,7 +90,9 @@ export default function BackgroundMusic({
           setStatus("main");
           lepasPendengar();
         })
-        .catch(() => {});
+        .catch(() => {
+          sedangMencoba = false;
+        });
     };
     const lepasPendengar = () => {
       for (const k of KEJADIAN) {
@@ -100,7 +115,9 @@ export default function BackgroundMusic({
           setDiblokir(true);
           setStatus((s) => (s === "tiada" ? s : "senyap"));
           for (const k of KEJADIAN) {
-            document.addEventListener(k, mulaiSaatInteraksi);
+            document.addEventListener(k, mulaiSaatInteraksi, {
+              passive: true,
+            });
           }
         });
     }
