@@ -27,6 +27,9 @@ export async function POST(req: NextRequest) {
     url,
   });
   if (error) {
+    // Bersihkan file yang telanjur terunggah agar tidak jadi sampah
+    // di Storage bila pendaftaran ke tabel gagal.
+    await sb.storage.from(BUCKET).remove([path]);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 

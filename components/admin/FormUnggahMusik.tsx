@@ -72,9 +72,18 @@ export default function FormUnggahMusik() {
       window.location.href = "/admin/musik?ok=1";
     } catch (err) {
       console.error(err);
-      setStatus(
-        err instanceof Error ? err.message : "Terjadi kesalahan. Coba lagi."
-      );
+      let pesan =
+        err instanceof Error ? err.message : "Terjadi kesalahan. Coba lagi.";
+      // Error Supabase paling umum: tabel belum dibuat karena skema
+      // database belum diperbarui — jelaskan cara memperbaikinya.
+      if (/could not find the table/i.test(pesan)) {
+        pesan =
+          "Tabel database belum ada — skema Supabase belum diperbarui. " +
+          "Buka Supabase → SQL Editor, jalankan seluruh isi file " +
+          "supabase/schema.sql versi terbaru, lalu coba unggah lagi. " +
+          "(Daftar tabel yang kurang bisa dilihat di Dasbor → Pemeriksaan Database.)";
+      }
+      setStatus(pesan);
       setSibuk(false);
     }
   };
