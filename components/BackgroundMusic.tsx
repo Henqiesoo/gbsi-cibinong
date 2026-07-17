@@ -56,8 +56,15 @@ export default function BackgroundMusic({
     audio.addEventListener("error", () => setStatus("tiada"));
 
     // Autoplay diblokir → mulai pada interaksi pertama di mana pun.
+    // PENTING: pakai kejadian AKHIR gerakan (pointerup/touchend/click),
+    // bukan pointerdown — di layar sentuh, izin autoplay dari browser
+    // baru diberikan saat jari DIANGKAT; pada pointerdown (awal
+    // sentuhan) play() masih ditolak. Bila play() tetap ditolak
+    // (mis. sentuhan yang ternyata scroll), pendengar dibiarkan
+    // terpasang agar ketukan berikutnya mencoba lagi.
     // Ketukan pada tombol musik sendiri dikecualikan agar tidak
     // bertabrakan dengan onClick tombol (main lalu langsung pause).
+    const KEJADIAN = ["pointerup", "touchend", "keydown", "click"] as const;
     const mulaiSaatInteraksi = (e: Event) => {
       if ((e.target as Element | null)?.closest?.("[data-musik]")) {
         lepasPendengar();
@@ -73,8 +80,9 @@ export default function BackgroundMusic({
         .catch(() => {});
     };
     const lepasPendengar = () => {
-      document.removeEventListener("pointerdown", mulaiSaatInteraksi);
-      document.removeEventListener("keydown", mulaiSaatInteraksi);
+      for (const k of KEJADIAN) {
+        document.removeEventListener(k, mulaiSaatInteraksi);
+      }
     };
 
     const pref = sessionStorage.getItem(KUNCI_PREF);
@@ -91,8 +99,9 @@ export default function BackgroundMusic({
           // Autoplay diblokir browser — mulai pada ketukan pertama.
           setDiblokir(true);
           setStatus((s) => (s === "tiada" ? s : "senyap"));
-          document.addEventListener("pointerdown", mulaiSaatInteraksi);
-          document.addEventListener("keydown", mulaiSaatInteraksi);
+          for (const k of KEJADIAN) {
+            document.addEventListener(k, mulaiSaatInteraksi);
+          }
         });
     }
 
