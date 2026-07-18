@@ -35,7 +35,9 @@ import { site } from "@/lib/site";
 //   selama tab ini hidup (menghormati pengunjung yang terganggu).
 // - Bila file audio gagal dimuat, semua kontrol disembunyikan.
 
-const VOLUME = 0.35; // 35% — tenang, tidak mengganggu
+// Lagu unggahan umumnya direkam lebih keras daripada musik bawaan,
+// jadi persentasenya dibuat rendah agar tetap tenang di latar.
+const VOLUME = 0.25; // 25% — tenang, tidak mengganggu
 const KUNCI_PREF = "musik_pref"; // "on" | "mute"
 
 type Status =
