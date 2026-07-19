@@ -28,6 +28,7 @@ semua pengelolaan dilakukan lewat browser.
 | **Jadwal Ibadah** | Ubah jadwal kegiatan mingguan (format: `Hari \| Kegiatan \| Jam`, satu baris per kegiatan). |
 | **Jadwal Tugas** | Unggah gambar jadwal tugas pelayanan. Tampil di halaman Jadwal Ibadah dan bisa diunduh jemaat — file otomatis diberi watermark saat diunggah. |
 | **Musik Latar** | Unggah beberapa lagu MP3 sebagai pilihan, tandai satu yang Aktif untuk diputar di Beranda, hapus yang tidak dipakai. |
+| **Statistik Pengunjung** | Lihat berapa orang membuka website dan dari wilayah mana (perkiraan kota/provinsi), plus halaman terpopuler — 30 hari terakhir, tanpa data pribadi. |
 
 Perubahan langsung tampil di website (tanpa perlu deploy ulang).
 

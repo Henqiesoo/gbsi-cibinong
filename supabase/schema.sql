@@ -79,6 +79,21 @@ create table if not exists surat_gembala (
   created_at timestamptz not null default now()
 );
 
+-- Statistik pengunjung (anonim): wilayah perkiraan dari jaringan
+-- internet pengunjung + halaman yang dibuka. Tanpa data pribadi.
+create table if not exists kunjungan (
+  id uuid primary key default gen_random_uuid(),
+  sesi text not null,
+  path text not null,
+  negara text,
+  wilayah text,
+  kota text,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists kunjungan_created_at_idx
+  on kunjungan (created_at);
+
 -- ——— Keamanan ———
 -- RLS diaktifkan tanpa policy publik: tabel hanya bisa diakses lewat
 -- server (service role) — yaitu melalui panel admin berpassword.
@@ -92,6 +107,7 @@ alter table acara enable row level security;
 alter table surat_gembala enable row level security;
 alter table foto_pengurus enable row level security;
 alter table musik enable row level security;
+alter table kunjungan enable row level security;
 
 -- ——— Storage ———
 -- Bucket "publik" untuk semua file (foto galeri, hero, thumbnail

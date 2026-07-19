@@ -20,6 +20,7 @@ const menu = [
   { label: "Jadwal Tugas", href: "/admin/jadwal-tugas" },
   { label: "Musik", href: "/admin/musik" },
   { label: "Tentang", href: "/admin/tentang" },
+  { label: "Statistik", href: "/admin/statistik" },
 ];
 
 export default function AdminLayout({

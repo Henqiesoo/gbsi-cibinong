@@ -16,6 +16,7 @@ const TABEL_WAJIB = [
   "surat_gembala",
   "foto_pengurus",
   "musik",
+  "kunjungan",
 ];
 
 type HasilCek = { nama: string; ok: boolean; pesan?: string };
@@ -143,6 +144,11 @@ const fitur = [
     href: "/admin/musik",
     judul: "Musik Latar",
     deskripsi: "Unggah & pilih lagu yang diputar di Beranda.",
+  },
+  {
+    href: "/admin/statistik",
+    judul: "Statistik Pengunjung",
+    deskripsi: "Jumlah pengunjung website & wilayah asalnya.",
   },
 ];
 
