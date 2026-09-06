@@ -2,6 +2,17 @@
 
 Website undangan pernikahan digital: **Next.js 14 (App Router) + Tailwind CSS + Supabase**, siap deploy ke **Vercel**. Dirancang mobile-first karena mayoritas tamu membukanya dari WhatsApp di HP.
 
+**Demo langsung:** https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app
+
+Contoh undangan personal per tamu:
+
+| Tamu | Link |
+|---|---|
+| Bapak Hengky Pianister & Keluarga | [`/invite/hengky-pianister`](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/invite/hengky-pianister) |
+| Bapak Rudi Hartono & Keluarga | [`/invite/rudi-hartono`](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/invite/rudi-hartono) |
+| Ibu Melisa Tanuwijaya | [`/invite/melisa-tanuwijaya`](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/invite/melisa-tanuwijaya) |
+| Sdri. Clara Gunawan | [`/invite/clara-gunawan`](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/invite/clara-gunawan) |
+
 > Data di dalam repo ini (nama lengkap, tanggal, alamat, rekening, kisah) adalah **contoh** untuk demo. Semuanya diganti dari satu file: [`lib/wedding-config.ts`](lib/wedding-config.ts).
 
 ## ✨ Fitur
