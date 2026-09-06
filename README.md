@@ -40,7 +40,7 @@ Repo ini sudah berisi kredensial **publik** project Supabase demo di [`lib/supab
 
 1. Buat project di [supabase.com](https://supabase.com)
 2. Buka **SQL Editor**, jalankan seluruh isi [`supabase/schema.sql`](supabase/schema.sql). Sebelum menjalankan, ganti `ganti-password-rahasia` di bagian bawah file dengan password panel admin yang Anda inginkan.
-3. Salin `.env.example` menjadi `.env.local`, isi `NEXT_PUBLIC_SUPABASE_URL` dan `NEXT_PUBLIC_SUPABASE_ANON_KEY` dari **Project Settings → API**
+3. Salin `.env.example` menjadi `.env.local`, isi `NEXT_PUBLIC_UNDANGAN_SUPABASE_URL` dan `NEXT_PUBLIC_UNDANGAN_SUPABASE_ANON_KEY` dari **Project Settings → API**
 
 Tidak ada service role key dan tidak ada password di environment variable.
 
@@ -59,7 +59,7 @@ Semua di [`lib/wedding-config.ts`](lib/wedding-config.ts): nama pasangan, orang 
 2. [vercel.com](https://vercel.com) → **Add New Project** → import repo (Next.js terdeteksi otomatis)
 3. **Deploy** — tanpa environment variable pun langsung jalan memakai project Supabase demo
 
-Bila memakai Supabase sendiri, tambahkan `NEXT_PUBLIC_SUPABASE_URL` dan `NEXT_PUBLIC_SUPABASE_ANON_KEY` di **Settings → Environment Variables**.
+Bila memakai Supabase sendiri, tambahkan `NEXT_PUBLIC_UNDANGAN_SUPABASE_URL` dan `NEXT_PUBLIC_UNDANGAN_SUPABASE_ANON_KEY` di **Settings → Environment Variables**. Awalan `UNDANGAN_` dipakai agar tidak bentrok dengan variabel Supabase milik website lain yang berbagi project Vercel yang sama.
 
 ## 📱 Membagikan undangan lewat WhatsApp
 

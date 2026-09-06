@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Invitation from "@/components/Invitation";
 import { getSupabaseServer } from "@/lib/supabase/server";
+import { SUPABASE_URL } from "@/lib/supabase/config";
 import { weddingConfig } from "@/lib/wedding-config";
 import type { Guest, RsvpAwal, RsvpStatus, UndanganRow } from "@/lib/types";
 
@@ -14,7 +15,12 @@ async function getUndangan(slug: string): Promise<HasilUndangan> {
   const supabase = getSupabaseServer();
   if (!supabase) return { guest: null, rsvpAwal: null };
 
-  const { data } = await supabase.rpc("get_undangan", { p_slug: slug });
+  const { data, error } = await supabase.rpc("get_undangan", { p_slug: slug });
+  if (error) {
+    console.error("get_undangan gagal:", error.message, "url:", SUPABASE_URL);
+    return { guest: null, rsvpAwal: null };
+  }
+
   const row = (data as UndanganRow[] | null)?.[0];
   if (!row) return { guest: null, rsvpAwal: null };
 
