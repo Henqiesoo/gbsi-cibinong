@@ -48,7 +48,7 @@ const melody = [
   ["D5", "C#5"], ["B4", "A4"], ["G4", "F#4"], ["G4", "E4"],
 ];
 
-const CYCLES = 3;
+const CYCLES = 2;
 const totalBars = progression.length * CYCLES;
 const durasi = totalBars * BAR + 4; // + ekor gema
 const total = Math.ceil(durasi * SR);
@@ -158,8 +158,8 @@ for (let i = 0; i < total; i++) {
   pcm[i] = Math.max(-32768, Math.min(32767, Math.round(v * 32767)));
 }
 
-// Encode MP3 mono 96 kbps — cukup untuk musik latar, hemat kuota tamu
-const encoder = new lamejs.Mp3Encoder(1, SR, 96);
+// Encode MP3 mono 64 kbps — cukup untuk musik latar, hemat kuota tamu
+const encoder = new lamejs.Mp3Encoder(1, SR, 64);
 const chunks = [];
 const BLOCK = 1152;
 for (let i = 0; i < pcm.length; i += BLOCK) {
