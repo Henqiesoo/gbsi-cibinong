@@ -1,19 +1,23 @@
-import { createHash } from "crypto";
 import { cookies } from "next/headers";
+import { getSupabaseServer } from "@/lib/supabase/server";
 
 export const ADMIN_COOKIE = "undangan_admin_session";
 
-// Token sesi sederhana: hash dari password admin. Cukup untuk panel
-// internal berpassword tunggal; cookie-nya httpOnly sehingga tidak bisa
-// dibaca script di browser.
-export function sessionToken(): string | null {
-  const password = process.env.ADMIN_PASSWORD;
-  if (!password) return null;
-  return createHash("sha256").update(`undangan-admin:${password}`).digest("hex");
+// Ambil token sesi admin dari cookie httpOnly
+export function sessionTokenFromCookie(): string | null {
+  return cookies().get(ADMIN_COOKIE)?.value ?? null;
 }
 
-export function isAdminAuthenticated(): boolean {
-  const token = sessionToken();
+// Password admin diverifikasi di dalam database (hash bcrypt di tabel
+// admin_config), bukan dibandingkan di sini — sehingga tidak ada rahasia
+// yang perlu disimpan di repo maupun environment variable.
+export async function isAdminAuthenticated(): Promise<boolean> {
+  const token = sessionTokenFromCookie();
   if (!token) return false;
-  return cookies().get(ADMIN_COOKIE)?.value === token;
+
+  const supabase = getSupabaseServer();
+  if (!supabase) return false;
+
+  const { data, error } = await supabase.rpc("admin_cek_sesi", { p_token: token });
+  return !error && data === true;
 }

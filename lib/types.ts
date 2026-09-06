@@ -7,13 +7,26 @@ export type Guest = {
 
 export type RsvpStatus = "hadir" | "tidak_hadir";
 
-export type Rsvp = {
-  id: string;
-  guest_id: string;
+// Konfirmasi yang sudah pernah dikirim tamu (untuk mengisi ulang formulir)
+export type RsvpAwal = {
   status: RsvpStatus;
   jumlah_hadir: number;
   catatan: string | null;
-  created_at: string;
+} | null;
+
+// Satu baris hasil fungsi get_undangan(slug)
+export type UndanganRow = Guest & {
+  rsvp_status: RsvpStatus | null;
+  rsvp_jumlah_hadir: number | null;
+  rsvp_catatan: string | null;
+};
+
+// Satu baris hasil fungsi admin_rekap(password)
+export type RekapRow = Guest & {
+  status: RsvpStatus | null;
+  jumlah_hadir: number | null;
+  catatan: string | null;
+  waktu_konfirmasi: string | null;
 };
 
 export type Ucapan = {

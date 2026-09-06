@@ -1,52 +1,69 @@
-import { isAdminAuthenticated } from "@/lib/admin-auth";
+import { isAdminAuthenticated, sessionTokenFromCookie } from "@/lib/admin-auth";
 import { getSupabaseServer } from "@/lib/supabase/server";
 import LoginForm from "@/components/admin/LoginForm";
 import AddGuestForm from "@/components/admin/AddGuestForm";
 import CopyLinkButton from "@/components/admin/CopyLinkButton";
 import { logoutAction } from "@/app/admin/actions";
-import type { Guest, Rsvp } from "@/lib/types";
+import { weddingConfig } from "@/lib/wedding-config";
+import type { RekapRow } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Admin — Rekap RSVP" };
+export const metadata = { title: "Panel Admin — Rekap RSVP" };
 
-type GuestWithRsvp = Guest & { rsvp: Rsvp[] };
+async function getRekap(): Promise<{ rows: RekapRow[]; error: string | null }> {
+  const supabase = getSupabaseServer();
+  if (!supabase) {
+    return { rows: [], error: "NEXT_PUBLIC_SUPABASE_URL / ANON_KEY belum diisi." };
+  }
 
-async function getData() {
-  const supabase = getSupabaseServer({ admin: true });
-  if (!supabase) return { guests: [] as GuestWithRsvp[], configError: true };
+  // Rekap hanya bisa dibuka lewat RPC yang memverifikasi token sesi admin
+  const { data, error } = await supabase.rpc("admin_rekap", {
+    p_token: sessionTokenFromCookie() ?? "",
+  });
 
-  const { data } = await supabase
-    .from("guests")
-    .select("id, nama, slug, jumlah_tamu_max, rsvp (id, guest_id, status, jumlah_hadir, catatan, created_at)")
-    .order("created_at", { ascending: false });
-
-  return { guests: (data ?? []) as GuestWithRsvp[], configError: false };
+  if (error) return { rows: [], error: error.message };
+  return { rows: (data ?? []) as RekapRow[], error: null };
 }
 
-function StatCard({ label, value, accent }: { label: string; value: number; accent?: boolean }) {
+function StatCard({
+  label,
+  value,
+  suffix,
+  accent,
+}: {
+  label: string;
+  value: number;
+  suffix?: string;
+  accent?: boolean;
+}) {
   return (
-    <div className={`rounded-2xl px-5 py-4 ${accent ? "bg-sage-600 text-cream-50" : "bg-white shadow-sm"}`}>
-      <div className={`text-3xl font-bold ${accent ? "" : "text-sage-700"}`}>{value}</div>
-      <div className={`mt-1 text-xs ${accent ? "text-cream-200" : "text-sage-400"}`}>{label}</div>
+    <div
+      className={`rounded-2xl px-5 py-4 ${
+        accent ? "bg-sage-700 text-ivory-50 shadow-lg shadow-sage-700/20" : "bg-white shadow-sm"
+      }`}
+    >
+      <div className={`font-serif text-3xl font-light ${accent ? "" : "text-sage-800"}`}>
+        {value}
+        {suffix && <span className="ml-1 text-base">{suffix}</span>}
+      </div>
+      <div className={`mt-1 text-xs ${accent ? "text-ivory-200" : "text-sage-400"}`}>{label}</div>
     </div>
   );
 }
 
 export default async function AdminPage() {
-  if (!isAdminAuthenticated()) {
-    return <LoginForm />;
-  }
+  if (!(await isAdminAuthenticated())) return <LoginForm />;
 
-  const { guests, configError } = await getData();
+  const { rows, error } = await getRekap();
+  const { groom, bride } = weddingConfig.couple;
 
-  const stats = guests.reduce(
-    (acc, g) => {
-      const r = g.rsvp[0];
-      if (!r) acc.belum += 1;
+  const stats = rows.reduce(
+    (acc, r) => {
+      if (!r.status) acc.belum += 1;
       else if (r.status === "hadir") {
         acc.hadir += 1;
-        acc.totalOrang += r.jumlah_hadir;
+        acc.totalOrang += r.jumlah_hadir ?? 0;
       } else acc.tidakHadir += 1;
       return acc;
     },
@@ -54,93 +71,91 @@ export default async function AdminPage() {
   );
 
   return (
-    <div className="min-h-screen bg-cream-100 px-4 py-8 md:px-8">
+    <div className="min-h-screen bg-ivory-100 px-4 py-8 md:px-8">
       <div className="mx-auto max-w-5xl">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h1 className="font-serif text-2xl text-sage-800">Rekap RSVP</h1>
-            <p className="mt-1 text-sm text-sage-500">Panel admin undangan pernikahan</p>
+            <h1 className="font-serif text-3xl font-light text-sage-800">Rekap RSVP</h1>
+            <p className="mt-1 text-sm text-sage-500">
+              Pernikahan {groom.nickname} &amp; {bride.nickname} · {weddingConfig.eventDateLabel}
+            </p>
           </div>
           <div className="flex gap-2">
-            <a href="/api/admin/export" className="btn-primary !py-2.5 text-xs">
-              ⬇ Export CSV
+            <a href="/api/admin/export" className="btn-primary !px-5 !py-2.5 text-xs">
+              Export CSV
             </a>
             <form action={logoutAction}>
-              <button className="btn-outline !py-2.5 text-xs">Keluar</button>
+              <button className="btn-ghost !py-2.5">Keluar</button>
             </form>
           </div>
         </div>
 
-        {configError && (
-          <p className="mt-6 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600">
-            Env <code>SUPABASE_SERVICE_ROLE_KEY</code> / <code>NEXT_PUBLIC_SUPABASE_URL</code> belum
-            diisi — data tidak dapat dimuat.
+        {error && (
+          <p className="mt-6 rounded-2xl bg-red-50 px-4 py-3 text-sm text-red-600">
+            Gagal memuat data: {error}
           </p>
         )}
 
         <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-4">
-          <StatCard label="Konfirmasi Hadir" value={stats.hadir} accent />
-          <StatCard label="Total Orang Hadir" value={stats.totalOrang} />
+          <StatCard label="Konfirmasi hadir" value={stats.hadir} accent />
+          <StatCard label="Total orang hadir" value={stats.totalOrang} suffix="orang" />
           <StatCard label="Berhalangan" value={stats.tidakHadir} />
-          <StatCard label="Belum Konfirmasi" value={stats.belum} />
+          <StatCard label="Belum konfirmasi" value={stats.belum} />
         </div>
 
         <AddGuestForm />
 
         <div className="mt-8 overflow-x-auto rounded-2xl bg-white shadow-sm">
-          <table className="w-full min-w-[640px] text-left text-sm">
+          <table className="w-full min-w-[680px] text-left text-sm">
             <thead>
-              <tr className="border-b border-cream-200 text-xs uppercase tracking-wide text-sage-400">
-                <th className="px-4 py-3">Tamu</th>
-                <th className="px-4 py-3">Status</th>
-                <th className="px-4 py-3">Jumlah Hadir</th>
-                <th className="px-4 py-3">Catatan</th>
-                <th className="px-4 py-3">Link Undangan</th>
+              <tr className="border-b border-ivory-200 text-[11px] uppercase tracking-wider text-sage-400">
+                <th className="px-4 py-3 font-semibold">Tamu</th>
+                <th className="px-4 py-3 font-semibold">Status</th>
+                <th className="px-4 py-3 font-semibold">Hadir</th>
+                <th className="px-4 py-3 font-semibold">Catatan</th>
+                <th className="px-4 py-3 font-semibold">Link undangan</th>
               </tr>
             </thead>
             <tbody>
-              {guests.length === 0 && (
+              {rows.length === 0 && !error && (
                 <tr>
-                  <td colSpan={5} className="px-4 py-8 text-center text-sage-400">
-                    Belum ada tamu. Tambahkan lewat form di atas atau lewat SQL Editor Supabase.
+                  <td colSpan={5} className="px-4 py-10 text-center text-sage-400">
+                    Belum ada tamu. Tambahkan lewat formulir di atas.
                   </td>
                 </tr>
               )}
-              {guests.map((g) => {
-                const r = g.rsvp[0];
-                return (
-                  <tr key={g.id} className="border-b border-cream-100 last:border-0">
-                    <td className="px-4 py-3">
-                      <div className="font-medium text-sage-700">{g.nama}</div>
-                      <div className="text-xs text-sage-400">maks. {g.jumlah_tamu_max} orang</div>
-                    </td>
-                    <td className="px-4 py-3">
-                      {!r ? (
-                        <span className="rounded-full bg-cream-100 px-2.5 py-1 text-xs text-sage-400">
-                          Belum
-                        </span>
-                      ) : r.status === "hadir" ? (
-                        <span className="rounded-full bg-sage-100 px-2.5 py-1 text-xs font-medium text-sage-700">
-                          Hadir
-                        </span>
-                      ) : (
-                        <span className="rounded-full bg-red-50 px-2.5 py-1 text-xs font-medium text-red-500">
-                          Berhalangan
-                        </span>
-                      )}
-                    </td>
-                    <td className="px-4 py-3 text-sage-600">
-                      {r?.status === "hadir" ? `${r.jumlah_hadir} orang` : "—"}
-                    </td>
-                    <td className="max-w-[200px] px-4 py-3 text-xs text-sage-500">
-                      {r?.catatan || "—"}
-                    </td>
-                    <td className="px-4 py-3">
-                      <CopyLinkButton slug={g.slug} />
-                    </td>
-                  </tr>
-                );
-              })}
+              {rows.map((r) => (
+                <tr key={r.id} className="border-b border-ivory-100 last:border-0">
+                  <td className="px-4 py-3">
+                    <div className="font-medium text-sage-700">{r.nama}</div>
+                    <div className="text-xs text-sage-400">maks. {r.jumlah_tamu_max} orang</div>
+                  </td>
+                  <td className="px-4 py-3">
+                    {!r.status ? (
+                      <span className="rounded-full bg-ivory-100 px-2.5 py-1 text-xs text-sage-400">
+                        Belum
+                      </span>
+                    ) : r.status === "hadir" ? (
+                      <span className="rounded-full bg-sage-100 px-2.5 py-1 text-xs font-medium text-sage-700">
+                        Hadir
+                      </span>
+                    ) : (
+                      <span className="rounded-full bg-red-50 px-2.5 py-1 text-xs font-medium text-red-500">
+                        Berhalangan
+                      </span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3 text-sage-600">
+                    {r.status === "hadir" ? `${r.jumlah_hadir} orang` : "—"}
+                  </td>
+                  <td className="max-w-[220px] px-4 py-3 text-xs text-sage-500">
+                    {r.catatan || "—"}
+                  </td>
+                  <td className="px-4 py-3">
+                    <CopyLinkButton slug={r.slug} />
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

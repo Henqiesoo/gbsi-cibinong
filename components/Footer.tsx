@@ -1,26 +1,40 @@
 import { weddingConfig } from "@/lib/wedding-config";
 import Ornament from "@/components/Ornament";
+import Reveal from "@/components/Reveal";
 
 export default function Footer() {
   const { groom, bride } = weddingConfig.couple;
 
   return (
-    <footer className="bg-sage-800 px-6 py-16 text-center text-cream-100">
-      <p className="mx-auto max-w-md text-sm leading-relaxed text-cream-200">
-        Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan
-        hadir dan memberikan doa restu.
-      </p>
+    <footer className="relative overflow-hidden bg-sage-800 px-6 pb-32 pt-20 text-center text-ivory-100">
+      {/* Foto samar sebagai latar */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={weddingConfig.coverPhoto}
+        alt=""
+        className="absolute inset-0 h-full w-full object-cover opacity-15"
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-sage-800/85 to-sage-900" />
 
-      <p className="mt-8 text-xs uppercase tracking-[0.3em] text-cream-200">Kami yang berbahagia</p>
-      <p className="mt-3 font-script text-4xl text-gold-300">
-        {groom.nickname} &amp; {bride.nickname}
-      </p>
+      <Reveal className="relative">
+        <p className="mx-auto max-w-sm text-sm leading-relaxed text-ivory-200">
+          Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i
+          berkenan hadir untuk memberikan doa restu.
+        </p>
 
-      <Ornament className="mx-auto mt-8 w-36 text-gold-400" />
+        <p className="mt-10 text-[11px] uppercase tracking-widest text-ivory-200/80">
+          Kami yang berbahagia
+        </p>
+        <p className="mt-4 font-script text-5xl text-gold-300">
+          {groom.nickname} &amp; {bride.nickname}
+        </p>
 
-      <p className="mt-8 text-[11px] text-sage-300">
-        Dibuat dengan ❤ — {new Date().getFullYear()}
-      </p>
+        <Ornament className="mx-auto mt-8 w-40 text-gold-300/80" />
+
+        <p className="mt-10 text-[11px] text-ivory-200/50">
+          Undangan digital · {new Date().getFullYear()}
+        </p>
+      </Reveal>
     </footer>
   );
 }

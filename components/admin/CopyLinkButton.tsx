@@ -25,7 +25,7 @@ export default function CopyLinkButton({ slug }: { slug: string }) {
   return (
     <button
       onClick={copy}
-      className="rounded-full border border-cream-200 px-3 py-1.5 text-xs text-sage-600 transition hover:border-gold-400 hover:text-gold-600"
+      className="rounded-full border border-ivory-300 px-3 py-1.5 text-xs text-sage-600 transition hover:border-gold-400 hover:text-gold-600"
       title={`/invite/${slug}`}
     >
       {copied ? "✓ Tersalin" : "Salin link"}

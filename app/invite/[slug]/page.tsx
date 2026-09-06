@@ -2,19 +2,37 @@ import type { Metadata } from "next";
 import Invitation from "@/components/Invitation";
 import { getSupabaseServer } from "@/lib/supabase/server";
 import { weddingConfig } from "@/lib/wedding-config";
-import type { Guest } from "@/lib/types";
+import type { Guest, RsvpAwal, RsvpStatus, UndanganRow } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
-async function getGuest(slug: string): Promise<Guest | null> {
+type HasilUndangan = { guest: Guest | null; rsvpAwal: RsvpAwal };
+
+// Ambil data tamu lewat RPC get_undangan — tabel guests sendiri tertutup
+// untuk anon key, sehingga daftar tamu tidak bisa diunduh dari browser.
+async function getUndangan(slug: string): Promise<HasilUndangan> {
   const supabase = getSupabaseServer();
-  if (!supabase) return null;
-  const { data } = await supabase
-    .from("guests")
-    .select("id, nama, slug, jumlah_tamu_max")
-    .eq("slug", slug)
-    .maybeSingle();
-  return data ?? null;
+  if (!supabase) return { guest: null, rsvpAwal: null };
+
+  const { data } = await supabase.rpc("get_undangan", { p_slug: slug });
+  const row = (data as UndanganRow[] | null)?.[0];
+  if (!row) return { guest: null, rsvpAwal: null };
+
+  return {
+    guest: {
+      id: row.id,
+      nama: row.nama,
+      slug: row.slug,
+      jumlah_tamu_max: row.jumlah_tamu_max,
+    },
+    rsvpAwal: row.rsvp_status
+      ? {
+          status: row.rsvp_status as RsvpStatus,
+          jumlah_hadir: row.rsvp_jumlah_hadir ?? 1,
+          catatan: row.rsvp_catatan,
+        }
+      : null,
+  };
 }
 
 export async function generateMetadata({
@@ -22,15 +40,13 @@ export async function generateMetadata({
 }: {
   params: { slug: string };
 }): Promise<Metadata> {
-  const guest = await getGuest(params.slug);
+  const { guest } = await getUndangan(params.slug);
   const { groom, bride } = weddingConfig.couple;
-  const title = `Undangan Pernikahan ${groom.nickname} & ${bride.nickname}`;
-  return {
-    title: guest ? `${title} — untuk ${guest.nama}` : title,
-  };
+  const title = `${groom.nickname} & ${bride.nickname} — Undangan Pernikahan`;
+  return { title: guest ? `Untuk ${guest.nama} · ${title}` : title };
 }
 
 export default async function InvitePage({ params }: { params: { slug: string } }) {
-  const guest = await getGuest(params.slug);
-  return <Invitation guest={guest} />;
+  const { guest, rsvpAwal } = await getUndangan(params.slug);
+  return <Invitation guest={guest} rsvpAwal={rsvpAwal} />;
 }

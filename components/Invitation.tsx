@@ -5,35 +5,58 @@ import Cover from "@/components/Cover";
 import Hero from "@/components/Hero";
 import Countdown from "@/components/Countdown";
 import CoupleSection from "@/components/CoupleSection";
+import LoveStory from "@/components/LoveStory";
 import EventDetails from "@/components/EventDetails";
 import Gallery from "@/components/Gallery";
 import RsvpForm from "@/components/RsvpForm";
 import GiftSection from "@/components/GiftSection";
 import UcapanWall from "@/components/UcapanWall";
 import Footer from "@/components/Footer";
-import type { Guest } from "@/lib/types";
+import MusicPlayer from "@/components/MusicPlayer";
+import NavDock from "@/components/NavDock";
+import type { Guest, RsvpAwal } from "@/lib/types";
 
-export default function Invitation({ guest }: { guest: Guest | null }) {
-  const [opened, setOpened] = useState(false);
+export default function Invitation({
+  guest,
+  rsvpAwal,
+}: {
+  guest: Guest | null;
+  rsvpAwal: RsvpAwal;
+}) {
+  const [dibuka, setDibuka] = useState(false);
+
+  function buka() {
+    setDibuka(true);
+    // Pastikan mulai dari atas saat undangan dibuka
+    window.scrollTo({ top: 0 });
+  }
 
   return (
     <div className="relative">
-      <Cover guestName={guest?.nama ?? null} opened={opened} onOpen={() => setOpened(true)} />
+      <Cover guestName={guest?.nama ?? null} opened={dibuka} onOpen={buka} />
+
+      {dibuka && (
+        <>
+          <MusicPlayer play={dibuka} />
+          <NavDock visible={dibuka} />
+        </>
+      )}
 
       <main
-        className={`mx-auto max-w-lg overflow-hidden transition-opacity duration-700 md:max-w-2xl ${
-          opened ? "opacity-100" : "h-screen overflow-hidden opacity-0"
+        aria-hidden={!dibuka}
+        className={`mx-auto max-w-lg overflow-hidden bg-ivory-50 md:max-w-xl ${
+          dibuka ? "" : "h-screen overflow-hidden"
         }`}
-        aria-hidden={!opened}
       >
         <Hero />
         <Countdown />
         <CoupleSection />
+        <LoveStory />
         <EventDetails />
         <Gallery />
-        <RsvpForm guest={guest} />
+        <RsvpForm guest={guest} rsvpAwal={rsvpAwal} />
         <GiftSection />
-        <UcapanWall />
+        <UcapanWall guest={guest} />
         <Footer />
       </main>
     </div>

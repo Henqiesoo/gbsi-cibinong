@@ -1,75 +1,116 @@
 // =====================================================================
-// KONFIGURASI UNDANGAN — sesuaikan semua data pernikahan di file ini.
-// Tidak perlu menyentuh file lain untuk mengganti nama, tanggal, lokasi,
-// foto galeri, maupun rekening amplop digital.
+// KONFIGURASI UNDANGAN — semua data pernikahan diatur dari file ini saja.
+// Ganti nama, tanggal, lokasi, foto, rekening di sini; komponen lain
+// tidak perlu disentuh.
+//
+// CATATAN: data di bawah ini contoh (tanggal, alamat, rekening, kisah)
+// yang dibuat untuk demo. Silakan ganti dengan data asli.
 // =====================================================================
 
 export const weddingConfig = {
   couple: {
     groom: {
-      nickname: "Raka",
-      fullName: "Raka Adi Pratama",
-      parents: "Putra pertama dari Bpk. Hendra Pratama & Ibu Sri Wahyuni",
-      instagram: "raka.pratama",
+      nickname: "Jonny",
+      fullName: "Jonathan Wijaya Kusuma",
+      parents: "Putra pertama dari Bapak Hendrawan Kusuma & Ibu Lianawati",
+      instagram: "jonny.kusuma",
+      photo: "/photos/jonny-sq.jpg",
     },
     bride: {
-      nickname: "Nadia",
-      fullName: "Nadia Salsabila",
-      parents: "Putri kedua dari Bpk. Ahmad Fauzi & Ibu Ratna Sari",
-      instagram: "nadia.salsabila",
+      nickname: "Veren",
+      fullName: "Verenita Anggraini",
+      parents: "Putri kedua dari Bapak Surya Anggara & Ibu Mariana Dewi",
+      instagram: "veren.anggraini",
+      photo: "/photos/veren-sq.jpg",
     },
   },
 
-  // Tanggal & waktu acara utama (dipakai untuk countdown) — zona waktu WIB
-  eventDateISO: "2026-09-12T08:00:00+07:00",
-  eventDateLabel: "Sabtu, 12 September 2026",
+  // Foto utama untuk cover & bagian pembuka
+  coverPhoto: "/photos/cover.jpg",
+  heroPhoto: "/photos/couple-bench.jpg",
+
+  // Tanggal & waktu acara utama untuk countdown (WIB / UTC+7)
+  eventDateISO: "2027-05-15T10:00:00+07:00",
+  eventDateLabel: "Sabtu, 15 Mei 2027",
+  eventDateShort: "15 · 05 · 2027",
 
   events: {
-    akad: {
-      title: "Akad Nikah",
-      date: "Sabtu, 12 September 2026",
-      time: "08.00 – 10.00 WIB",
-      venue: "Masjid Al-Ikhlas",
-      address: "Jl. Raya Pajajaran No. 10, Bogor, Jawa Barat",
+    pemberkatan: {
+      title: "Pemberkatan Pernikahan",
+      date: "Sabtu, 15 Mei 2027",
+      time: "10.00 – 12.00 WIB",
+      venue: "GBSI Cibinong",
+      address: "Jl. Mayor Oking Jaya Atmaja No. 27, Cibinong, Kabupaten Bogor",
       mapsEmbedUrl:
-        "https://maps.google.com/maps?q=Masjid%20Raya%20Bogor&t=&z=15&ie=UTF8&iwloc=&output=embed",
-      mapsLink: "https://maps.google.com/?q=Masjid+Raya+Bogor",
+        "https://maps.google.com/maps?q=Cibinong%2C%20Kabupaten%20Bogor&t=&z=14&ie=UTF8&iwloc=&output=embed",
+      mapsLink: "https://maps.google.com/?q=Cibinong,+Kabupaten+Bogor",
+      dressCode: "Formal · nuansa putih & krem",
     },
     resepsi: {
       title: "Resepsi",
-      date: "Sabtu, 12 September 2026",
-      time: "11.00 – 14.00 WIB",
-      venue: "Gedung Graha Widya",
-      address: "Jl. Padjadjaran No. 55, Bogor, Jawa Barat",
+      date: "Sabtu, 15 Mei 2027",
+      time: "18.00 – 21.00 WIB",
+      venue: "Bogor Valley Ballroom",
+      address: "Jl. Raya Pajajaran No. 88, Bogor, Jawa Barat",
       mapsEmbedUrl:
-        "https://maps.google.com/maps?q=Botani%20Square%20Bogor&t=&z=15&ie=UTF8&iwloc=&output=embed",
-      mapsLink: "https://maps.google.com/?q=Botani+Square+Bogor",
+        "https://maps.google.com/maps?q=Jalan%20Raya%20Pajajaran%20Bogor&t=&z=15&ie=UTF8&iwloc=&output=embed",
+      mapsLink: "https://maps.google.com/?q=Jalan+Raya+Pajajaran+Bogor",
+      dressCode: "Semi formal · nuansa sage & earth tone",
     },
   },
 
-  // Ganti dengan foto asli di folder public/gallery
-  gallery: [
-    { src: "/gallery/foto-1.svg", alt: "Foto prewedding 1" },
-    { src: "/gallery/foto-2.svg", alt: "Foto prewedding 2" },
-    { src: "/gallery/foto-3.svg", alt: "Foto prewedding 3" },
-    { src: "/gallery/foto-4.svg", alt: "Foto prewedding 4" },
-    { src: "/gallery/foto-5.svg", alt: "Foto prewedding 5" },
-    { src: "/gallery/foto-6.svg", alt: "Foto prewedding 6" },
+  // Perjalanan kisah — tampil sebagai linimasa
+  story: [
+    {
+      year: "2021",
+      title: "Pandangan Pertama",
+      text: "Bertemu tanpa rencana di sebuah kedai kopi kecil. Satu meja, dua cangkir, dan obrolan yang ternyata tidak selesai sampai kedai tutup.",
+    },
+    {
+      year: "2023",
+      title: "Menjalani Bersama",
+      text: "Dari teman menjadi teman perjalanan. Melewati hari baik dan hari sulit, sampai sadar rumah itu bukan tempat, melainkan orang.",
+    },
+    {
+      year: "2026",
+      title: "Melamar",
+      text: "Di bawah untaian lampu taman, satu pertanyaan diajukan — dan dijawab dengan air mata bahagia serta satu kata: iya.",
+    },
+    {
+      year: "2027",
+      title: "Menuju Janji Suci",
+      text: "Kini kami melangkah ke hari yang dinanti, memohon doa restu untuk memulai babak baru sebagai satu keluarga.",
+    },
   ],
 
-  // Amplop digital
+  gallery: [
+    { src: "/photos/couple-bench.jpg", alt: "Jonny & Veren di taman" },
+    { src: "/photos/cafe-both.jpg", alt: "Pertemuan di kedai kopi" },
+    { src: "/photos/veren.jpg", alt: "Veren" },
+    { src: "/photos/jonny.jpg", alt: "Jonny" },
+    { src: "/photos/bench-wide.jpg", alt: "Senja di bawah lampu taman" },
+    { src: "/photos/cafe-detail.jpg", alt: "Suasana kedai kopi" },
+  ],
+
   gift: {
     accounts: [
-      { bank: "BCA", number: "1234567890", holder: "Raka Adi Pratama" },
-      { bank: "Mandiri", number: "9876543210", holder: "Nadia Salsabila" },
+      { bank: "BCA", number: "5271884390", holder: "Jonathan Wijaya Kusuma" },
+      { bank: "BNI", number: "0817246513", holder: "Verenita Anggraini" },
     ],
-    // Ganti dengan gambar QRIS asli di folder public
     qrisImage: "/qris.svg",
+    // Alamat kirim hadiah fisik
+    address: "Perumahan Bukit Cimanggu City Blok F2 No. 14, Bogor Utara, Jawa Barat 16167",
   },
 
   quote: {
-    text: "Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan untukmu pasangan-pasangan dari jenismu sendiri, supaya kamu merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.",
-    source: "QS. Ar-Rum: 21",
+    text: "Sebab itu seorang laki-laki akan meninggalkan ayahnya dan ibunya dan bersatu dengan isterinya, sehingga keduanya menjadi satu daging.",
+    source: "Kejadian 2:24",
+  },
+
+  // Musik latar (disintesis dari Canon in D — Johann Pachelbel, domain publik)
+  music: {
+    src: "/music/canon-in-d.mp3",
+    title: "Canon in D — Pachelbel",
   },
 };
 

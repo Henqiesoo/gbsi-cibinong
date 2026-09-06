@@ -2,20 +2,24 @@
 
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
-import { ADMIN_COOKIE, isAdminAuthenticated, sessionToken } from "@/lib/admin-auth";
+import { ADMIN_COOKIE, isAdminAuthenticated, sessionTokenFromCookie } from "@/lib/admin-auth";
 import { getSupabaseServer } from "@/lib/supabase/server";
 
 export async function loginAction(formData: FormData) {
-  const password = formData.get("password");
-  const expected = process.env.ADMIN_PASSWORD;
-  const token = sessionToken();
+  const password = String(formData.get("password") ?? "");
+  if (!password) return { error: "Password wajib diisi." };
 
-  if (!expected || !token || password !== expected) {
-    revalidatePath("/admin");
+  const supabase = getSupabaseServer();
+  if (!supabase) return { error: "Konfigurasi Supabase belum diisi." };
+
+  // Password dicek di database; server hanya menerima token sesi
+  const { data, error } = await supabase.rpc("admin_login", { p_password: password });
+
+  if (error || typeof data !== "string") {
     return { error: "Password salah." };
   }
 
-  cookies().set(ADMIN_COOKIE, token, {
+  cookies().set(ADMIN_COOKIE, data, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
@@ -31,37 +35,27 @@ export async function logoutAction() {
   revalidatePath("/admin");
 }
 
-function slugify(nama: string): string {
-  return nama
-    .toLowerCase()
-    .normalize("NFKD")
-    .replace(/[^a-z0-9\s-]/g, "")
-    .trim()
-    .replace(/[\s-]+/g, "-")
-    .slice(0, 60);
-}
-
 export async function addGuestAction(formData: FormData) {
-  if (!isAdminAuthenticated()) return { error: "Sesi berakhir, silakan login ulang." };
+  if (!(await isAdminAuthenticated())) {
+    return { error: "Sesi berakhir, silakan login ulang." };
+  }
 
   const nama = String(formData.get("nama") ?? "").trim();
   const jumlahTamuMax = Number(formData.get("jumlah_tamu_max") ?? 2);
   if (!nama) return { error: "Nama tamu wajib diisi." };
 
-  const supabase = getSupabaseServer({ admin: true });
-  if (!supabase) return { error: "SUPABASE_SERVICE_ROLE_KEY belum diisi di environment." };
+  const supabase = getSupabaseServer();
+  if (!supabase) return { error: "Konfigurasi Supabase belum diisi." };
 
-  const baseSlug = slugify(nama) || "tamu";
-  // Coba slug dasar dulu; jika bentrok, tambahkan sufiks acak
-  for (const slug of [baseSlug, `${baseSlug}-${Math.random().toString(36).slice(2, 6)}`]) {
-    const { error } = await supabase
-      .from("guests")
-      .insert({ nama, slug, jumlah_tamu_max: jumlahTamuMax });
-    if (!error) {
-      revalidatePath("/admin");
-      return { error: null };
-    }
-    if (error.code !== "23505") return { error: `Gagal menyimpan: ${error.message}` };
-  }
-  return { error: "Gagal membuat slug unik, coba lagi." };
+  // Slug dibuat otomatis & dijamin unik di dalam fungsi database
+  const { error } = await supabase.rpc("admin_tambah_tamu", {
+    p_token: sessionTokenFromCookie() ?? "",
+    p_nama: nama,
+    p_jumlah_tamu_max: jumlahTamuMax,
+  });
+
+  if (error) return { error: `Gagal menyimpan: ${error.message}` };
+
+  revalidatePath("/admin");
+  return { error: null };
 }
