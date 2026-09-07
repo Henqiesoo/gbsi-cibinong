@@ -1,6 +1,14 @@
-// Sintesis musik latar undangan: Canon in D (Johann Pachelbel, 1653–1706 — domain publik)
-// Piano lembut + pad senar, dirender jadi MP3 mono agar ringan dibuka dari HP.
+// Sintesis musik latar undangan menjadi MP3 mono (ringan dibuka dari HP).
 // Jalankan: node scripts/generate-music.mjs
+//
+// Menghasilkan dua lagu, keduanya bebas masalah hak cipta:
+//   1. romantic-ballad.mp3 — komposisi ASLI (ditulis untuk proyek ini)
+//   2. canon-in-d.mp3      — Canon in D, Johann Pachelbel (1653–1706, domain publik)
+//
+// Catatan lisensi: lagu populer seperti "A Thousand Years" TIDAK bisa dihasilkan
+// di sini karena masih dilindungi hak cipta. Untuk memakainya, sediakan berkas
+// audio berlisensi milik Anda sendiri lalu taruh di public/music/ dan tunjuk dari
+// lib/wedding-config.ts.
 import { readFileSync, writeFileSync } from "fs";
 import { createRequire } from "module";
 import vm from "vm";
@@ -9,168 +17,260 @@ import vm from "vm";
 // point src/js bawaan paket rusak di Node. Jalankan bundel di sandbox VM lalu
 // ambil objeknya dari sana.
 const require = createRequire(import.meta.url);
-const bundlePath = require.resolve("lamejs/lame.all.js");
 const sandbox = { console, setTimeout, clearTimeout };
 sandbox.window = sandbox;
 vm.createContext(sandbox);
-vm.runInContext(readFileSync(bundlePath, "utf8"), sandbox);
+vm.runInContext(readFileSync(require.resolve("lamejs/lame.all.js"), "utf8"), sandbox);
 const lamejs = sandbox.lamejs;
 
 const SR = 44100;
-const BPM = 62;
-const BEAT = 60 / BPM;
-const BAR = BEAT * 4;
 
-const midi = (n) => 440 * Math.pow(2, (n - 69) / 12);
-// Nama nada -> nomor MIDI
-const N = {
-  "D2": 38, "E2": 40, "F#2": 42, "G2": 43, "A2": 45, "B2": 47,
-  "D3": 50, "E3": 52, "F#3": 54, "G3": 55, "A3": 57, "B3": 59, "C#3": 49,
-  "D4": 62, "E4": 64, "F#4": 66, "G4": 67, "A4": 69, "B4": 71, "C#4": 61,
-  "D5": 74, "E5": 76, "F#5": 78, "G5": 79, "A5": 81, "B5": 83, "C#5": 73,
+// Nama nada -> nomor MIDI (60 = C4 / do tengah)
+const N = {};
+["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"].forEach((nama, i) => {
+  for (let oct = 1; oct <= 6; oct++) N[`${nama}${oct}`] = 12 * (oct + 1) + i;
+});
+N["Bb1"] = N["A#1"];
+N["Bb2"] = N["A#2"];
+N["Bb3"] = N["A#3"];
+N["Bb4"] = N["A#4"];
+N["Bb5"] = N["A#5"];
+N["Eb3"] = N["D#3"];
+N["Eb4"] = N["D#4"];
+
+const freq = (nama) => 440 * Math.pow(2, (N[nama] - 69) / 12);
+
+// =====================================================================
+// Mesin sintesis
+// =====================================================================
+function render({ bpm, bars, buildBar, ekor = 4 }) {
+  const BEAT = 60 / bpm;
+  const BAR = BEAT * 4;
+  const durasi = bars * BAR + ekor;
+  const total = Math.ceil(durasi * SR);
+  const buf = new Float32Array(total);
+
+  // Nada piano: penjumlahan harmonik dengan peluruhan eksponensial
+  function piano(startSec, f, gain, decay, dur) {
+    const start = Math.floor(startSec * SR);
+    if (start >= total) return;
+    const len = Math.min(Math.ceil(dur * SR), total - start);
+    const harmonics = [1, 0.46, 0.24, 0.13, 0.07, 0.035, 0.02];
+    const attack = 0.008;
+    for (let i = 0; i < len; i++) {
+      const t = i / SR;
+      const env = (t < attack ? t / attack : Math.exp(-(t - attack) * decay)) * gain;
+      if (env < 1e-5 && t > attack) break;
+      let s = 0;
+      for (let h = 0; h < harmonics.length; h++) {
+        const n = h + 1;
+        // inharmonisitas ringan agar terdengar seperti dawai asli
+        const ff = f * n * (1 + 0.0004 * n * n);
+        s += harmonics[h] * Math.sin(2 * Math.PI * ff * t) * Math.exp(-t * decay * (0.6 + n * 0.28));
+      }
+      buf[start + i] += s * env * 0.25;
+    }
+  }
+
+  // Pad senar lembut untuk mengisi latar
+  function pad(startSec, f, gain, dur) {
+    const start = Math.floor(startSec * SR);
+    if (start >= total) return;
+    const len = Math.min(Math.ceil(dur * SR), total - start);
+    const fade = 0.4;
+    for (let i = 0; i < len; i++) {
+      const t = i / SR;
+      const rel = len / SR - t;
+      const env = Math.min(1, t / fade) * Math.min(1, rel / fade) * gain;
+      const vib = 1 + 0.0022 * Math.sin(2 * Math.PI * 4.6 * t);
+      const s =
+        Math.sin(2 * Math.PI * f * vib * t) * 0.6 +
+        Math.sin(2 * Math.PI * f * 2 * vib * t) * 0.18 +
+        Math.sin(2 * Math.PI * f * 3 * vib * t) * 0.06;
+      buf[start + i] += s * env * 0.06;
+    }
+  }
+
+  for (let bar = 0; bar < bars; bar++) {
+    buildBar({ bar, t0: bar * BAR, BEAT, BAR, piano, pad });
+  }
+
+  // Gema beberapa ketukan tunda supaya terasa lapang seperti ruang aula
+  const out = new Float32Array(total);
+  out.set(buf);
+  for (const [delay, gain] of [
+    [0.041, 0.3],
+    [0.083, 0.22],
+    [0.137, 0.16],
+    [0.211, 0.11],
+    [0.317, 0.07],
+  ]) {
+    const d = Math.floor(delay * SR);
+    for (let i = d; i < total; i++) out[i] += buf[i - d] * gain;
+  }
+
+  // Lowpass satu kutub — melembutkan nada tinggi agar tidak menusuk di speaker HP
+  let prev = 0;
+  for (let i = 0; i < total; i++) {
+    prev += 0.28 * (out[i] - prev);
+    out[i] = prev;
+  }
+
+  // Normalisasi + fade in/out supaya pengulangan (loop) mulus
+  let peak = 0;
+  for (let i = 0; i < total; i++) peak = Math.max(peak, Math.abs(out[i]));
+  const norm = 0.82 / peak;
+  const fadeIn = Math.floor(2.2 * SR);
+  const fadeOut = Math.floor(3.5 * SR);
+  const pcm = new Int16Array(total);
+  for (let i = 0; i < total; i++) {
+    let v = out[i] * norm;
+    if (i < fadeIn) v *= i / fadeIn;
+    if (i > total - fadeOut) v *= (total - i) / fadeOut;
+    pcm[i] = Math.max(-32768, Math.min(32767, Math.round(v * 32767)));
+  }
+  return { pcm, durasi };
+}
+
+function tulisMp3(namaFile, pcm, durasi) {
+  const encoder = new lamejs.Mp3Encoder(1, SR, 64);
+  const chunks = [];
+  for (let i = 0; i < pcm.length; i += 1152) {
+    const b = encoder.encodeBuffer(pcm.subarray(i, i + 1152));
+    if (b.length) chunks.push(Buffer.from(b));
+  }
+  const last = encoder.flush();
+  if (last.length) chunks.push(Buffer.from(last));
+  const mp3 = Buffer.concat(chunks);
+  writeFileSync(`public/music/${namaFile}`, mp3);
+  console.log(`OK: public/music/${namaFile} — ${(mp3.length / 1024).toFixed(0)} KB, ${durasi.toFixed(1)} detik`);
+}
+
+// =====================================================================
+// LAGU 1 — "Selamanya Bersama": balada piano ASLI untuk proyek ini
+// Nada dasar F mayor, 70 BPM. Progresi I–V–vi–IV yang hangat, dengan
+// melodi yang ditulis sendiri (bukan kutipan lagu mana pun).
+// =====================================================================
+const balada = {
+  // bass, akor (untuk arpeggio & pad)
+  akor: [
+    { bass: "F2", nada: ["F3", "A3", "C4", "F4"] }, // F
+    { bass: "C2", nada: ["E3", "G3", "C4", "E4"] }, // C
+    { bass: "D2", nada: ["F3", "A3", "D4", "F4"] }, // Dm
+    { bass: "Bb1", nada: ["F3", "Bb3", "D4", "F4"] }, // Bb
+    { bass: "F2", nada: ["F3", "A3", "C4", "F4"] },
+    { bass: "C2", nada: ["E3", "G3", "C4", "E4"] },
+    { bass: "D2", nada: ["F3", "A3", "D4", "F4"] },
+    { bass: "Bb1", nada: ["F3", "Bb3", "D4", "F4"] },
+  ],
+  // Melodi asli — dua nada setengah per birama
+  melodi: [
+    ["A4", "C5"],
+    ["Bb4", "A4"],
+    ["F4", "A4"],
+    ["G4", "G4"],
+    ["C5", "D5"],
+    ["C5", "Bb4"],
+    ["A4", "G4"],
+    ["F4", "F4"],
+  ],
+  // Bagian angkat (bridge) pada siklus terakhir
+  bridge: [
+    ["D5", "F5"],
+    ["E5", "D5"],
+    ["C5", "A4"],
+    ["Bb4", "C5"],
+    ["D5", "C5"],
+    ["Bb4", "A4"],
+    ["G4", "A4"],
+    ["F4", "F4"],
+  ],
 };
 
-// Progresi Canon in D: D – A – Bm – F#m – G – D – G – A
-const progression = [
-  { bass: "D2", tones: ["D3", "F#3", "A3", "D4"] },
-  { bass: "A2", tones: ["C#3", "E3", "A3", "C#4"] },
-  { bass: "B2", tones: ["D3", "F#3", "B3", "D4"] },
-  { bass: "F#2", tones: ["C#3", "F#3", "A3", "C#4"] },
-  { bass: "G2", tones: ["D3", "G3", "B3", "D4"] },
-  { bass: "D2", tones: ["D3", "F#3", "A3", "D4"] },
-  { bass: "G2", tones: ["D3", "G3", "B3", "D4"] },
-  { bass: "A2", tones: ["C#3", "E3", "A3", "C#4"] },
-];
+const SIKLUS = 3;
+const hasilBalada = render({
+  bpm: 70,
+  bars: balada.akor.length * SIKLUS,
+  buildBar({ bar, t0, BEAT, BAR, piano, pad }) {
+    const idx = bar % balada.akor.length;
+    const siklus = Math.floor(bar / balada.akor.length);
+    const a = balada.akor[idx];
 
-// Melodi biola Canon yang ikonik — dua nada setengah per birama
-const melody = [
-  ["F#5", "E5"], ["D5", "C#5"], ["B4", "A4"], ["B4", "C#5"],
-  ["D5", "C#5"], ["B4", "A4"], ["G4", "F#4"], ["G4", "E4"],
-];
+    // Bas: akar di ketukan 1, oktaf atas di ketukan 3
+    piano(t0, freq(a.bass), 0.9, 1.0, BEAT * 2.4);
+    piano(t0 + BEAT * 2, freq(a.bass) * 2, 0.4, 1.3, BEAT * 2);
 
-const CYCLES = 2;
-const totalBars = progression.length * CYCLES;
-const durasi = totalBars * BAR + 4; // + ekor gema
-const total = Math.ceil(durasi * SR);
-const buf = new Float32Array(total);
-
-// Nada piano: penjumlahan harmonik dengan peluruhan eksponensial
-function piano(startSec, freq, gain, decay, dur) {
-  const start = Math.floor(startSec * SR);
-  const len = Math.min(Math.ceil(dur * SR), total - start);
-  if (len <= 0) return;
-  const harmonics = [1, 0.46, 0.24, 0.13, 0.07, 0.035, 0.02];
-  const attack = 0.008;
-  for (let i = 0; i < len; i++) {
-    const t = i / SR;
-    // amplop: serang cepat lalu meluruh seperti dawai piano
-    const env = (t < attack ? t / attack : Math.exp(-(t - attack) * decay)) * gain;
-    if (env < 1e-5 && t > attack) break;
-    let s = 0;
-    for (let h = 0; h < harmonics.length; h++) {
-      const n = h + 1;
-      // inharmonisitas ringan agar terdengar seperti dawai asli
-      const f = freq * n * (1 + 0.0004 * n * n);
-      s += harmonics[h] * Math.sin(2 * Math.PI * f * t) * Math.exp(-t * decay * (0.6 + n * 0.28));
+    // Arpeggio delapanan naik-turun — ciri khas balada piano
+    const arp = [...a.nada, ...a.nada.slice(0, 3).reverse()];
+    for (let i = 0; i < 8; i++) {
+      const oct = i >= 4 ? 2 : 1;
+      piano(t0 + i * (BEAT / 2), freq(arp[i % arp.length]) * oct, 0.28 - i * 0.011, 2.5, BEAT * 1.2);
     }
-    buf[start + i] += s * env * 0.25;
-  }
-}
 
-// Pad senar lembut untuk mengisi latar
-function pad(startSec, freq, gain, dur) {
-  const start = Math.floor(startSec * SR);
-  const len = Math.min(Math.ceil(dur * SR), total - start);
-  const fade = 0.35;
-  for (let i = 0; i < len; i++) {
-    const t = i / SR;
-    const rel = len / SR - t;
-    const env = Math.min(1, t / fade) * Math.min(1, rel / fade) * gain;
-    const vib = 1 + 0.0022 * Math.sin(2 * Math.PI * 4.6 * t);
-    const s =
-      Math.sin(2 * Math.PI * freq * vib * t) * 0.6 +
-      Math.sin(2 * Math.PI * freq * 2 * vib * t) * 0.18 +
-      Math.sin(2 * Math.PI * freq * 3 * vib * t) * 0.06;
-    buf[start + i] += s * env * 0.06;
-  }
-}
+    // Melodi: siklus 1 hening (pembukaan lapang), siklus 2 melodi, siklus 3 bridge
+    const mel = siklus === 1 ? balada.melodi[idx] : siklus === 2 ? balada.bridge[idx] : null;
+    if (mel) {
+      mel.forEach((nada, i) => {
+        piano(t0 + i * BEAT * 2, freq(nada), 0.64, 0.8, BEAT * 2.4);
+        // lapis kedua sedikit detune supaya terdengar lebih tebal & hangat
+        piano(t0 + i * BEAT * 2 + 0.012, freq(nada) * 1.0012, 0.3, 0.85, BEAT * 2.2);
+      });
+    }
 
-for (let bar = 0; bar < totalBars; bar++) {
-  const step = progression[bar % progression.length];
-  const mel = melody[bar % melody.length];
-  const t0 = bar * BAR;
-  const cycle = Math.floor(bar / progression.length);
+    a.nada.slice(0, 3).forEach((nada) => pad(t0, freq(nada), 0.9, BAR));
+  },
+});
+tulisMp3("romantic-ballad.mp3", hasilBalada.pcm, hasilBalada.durasi);
 
-  // Bas: nada akar di ketukan 1 dan 3
-  piano(t0, midi(N[step.bass]), 0.85, 1.1, BEAT * 2.2);
-  piano(t0 + BEAT * 2, midi(N[step.bass]) * 2, 0.42, 1.4, BEAT * 2);
-
-  // Arpeggio delapanan naik-turun
-  const arp = [...step.tones, ...step.tones.slice(0, 3).reverse()];
-  for (let i = 0; i < 8; i++) {
-    const nada = arp[i % arp.length];
-    const oct = i >= 4 ? 2 : 1; // paruh kedua satu oktaf lebih tinggi
-    piano(t0 + i * (BEAT / 2), midi(N[nada]) * oct, 0.3 - i * 0.012, 2.6, BEAT * 1.2);
-  }
-
-  // Melodi utama — masuk mulai siklus kedua agar pembukaan terasa lapang
-  if (cycle >= 1) {
-    mel.forEach((nada, i) => {
-      piano(t0 + i * BEAT * 2, midi(N[nada]), 0.62, 0.85, BEAT * 2.4);
-      piano(t0 + i * BEAT * 2 + 0.012, midi(N[nada]) * 1.001, 0.3, 0.9, BEAT * 2.2);
-    });
-  }
-
-  // Pad akor sepanjang birama
-  step.tones.slice(0, 3).forEach((nada) => pad(t0, midi(N[nada]), 0.9, BAR));
-}
-
-// Gema sederhana (beberapa ketukan tunda) supaya terasa lapang seperti ruang aula
-const out = new Float32Array(total);
-const taps = [
-  [0.041, 0.3], [0.083, 0.22], [0.137, 0.16], [0.211, 0.11], [0.317, 0.07],
+// =====================================================================
+// LAGU 2 — Canon in D (Johann Pachelbel, domain publik)
+// =====================================================================
+const canonAkor = [
+  { bass: "D2", nada: ["D3", "F#3", "A3", "D4"] },
+  { bass: "A2", nada: ["C#3", "E3", "A3", "C#4"] },
+  { bass: "B2", nada: ["D3", "F#3", "B3", "D4"] },
+  { bass: "F#2", nada: ["C#3", "F#3", "A3", "C#4"] },
+  { bass: "G2", nada: ["D3", "G3", "B3", "D4"] },
+  { bass: "D2", nada: ["D3", "F#3", "A3", "D4"] },
+  { bass: "G2", nada: ["D3", "G3", "B3", "D4"] },
+  { bass: "A2", nada: ["C#3", "E3", "A3", "C#4"] },
 ];
-for (let i = 0; i < total; i++) out[i] = buf[i];
-for (const [delay, gain] of taps) {
-  const d = Math.floor(delay * SR);
-  for (let i = d; i < total; i++) out[i] += buf[i - d] * gain;
-}
+const canonMelodi = [
+  ["F#5", "E5"],
+  ["D5", "C#5"],
+  ["B4", "A4"],
+  ["B4", "C#5"],
+  ["D5", "C#5"],
+  ["B4", "A4"],
+  ["G4", "F#4"],
+  ["G4", "E4"],
+];
 
-// Lowpass satu kutub — melembutkan nada tinggi agar tidak menusuk di speaker HP
-let prev = 0;
-const a = 0.28;
-for (let i = 0; i < total; i++) {
-  prev += a * (out[i] - prev);
-  out[i] = prev;
-}
+const hasilCanon = render({
+  bpm: 62,
+  bars: canonAkor.length * 2,
+  buildBar({ bar, t0, BEAT, BAR, piano, pad }) {
+    const idx = bar % canonAkor.length;
+    const siklus = Math.floor(bar / canonAkor.length);
+    const a = canonAkor[idx];
 
-// Normalisasi + fade in/out supaya pengulangan (loop) mulus
-let peak = 0;
-for (let i = 0; i < total; i++) peak = Math.max(peak, Math.abs(out[i]));
-const norm = 0.82 / peak;
-const fadeIn = Math.floor(2.2 * SR);
-const fadeOut = Math.floor(3.5 * SR);
-const pcm = new Int16Array(total);
-for (let i = 0; i < total; i++) {
-  let v = out[i] * norm;
-  if (i < fadeIn) v *= i / fadeIn;
-  if (i > total - fadeOut) v *= (total - i) / fadeOut;
-  pcm[i] = Math.max(-32768, Math.min(32767, Math.round(v * 32767)));
-}
+    piano(t0, freq(a.bass), 0.85, 1.1, BEAT * 2.2);
+    piano(t0 + BEAT * 2, freq(a.bass) * 2, 0.42, 1.4, BEAT * 2);
 
-// Encode MP3 mono 64 kbps — cukup untuk musik latar, hemat kuota tamu
-const encoder = new lamejs.Mp3Encoder(1, SR, 64);
-const chunks = [];
-const BLOCK = 1152;
-for (let i = 0; i < pcm.length; i += BLOCK) {
-  const b = encoder.encodeBuffer(pcm.subarray(i, i + BLOCK));
-  if (b.length) chunks.push(Buffer.from(b));
-}
-const last = encoder.flush();
-if (last.length) chunks.push(Buffer.from(last));
+    const arp = [...a.nada, ...a.nada.slice(0, 3).reverse()];
+    for (let i = 0; i < 8; i++) {
+      const oct = i >= 4 ? 2 : 1;
+      piano(t0 + i * (BEAT / 2), freq(arp[i % arp.length]) * oct, 0.3 - i * 0.012, 2.6, BEAT * 1.2);
+    }
 
-const mp3 = Buffer.concat(chunks);
-writeFileSync("public/music/canon-in-d.mp3", mp3);
-console.log(
-  `OK: public/music/canon-in-d.mp3 — ${(mp3.length / 1024).toFixed(0)} KB, ${durasi.toFixed(1)} detik`
-);
+    if (siklus >= 1) {
+      canonMelodi[idx].forEach((nada, i) => {
+        piano(t0 + i * BEAT * 2, freq(nada), 0.62, 0.85, BEAT * 2.4);
+        piano(t0 + i * BEAT * 2 + 0.012, freq(nada) * 1.001, 0.3, 0.9, BEAT * 2.2);
+      });
+    }
+
+    a.nada.slice(0, 3).forEach((nada) => pad(t0, freq(nada), 0.9, BAR));
+  },
+});
+tulisMp3("canon-in-d.mp3", hasilCanon.pcm, hasilCanon.durasi);

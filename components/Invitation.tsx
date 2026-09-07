@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import Cover from "@/components/Cover";
 import Hero from "@/components/Hero";
 import Countdown from "@/components/Countdown";
@@ -14,6 +14,7 @@ import UcapanWall from "@/components/UcapanWall";
 import Footer from "@/components/Footer";
 import MusicPlayer from "@/components/MusicPlayer";
 import NavDock from "@/components/NavDock";
+import AutoScroll from "@/components/AutoScroll";
 import type { Guest, RsvpAwal } from "@/lib/types";
 
 export default function Invitation({
@@ -24,12 +25,15 @@ export default function Invitation({
   rsvpAwal: RsvpAwal;
 }) {
   const [dibuka, setDibuka] = useState(false);
+  // Saat gulir otomatis berjalan, dok navigasi disembunyikan agar rekaman bersih
+  const [modeRekam, setModeRekam] = useState(false);
 
   function buka() {
     setDibuka(true);
-    // Pastikan mulai dari atas saat undangan dibuka
     window.scrollTo({ top: 0 });
   }
+
+  const handleModeRekam = useCallback((aktif: boolean) => setModeRekam(aktif), []);
 
   return (
     <div className="relative">
@@ -38,7 +42,8 @@ export default function Invitation({
       {dibuka && (
         <>
           <MusicPlayer play={dibuka} />
-          <NavDock visible={dibuka} />
+          <AutoScroll onModeRekam={handleModeRekam} />
+          <NavDock visible={dibuka && !modeRekam} />
         </>
       )}
 

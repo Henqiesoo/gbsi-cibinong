@@ -27,8 +27,9 @@ Contoh undangan personal per tamu:
 | **RSVP** | Hadir / berhalangan + jumlah tamu + catatan, tersimpan ke tabel `rsvp` |
 | **Ucapan & doa** | Kirim pesan + daftar realtime dari tabel `ucapan` |
 | **Amplop digital** | Rekening dengan tombol salin, QRIS, alamat kirim hadiah |
-| **Musik latar** | Canon in D (Pachelbel) dengan tombol putar/berhenti mengambang |
-| **Panel admin** | `/admin` berpassword: statistik, rekap RSVP, tambah tamu, export CSV |
+| **Musik latar** | Balada piano orisinal, dengan tombol putar/berhenti mengambang |
+| **Gulir otomatis** | Tombol khusus untuk merekam video undangan tanpa menyentuh layar |
+| **Panel admin** | `/admin` berpassword: statistik, rekap RSVP, tambah/ubah/hapus tamu, export CSV |
 
 Tema: **sage green · ivory · champagne gold**, font serif *Cormorant Garamond* dan skrip *Parisienne* untuk nama pasangan.
 
@@ -62,7 +63,16 @@ Semua di [`lib/wedding-config.ts`](lib/wedding-config.ts): nama pasangan, orang 
 - **Foto** — taruh di `public/photos/`, lalu sesuaikan daftar `gallery`, `coverPhoto`, `heroPhoto`, serta `photo` masing-masing mempelai.
 - **QRIS** — ganti `public/qris.svg` dengan gambar QRIS asli.
 - **Embed Maps** — Google Maps → Share → Embed a map → salin URL di atribut `src` ke `mapsEmbedUrl`.
-- **Musik** — ganti `public/music/canon-in-d.mp3`, atau hasilkan ulang dengan `node scripts/generate-music.mjs` (file itu mensintesis Canon in D karya Pachelbel, domain publik, jadi tidak ada masalah hak cipta).
+- **Musik** — dua lagu bawaan tersedia di `public/music/`, keduanya bebas masalah hak cipta dan dihasilkan oleh `node scripts/generate-music.mjs`:
+
+  | Berkas | Keterangan |
+  |---|---|
+  | `romantic-ballad.mp3` | Balada piano **orisinal** (bawaan) |
+  | `canon-in-d.mp3` | Canon in D — Pachelbel, domain publik |
+
+  Tinggal ubah `music.src` di `lib/wedding-config.ts` untuk berpindah lagu.
+
+  > **Lagu populer seperti "A Thousand Years" tidak disertakan** karena masih dilindungi hak cipta — memakainya tanpa lisensi berisiko klaim/takedown, terutama bila videonya diunggah ke Instagram, TikTok, atau YouTube. Bila Anda punya berkas berlisensi, taruh di `public/music/` lalu tunjuk dari `music.src`.
 
 ## ☁️ Deploy ke Vercel
 
@@ -71,6 +81,26 @@ Semua di [`lib/wedding-config.ts`](lib/wedding-config.ts): nama pasangan, orang 
 3. **Deploy** — tanpa environment variable pun langsung jalan memakai project Supabase demo
 
 Bila memakai Supabase sendiri, tambahkan `NEXT_PUBLIC_UNDANGAN_SUPABASE_URL` dan `NEXT_PUBLIC_UNDANGAN_SUPABASE_ANON_KEY` di **Settings → Environment Variables**. Awalan `UNDANGAN_` dipakai agar tidak bentrok dengan variabel Supabase milik website lain yang berbagi project Vercel yang sama.
+
+## 🎬 Merekam video undangan untuk media sosial
+
+Undangan punya tombol **gulir otomatis** (ikon panah bawah, di bawah tombol musik):
+
+1. Buka undangan, ketuk ikon panah bawah
+2. Pilih kecepatan — Pelan (±100 dtk), Sedang (±60 dtk), atau Cepat (±38 dtk)
+3. Ketuk **Mulai rekam** — halaman kembali ke atas lalu bergulir sendiri
+4. Rekam layar HP; dok navigasi otomatis disembunyikan agar hasilnya bersih
+
+Menyentuh layar akan menghentikan gulir otomatis, jadi jangan sentuh apa pun selama merekam.
+
+## 👤 Mengganti nama pada undangan
+
+Ada dua jenis nama yang berbeda:
+
+| Yang diganti | Caranya |
+|---|---|
+| **Nama tamu** (yang muncul di cover, per orang) | Buka `/admin` → tabel tamu → tombol **Ubah**. Bisa juga menambah tamu baru lewat formulir di atas tabel. Kolom "Link baru" dikosongkan saja agar link yang sudah disebar tetap hidup. |
+| **Nama mempelai & data acara** | Edit [`lib/wedding-config.ts`](lib/wedding-config.ts), lalu deploy ulang |
 
 ## 📱 Membagikan undangan lewat WhatsApp
 
@@ -104,6 +134,8 @@ Tabel `guests` dan `rsvp` **tidak punya policy publik** — memakai anon key dar
 | `admin_cek_sesi(token)` | anon | Verifikasi cookie sesi |
 | `admin_rekap(token)` | anon | Rekap RSVP — hanya jalan dengan token sesi sah |
 | `admin_tambah_tamu(token, ...)` | anon | Tambah tamu + slug otomatis unik |
+| `admin_ubah_tamu(token, ...)` | anon | Ubah nama / kuota tamu (link lama dipertahankan) |
+| `admin_hapus_tamu(token, id)` | anon | Hapus tamu beserta RSVP-nya |
 | `cek_admin(password)` | **ditolak** | Internal saja, tidak bisa dipanggil dari luar |
 
 Password admin disimpan sebagai **hash bcrypt** di tabel `admin_config`; token sesi disimpan sebagai cookie **httpOnly**. Tabel `ucapan` sengaja terbuka untuk publik karena isinya memang ditampilkan ke semua tamu (dengan batas panjang nama 100 dan pesan 500 karakter).

@@ -59,3 +59,57 @@ export async function addGuestAction(formData: FormData) {
   revalidatePath("/admin");
   return { error: null };
 }
+
+export async function editGuestAction(formData: FormData) {
+  if (!(await isAdminAuthenticated())) {
+    return { error: "Sesi berakhir, silakan login ulang." };
+  }
+
+  const id = String(formData.get("id") ?? "");
+  const nama = String(formData.get("nama") ?? "").trim();
+  const jumlahTamuMax = Number(formData.get("jumlah_tamu_max") ?? 2);
+  // Kosongkan untuk mempertahankan link lama agar undangan yang sudah
+  // terlanjur disebar tidak mati
+  const slugBaru = String(formData.get("slug_baru") ?? "").trim();
+
+  if (!id) return { error: "Tamu tidak dikenali." };
+  if (!nama) return { error: "Nama tamu wajib diisi." };
+
+  const supabase = getSupabaseServer();
+  if (!supabase) return { error: "Konfigurasi Supabase belum diisi." };
+
+  const { error } = await supabase.rpc("admin_ubah_tamu", {
+    p_token: sessionTokenFromCookie() ?? "",
+    p_id: id,
+    p_nama: nama,
+    p_jumlah_tamu_max: jumlahTamuMax,
+    p_slug_baru: slugBaru || null,
+  });
+
+  if (error) return { error: `Gagal menyimpan: ${error.message}` };
+
+  revalidatePath("/admin");
+  return { error: null };
+}
+
+export async function deleteGuestAction(formData: FormData) {
+  if (!(await isAdminAuthenticated())) {
+    return { error: "Sesi berakhir, silakan login ulang." };
+  }
+
+  const id = String(formData.get("id") ?? "");
+  if (!id) return { error: "Tamu tidak dikenali." };
+
+  const supabase = getSupabaseServer();
+  if (!supabase) return { error: "Konfigurasi Supabase belum diisi." };
+
+  const { error } = await supabase.rpc("admin_hapus_tamu", {
+    p_token: sessionTokenFromCookie() ?? "",
+    p_id: id,
+  });
+
+  if (error) return { error: `Gagal menghapus: ${error.message}` };
+
+  revalidatePath("/admin");
+  return { error: null };
+}

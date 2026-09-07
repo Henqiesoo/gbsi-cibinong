@@ -2,7 +2,7 @@ import { isAdminAuthenticated, sessionTokenFromCookie } from "@/lib/admin-auth";
 import { getSupabaseServer } from "@/lib/supabase/server";
 import LoginForm from "@/components/admin/LoginForm";
 import AddGuestForm from "@/components/admin/AddGuestForm";
-import CopyLinkButton from "@/components/admin/CopyLinkButton";
+import GuestActions from "@/components/admin/GuestActions";
 import { logoutAction } from "@/app/admin/actions";
 import { weddingConfig } from "@/lib/wedding-config";
 import type { RekapRow } from "@/lib/types";
@@ -113,7 +113,7 @@ export default async function AdminPage() {
                 <th className="px-4 py-3 font-semibold">Status</th>
                 <th className="px-4 py-3 font-semibold">Hadir</th>
                 <th className="px-4 py-3 font-semibold">Catatan</th>
-                <th className="px-4 py-3 font-semibold">Link undangan</th>
+                <th className="px-4 py-3 font-semibold">Link &amp; kelola</th>
               </tr>
             </thead>
             <tbody>
@@ -152,7 +152,12 @@ export default async function AdminPage() {
                     {r.catatan || "—"}
                   </td>
                   <td className="px-4 py-3">
-                    <CopyLinkButton slug={r.slug} />
+                    <GuestActions
+                      id={r.id}
+                      nama={r.nama}
+                      slug={r.slug}
+                      jumlahTamuMax={r.jumlah_tamu_max}
+                    />
                   </td>
                 </tr>
               ))}

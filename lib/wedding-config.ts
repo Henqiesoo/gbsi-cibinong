@@ -107,10 +107,19 @@ export const weddingConfig = {
     source: "Kejadian 2:24",
   },
 
-  // Musik latar (disintesis dari Canon in D — Johann Pachelbel, domain publik)
+  // Musik latar.
+  //
+  // Dua lagu bawaan tersedia di public/music/ dan keduanya bebas masalah
+  // hak cipta (dihasilkan oleh scripts/generate-music.mjs):
+  //   /music/romantic-ballad.mp3 — komposisi asli, balada piano modern
+  //   /music/canon-in-d.mp3      — Canon in D, Pachelbel (domain publik)
+  //
+  // Ingin memakai lagu populer (mis. "A Thousand Years")? Lagu itu masih
+  // dilindungi hak cipta, jadi sediakan berkas berlisensi milik Anda sendiri,
+  // taruh di public/music/, lalu tunjuk berkasnya di bawah ini.
   music: {
-    src: "/music/canon-in-d.mp3",
-    title: "Canon in D — Pachelbel",
+    src: "/music/romantic-ballad.mp3",
+    title: "Selamanya Bersama — instrumental piano",
   },
 };
 
