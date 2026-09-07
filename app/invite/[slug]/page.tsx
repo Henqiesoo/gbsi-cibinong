@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Invitation from "@/components/Invitation";
+import CinematicInvitation from "@/components/CinematicInvitation";
 import { getSupabaseServer } from "@/lib/supabase/server";
 import { SUPABASE_URL } from "@/lib/supabase/config";
 import { bacaTema, cssTema } from "@/lib/themes";
@@ -68,7 +69,12 @@ export default async function InvitePage({
     <>
       {/* Dirender di server sehingga warna sudah benar sejak cat pertama */}
       {css && <style dangerouslySetInnerHTML={{ __html: css }} />}
-      <Invitation guest={guest} rsvpAwal={rsvpAwal} tema={tema} />
+      {/* Tema Royal Red memakai tata letak adegan berjalan, bukan gulir */}
+      {tema === "royal" ? (
+        <CinematicInvitation guest={guest} rsvpAwal={rsvpAwal} />
+      ) : (
+        <Invitation guest={guest} rsvpAwal={rsvpAwal} tema={tema} />
+      )}
     </>
   );
 }

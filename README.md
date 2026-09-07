@@ -11,7 +11,7 @@ Website undangan pernikahan digital: **Next.js 14 (App Router) + Tailwind CSS + 
 | 3 | **Floral Watercolor** | [buka](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/?tema=floral) | Blush & mawar, Playfair + Great Vibes, foto bulat, sapuan cat air |
 | 4 | **Minimalis Modern** | [buka](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/?tema=minimal) | Putih–hitam, Jost geometris, sudut tegas, garis polos |
 | 5 | **Nusantara** | [buka](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/?tema=adat) | Cokelat soga & kunyit, Marcellus, motif batik, ornamen kawung |
-| 6 | **Royal Red** | [buka](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/?tema=royal) | Marun & emas, Cinzel + Pinyon, foto berbentuk gerbang, kilau emas |
+| 6 | **Royal Red** | [buka](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/?tema=royal) | **Format berbeda**: bukan halaman gulir, melainkan 13 adegan yang berganti sendiri seperti video |
 
 Tema dipilih lewat parameter `?tema=` di URL mana pun, termasuk link undangan personal — mis. `https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/invite/rudi-hartono?tema=royal`.
 
@@ -53,6 +53,17 @@ Sebuah tema di sini bukan sekadar ganti warna. Setiap tema di [`lib/themes.ts`](
 | Bahasa bentuk | `--r-md`, `--r-lg`, `--r-foto` | Sudut membulat vs tegas; foto bulat vs **lengkung gerbang** |
 | Tekstur latar | `--tekstur` | Sapuan cat air, kilau emas, motif batik |
 | Gaya ornamen | field `ornamen` | Daun · art deco · bunga · garis · kawung · gerbang |
+| **Format halaman** | field `format` | `gulir` (halaman panjang) vs `adegan` (berganti sendiri) |
+
+#### Tema 6 memakai format berbeda
+
+Lima tema pertama adalah halaman gulir dengan urutan bagian yang sama. Tema **Royal Red** sengaja dibuat lain: satu layar penuh berisi **13 adegan yang berganti sendiri**, mengikuti alur undangan video — gerbang pelaminan, untaian bunga turun, lingkaran inisial, siluet pasangan berjalan ke altar, lalu bingkai undangan.
+
+- Latar pelaminan, siluet pasangan, dan bingkai ornamen semuanya **digambar sendiri dengan SVG** (`components/royal/`) — tidak memakai foto stok, jadi bebas lisensi dan sangat ringan
+- Siluet dibuat bernuansa pemberkatan Kristen: gaun putih + veil, setelan hitam, salib di puncak bingkai
+- Adegan berjalan otomatis; adegan interaktif (RSVP, amplop, ucapan) berhenti menunggu tamu dan punya tombol **Lanjut**
+- Ada bilah kemajuan seperti cerita media sosial, tombol jeda, ketuk kiri/kanan, dan tombol panah keyboard
+- Karena berjalan sendiri, tema ini **tidak perlu gulir otomatis** untuk direkam jadi video
 
 Komponen tidak pernah tahu tema apa yang aktif, jadi **menambah tema ketujuh cukup menyalin satu objek** di `lib/themes.ts` — tanpa menyentuh satu pun komponen, dan seluruh tema langsung ikut menerima perbaikan fitur apa pun.
 

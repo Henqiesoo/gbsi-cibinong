@@ -106,3 +106,95 @@ body {
     @apply mx-auto h-px w-16 bg-gradient-to-r from-transparent via-gold-400 to-transparent;
   }
 }
+
+/* =====================================================================
+   Animasi mode sinematik (tema Royal Red)
+   Adegan berganti sendiri, jadi setiap elemen perlu gerak masuk sendiri.
+   ===================================================================== */
+
+/* Elemen naik perlahan sambil memudar masuk */
+.art-naik {
+  animation: art-naik 1100ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes art-naik {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Lingkaran inisial mengembang dari titik tengah */
+.art-lingkaran {
+  animation: art-lingkaran 900ms cubic-bezier(0.34, 1.4, 0.5, 1) both;
+}
+@keyframes art-lingkaran {
+  from {
+    opacity: 0;
+    transform: scale(0.25);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Pasangan melangkah maju perlahan ke arah altar */
+.art-melangkah {
+  animation: art-melangkah 5600ms ease-out both;
+}
+@keyframes art-melangkah {
+  from {
+    transform: translateY(9%) scale(0.86);
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-2%) scale(1.04);
+    opacity: 1;
+  }
+}
+
+/* Lampu gantung & untaian bunga berayun pelan */
+.art-ayun {
+  animation: art-ayun 6s ease-in-out infinite;
+}
+.art-ayun-halus {
+  animation: art-ayun 8s ease-in-out infinite;
+}
+@keyframes art-ayun {
+  0%,
+  100% {
+    transform: rotate(-1.1deg);
+  }
+  50% {
+    transform: rotate(1.1deg);
+  }
+}
+
+/* Nyala lilin berkedip */
+.art-kedip {
+  animation: art-kedip 3.2s ease-in-out infinite;
+}
+@keyframes art-kedip {
+  0%,
+  100% {
+    opacity: 0.75;
+  }
+  45% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 0.6;
+  }
+}
+
+/* Elemen yang baru muncul pada fase tertentu */
+.art-muncul {
+  transition: opacity 1400ms ease-out;
+}

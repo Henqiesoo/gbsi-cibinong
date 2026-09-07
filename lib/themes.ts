@@ -25,6 +25,9 @@ export type Tema = {
   nama: string;
   deskripsi: string;
   ornamen: GayaOrnamen;
+  /* "gulir" = halaman panjang yang digulir tamu.
+     "adegan" = satu halaman yang isinya berganti sendiri seperti video. */
+  format: "gulir" | "adegan";
   token: Token;
 };
 
@@ -55,6 +58,7 @@ const sage: Tema = {
   nama: "Sage & Gold",
   deskripsi: "Gading, sage, emas sampanye — hangat dan natural",
   ornamen: "daun",
+  format: "gulir",
   token: {
     "--ivory-50": "253 251 247",
     "--ivory-100": "248 244 236",
@@ -94,6 +98,7 @@ const dark: Tema = {
   nama: "Dark Luxury",
   deskripsi: "Hitam pekat, krem, emas — mewah bergaya malam gala",
   ornamen: "deco",
+  format: "gulir",
   token: {
     "--ivory-50": "12 11 14",
     "--ivory-100": "23 21 27",
@@ -135,6 +140,7 @@ const floral: Tema = {
   nama: "Floral Watercolor",
   deskripsi: "Blush, mawar kering, dan sapuan cat air yang lembut",
   ornamen: "bunga",
+  format: "gulir",
   token: {
     "--ivory-50": "255 250 250",
     "--ivory-100": "253 242 242",
@@ -177,6 +183,7 @@ const minimal: Tema = {
   nama: "Minimalis Modern",
   deskripsi: "Putih bersih, sudut tegas, tipografi geometris tanpa hiasan",
   ornamen: "garis",
+  format: "gulir",
   token: {
     "--ivory-50": "250 250 249",
     "--ivory-100": "244 244 242",
@@ -217,6 +224,7 @@ const adat: Tema = {
   nama: "Nusantara",
   deskripsi: "Cokelat tanah, kuning kunyit, dan motif batik — bernuansa adat",
   ornamen: "batik",
+  format: "gulir",
   token: {
     "--ivory-50": "250 245 235",
     "--ivory-100": "243 234 217",
@@ -260,8 +268,9 @@ const adat: Tema = {
 // ---------------------------------------------------------------------
 const royal: Tema = {
   nama: "Royal Red",
-  deskripsi: "Marun, emas berkilau, dan lengkung gerbang pelaminan",
+  deskripsi: "Marun & emas — bukan halaman gulir, melainkan adegan yang berjalan sendiri",
   ornamen: "mandala",
+  format: "adegan",
   token: {
     "--ivory-50": "245 239 230", // #F5EFE6 dari referensi
     "--ivory-100": "238 228 214",
