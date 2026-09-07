@@ -2,7 +2,14 @@
 
 Website undangan pernikahan digital: **Next.js 14 (App Router) + Tailwind CSS + Supabase**, siap deploy ke **Vercel**. Dirancang mobile-first karena mayoritas tamu membukanya dari WhatsApp di HP.
 
-**Demo langsung:** https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app
+**Demo langsung — dua tema:**
+
+| Tema | Link |
+|---|---|
+| **Sage & Gold** (terang, natural) | https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app |
+| **Dark Luxury** (hitam & emas) | https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/?tema=dark |
+
+Tema dipilih lewat parameter `?tema=dark` di URL mana pun, termasuk link undangan personal — mis. `https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/invite/rudi-hartono?tema=dark`.
 
 Contoh undangan personal per tamu:
 
@@ -31,7 +38,16 @@ Contoh undangan personal per tamu:
 | **Gulir otomatis** | Tombol khusus untuk merekam video undangan tanpa menyentuh layar |
 | **Panel admin** | `/admin` berpassword: statistik, rekap RSVP, tambah/ubah/hapus tamu, export CSV |
 
-Tema: **sage green · ivory · champagne gold**, font serif *Cormorant Garamond* dan skrip *Parisienne* untuk nama pasangan.
+### 🎨 Tema
+
+Dua tema tersedia dan seluruhnya diatur dari [`lib/themes.ts`](lib/themes.ts):
+
+| Tema | Parameter URL | Nuansa |
+|---|---|---|
+| **Sage & Gold** (bawaan) | — | Gading, sage, emas sampanye — hangat & natural |
+| **Dark Luxury** | `?tema=dark` | Hitam pekat, krem, emas terang — mewah & elegan |
+
+Semua warna adalah CSS variable, jadi menambah tema ketiga cukup dengan menyalin satu objek di `lib/themes.ts` — tanpa menyentuh satu pun komponen. Font: serif *Cormorant Garamond* dan skrip *Parisienne* untuk nama pasangan.
 
 ## 🚀 Menjalankan secara lokal
 
@@ -67,12 +83,19 @@ Semua di [`lib/wedding-config.ts`](lib/wedding-config.ts): nama pasangan, orang 
 
   | Berkas | Keterangan |
   |---|---|
-  | `romantic-ballad.mp3` | Balada piano **orisinal** (bawaan) |
+  | `a-thousand-years.mp3` | Berkas unggahan pemilik proyek — **dipakai saat ini** |
+  | `romantic-ballad.mp3` | Balada piano **orisinal**, bebas lisensi |
   | `canon-in-d.mp3` | Canon in D — Pachelbel, domain publik |
 
   Tinggal ubah `music.src` di `lib/wedding-config.ts` untuk berpindah lagu.
 
-  > **Lagu populer seperti "A Thousand Years" tidak disertakan** karena masih dilindungi hak cipta — memakainya tanpa lisensi berisiko klaim/takedown, terutama bila videonya diunggah ke Instagram, TikTok, atau YouTube. Bila Anda punya berkas berlisensi, taruh di `public/music/` lalu tunjuk dari `music.src`.
+  Berkas MP3 baru sebaiknya diperkecil dulu agar ringan dibuka lewat data seluler:
+
+  ```bash
+  node scripts/optimize-audio.mjs lagu-asli.mp3 public/music/lagu.mp3 64
+  ```
+
+  > **Hak cipta:** "A Thousand Years" (Christina Perri) masih dilindungi hak cipta. Pastikan Anda memiliki hak/lisensi untuk memakainya, terutama untuk pemakaian komersial atau bila videonya diunggah ke Instagram/TikTok/YouTube yang memindai audio secara otomatis. Dua berkas lain di atas bebas masalah lisensi.
 
 ## ☁️ Deploy ke Vercel
 

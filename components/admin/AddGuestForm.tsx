@@ -18,7 +18,7 @@ export default function AddGuestForm() {
   }
 
   return (
-    <div className="mt-8 rounded-2xl bg-white p-5 shadow-sm">
+    <div className="mt-8 rounded-2xl bg-surface p-5 shadow-sm">
       <h2 className="text-sm font-semibold text-sage-700">Tambah Tamu Baru</h2>
       <form ref={formRef} action={handleSubmit} className="mt-3 flex flex-wrap items-end gap-3">
         <div className="min-w-[220px] flex-1">

@@ -111,15 +111,18 @@ export const weddingConfig = {
   //
   // Dua lagu bawaan tersedia di public/music/ dan keduanya bebas masalah
   // hak cipta (dihasilkan oleh scripts/generate-music.mjs):
-  //   /music/romantic-ballad.mp3 — komposisi asli, balada piano modern
-  //   /music/canon-in-d.mp3      — Canon in D, Pachelbel (domain publik)
+  //   /music/a-thousand-years.mp3 — berkas unggahan pemilik proyek (dipakai)
+  //   /music/romantic-ballad.mp3  — komposisi asli, balada piano modern
+  //   /music/canon-in-d.mp3       — Canon in D, Pachelbel (domain publik)
   //
-  // Ingin memakai lagu populer (mis. "A Thousand Years")? Lagu itu masih
-  // dilindungi hak cipta, jadi sediakan berkas berlisensi milik Anda sendiri,
-  // taruh di public/music/, lalu tunjuk berkasnya di bawah ini.
+  // CATATAN HAK CIPTA: "A Thousand Years" (Christina Perri) masih dilindungi
+  // hak cipta. Pastikan Anda punya hak/lisensi untuk memakainya — terutama bila
+  // undangan dipakai komersial atau videonya diunggah ke Instagram/TikTok/
+  // YouTube, yang memindai audio secara otomatis. Dua berkas lain di atas bebas
+  // masalah lisensi dan bisa dipakai sebagai pengganti kapan saja.
   music: {
-    src: "/music/romantic-ballad.mp3",
-    title: "Selamanya Bersama — instrumental piano",
+    src: "/music/a-thousand-years.mp3",
+    title: "A Thousand Years",
   },
 };
 

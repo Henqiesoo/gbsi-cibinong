@@ -16,8 +16,8 @@ export default function LoginForm() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-sage-800 px-6">
-      <div className="w-full max-w-sm rounded-2xl bg-white p-8 shadow-xl">
+    <div className="flex min-h-screen items-center justify-center bg-sage-900 px-6">
+      <div className="w-full max-w-sm rounded-2xl bg-surface p-8 shadow-xl">
         <h1 className="text-center font-serif text-2xl text-sage-800">Panel Admin</h1>
         <p className="mt-2 text-center text-sm text-sage-400">
           Masukkan password untuk melihat rekap RSVP

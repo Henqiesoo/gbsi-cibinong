@@ -2,9 +2,44 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Nilai bawaan = tema "sage". Tema lain menimpanya lewat <style> yang
+   dirender server (lihat lib/themes.ts). */
+:root {
+  --ivory-50: 253 251 247;
+  --ivory-100: 248 244 236;
+  --ivory-200: 239 232 218;
+  --ivory-300: 226 215 195;
+
+  --sage-100: 223 229 218;
+  --sage-200: 195 205 187;
+  --sage-300: 162 176 151;
+  --sage-400: 129 143 118;
+  --sage-500: 103 115 93;
+  --sage-600: 79 90 71;
+  --sage-700: 60 69 54;
+  --sage-800: 44 51 39;
+  --sage-900: 30 35 27;
+
+  --gold-200: 235 217 180;
+  --gold-300: 220 192 138;
+  --gold-400: 201 167 106;
+  --gold-500: 176 141 87;
+  --gold-600: 143 112 68;
+
+  --ink: 35 38 31;
+  --surface: 255 255 255;
+  --edge: 255 255 255;
+  --onprimary: 253 251 247;
+
+  /* Bayangan kartu — pada tema gelap dibuat lebih pekat */
+  --bayangan-kartu: 0 8px 40px -12px rgb(60 69 54 / 0.25);
+  --bayangan-dok: 0 10px 40px -8px rgb(60 69 54 / 0.4);
+}
+
 html {
   scroll-behavior: smooth;
   -webkit-tap-highlight-color: transparent;
+  background: rgb(var(--ivory-50));
 }
 
 body {
@@ -15,7 +50,7 @@ body {
   width: 5px;
 }
 ::-webkit-scrollbar-thumb {
-  background: theme("colors.sage.300");
+  background: rgb(var(--sage-300));
   border-radius: 9999px;
 }
 
@@ -42,18 +77,18 @@ body {
     @apply mx-auto mt-4 max-w-sm text-sm leading-relaxed text-sage-500;
   }
   .glass {
-    @apply rounded-3xl border border-white/60 bg-white/70 shadow-[0_8px_40px_-12px_rgba(60,69,54,0.25)] backdrop-blur-xl;
+    @apply rounded-3xl border border-edge/60 bg-surface/70 backdrop-blur-xl;
+    box-shadow: var(--bayangan-kartu);
   }
   .input {
-    @apply w-full rounded-2xl border border-ivory-300 bg-white/90 px-4 py-3.5 text-[15px] text-ink outline-none transition placeholder:text-sage-300 focus:border-gold-400 focus:ring-4 focus:ring-gold-300/25;
+    @apply w-full rounded-2xl border border-ivory-300 bg-surface/90 px-4 py-3.5 text-[15px] text-ink outline-none transition placeholder:text-sage-300 focus:border-gold-400 focus:ring-4 focus:ring-gold-300/25;
   }
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full bg-sage-700 px-7 py-3.5 text-sm font-semibold text-ivory-50 shadow-lg shadow-sage-700/25 transition active:scale-[0.97] hover:bg-sage-800 disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-sage-700 px-7 py-3.5 text-sm font-semibold text-onprimary shadow-lg shadow-sage-700/25 transition active:scale-[0.97] hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60;
   }
   .btn-ghost {
     @apply inline-flex items-center justify-center gap-2 rounded-full border border-gold-400/70 px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-gold-600 transition active:scale-[0.97] hover:bg-gold-400/10;
   }
-  /* Garis emas tipis sebagai pemisah antar bagian */
   .hairline {
     @apply mx-auto h-px w-16 bg-gradient-to-r from-transparent via-gold-400 to-transparent;
   }

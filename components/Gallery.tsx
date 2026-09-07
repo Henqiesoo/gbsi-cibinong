@@ -90,7 +90,7 @@ export default function Gallery() {
           <button
             onClick={tutup}
             aria-label="Tutup"
-            className="absolute right-4 top-4 rounded-full bg-white/10 p-2.5 text-ivory-50 transition hover:bg-white/20"
+            className="absolute right-4 top-4 rounded-full bg-white/10 p-2.5 text-cream-50 transition hover:bg-white/20"
           >
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -103,7 +103,7 @@ export default function Gallery() {
               sebelum();
             }}
             aria-label="Foto sebelumnya"
-            className="absolute left-2 rounded-full bg-white/10 p-2.5 text-ivory-50 transition hover:bg-white/20 md:left-8"
+            className="absolute left-2 rounded-full bg-white/10 p-2.5 text-cream-50 transition hover:bg-white/20 md:left-8"
           >
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
@@ -124,14 +124,14 @@ export default function Gallery() {
               sesudah();
             }}
             aria-label="Foto berikutnya"
-            className="absolute right-2 rounded-full bg-white/10 p-2.5 text-ivory-50 transition hover:bg-white/20 md:right-8"
+            className="absolute right-2 rounded-full bg-white/10 p-2.5 text-cream-50 transition hover:bg-white/20 md:right-8"
           >
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
             </svg>
           </button>
 
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 rounded-full bg-white/10 px-3.5 py-1.5 text-xs tracking-wider text-ivory-100">
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 rounded-full bg-white/10 px-3.5 py-1.5 text-xs tracking-wider text-cream-100">
             {aktif + 1} / {photos.length}
           </div>
         </div>

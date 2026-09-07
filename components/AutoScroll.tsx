@@ -107,7 +107,7 @@ export default function AutoScroll({ onModeRekam }: { onModeRekam: (aktif: boole
         className={`flex h-11 w-11 items-center justify-center rounded-full border shadow-lg backdrop-blur-md transition active:scale-90 ${
           jalan
             ? "border-gold-400 bg-gold-500 text-white"
-            : "border-white/60 bg-white/80 text-sage-700 hover:bg-white"
+            : "border-edge/60 bg-surface/80 text-sage-700 hover:bg-surface"
         }`}
       >
         {jalan ? (
@@ -123,7 +123,7 @@ export default function AutoScroll({ onModeRekam }: { onModeRekam: (aktif: boole
       </button>
 
       {bukaPilihan && !jalan && (
-        <div className="rounded-2xl border border-white/60 bg-white/90 p-2 shadow-lg backdrop-blur-md">
+        <div className="rounded-2xl border border-edge/60 bg-surface/90 p-2 shadow-lg backdrop-blur-md">
           <p className="px-2 pb-1.5 pt-0.5 text-[10px] font-semibold uppercase tracking-wider text-sage-400">
             Kecepatan
           </p>
@@ -133,14 +133,14 @@ export default function AutoScroll({ onModeRekam }: { onModeRekam: (aktif: boole
               onClick={() => setIndeksKecepatan(i)}
               className={`block w-full rounded-xl px-3 py-1.5 text-left text-xs transition ${
                 indeksKecepatan === i
-                  ? "bg-sage-700 font-semibold text-ivory-50"
+                  ? "bg-sage-700 font-semibold text-onprimary"
                   : "text-sage-600 hover:bg-ivory-100"
               }`}
             >
               {k.label}
               <span
                 className={`ml-1.5 text-[10px] ${
-                  indeksKecepatan === i ? "text-ivory-200" : "text-sage-400"
+                  indeksKecepatan === i ? "text-onprimary/70" : "text-sage-400"
                 }`}
               >
                 {k.perkiraan}

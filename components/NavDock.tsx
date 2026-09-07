@@ -67,7 +67,7 @@ export default function NavDock({ visible }: { visible: boolean }) {
         visible ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-full opacity-0"
       }`}
     >
-      <div className="mx-3 flex w-full max-w-md items-center justify-between gap-0.5 rounded-full border border-white/70 bg-white/85 px-2 py-2 shadow-[0_10px_40px_-8px_rgba(60,69,54,0.4)] backdrop-blur-xl">
+      <div className="mx-3 flex w-full max-w-md items-center justify-between gap-0.5 rounded-full border border-edge/70 bg-surface/85 px-2 py-2 backdrop-blur-xl [box-shadow:var(--bayangan-dok)]">
         {items.map((item) => {
           const isActive = active === item.id;
           return (
@@ -76,7 +76,7 @@ export default function NavDock({ visible }: { visible: boolean }) {
               href={`#${item.id}`}
               aria-current={isActive ? "true" : undefined}
               className={`flex flex-1 flex-col items-center gap-1 rounded-full px-1 py-1.5 transition ${
-                isActive ? "bg-sage-700 text-ivory-50" : "text-sage-500 active:bg-ivory-100"
+                isActive ? "bg-sage-700 text-onprimary" : "text-sage-500 active:bg-ivory-100"
               }`}
             >
               <svg className="h-[18px] w-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.6}>

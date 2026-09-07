@@ -33,7 +33,7 @@ export default function GiftSection() {
   }
 
   return (
-    <section id="hadiah" className="scroll-mt-4 bg-white/70 px-6 py-20 text-center">
+    <section id="hadiah" className="scroll-mt-4 bg-surface/70 px-6 py-20 text-center">
       <Reveal>
         <p className="eyebrow">Wedding Gift</p>
         <h2 className="section-title mt-3">Amplop Digital</h2>

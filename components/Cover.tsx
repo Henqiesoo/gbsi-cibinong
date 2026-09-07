@@ -36,10 +36,10 @@ export default function Cover({ guestName, opened, onOpen }: Props) {
       />
       <div className="absolute inset-0 bg-gradient-to-b from-sage-900/75 via-sage-900/55 to-sage-900/90" />
 
-      <div className="relative flex h-full flex-col items-center justify-center px-7 text-center text-ivory-50">
+      <div className="relative flex h-full flex-col items-center justify-center px-7 text-center text-cream-50">
         <p className="eyebrow !text-gold-300">The Wedding Of</p>
 
-        <h1 className="mt-5 font-script text-[3.75rem] leading-[1.05] text-ivory-50 drop-shadow-sm sm:text-7xl">
+        <h1 className="mt-5 font-script text-[3.75rem] leading-[1.05] text-cream-50 drop-shadow-sm sm:text-7xl">
           {groom.nickname}
           <span className="mx-2 text-gold-300">&amp;</span>
           {bride.nickname}
@@ -47,12 +47,12 @@ export default function Cover({ guestName, opened, onOpen }: Props) {
 
         <Ornament className="mt-6 w-44 text-gold-300/90" />
 
-        <p className="mt-5 font-serif text-lg tracking-[0.2em] text-ivory-100">
+        <p className="mt-5 font-serif text-lg tracking-[0.2em] text-cream-100">
           {weddingConfig.eventDateShort}
         </p>
 
         <div className="mt-12 w-full max-w-xs rounded-3xl border border-white/25 bg-white/10 px-6 py-6 backdrop-blur-md">
-          <p className="text-[10px] uppercase tracking-widest text-ivory-200">
+          <p className="text-[10px] uppercase tracking-widest text-cream-200">
             Kepada Yth. Bapak/Ibu/Saudara/i
           </p>
           <p className="mt-2.5 font-serif text-2xl leading-snug text-white">
@@ -62,7 +62,7 @@ export default function Cover({ guestName, opened, onOpen }: Props) {
 
         <button
           onClick={onOpen}
-          className="group mt-8 inline-flex items-center gap-2.5 rounded-full bg-ivory-50 px-8 py-4 text-sm font-semibold text-sage-800 shadow-2xl transition active:scale-95 hover:bg-white"
+          className="group mt-8 inline-flex items-center gap-2.5 rounded-full bg-cream-50 px-8 py-4 text-sm font-semibold text-sage-900 shadow-2xl transition active:scale-95 hover:bg-white"
         >
           <svg
             className="h-4 w-4 text-gold-500 transition-transform group-hover:-translate-y-0.5"
@@ -80,7 +80,7 @@ export default function Cover({ guestName, opened, onOpen }: Props) {
           Buka Undangan
         </button>
 
-        <p className="mt-5 text-[11px] text-ivory-200/70">
+        <p className="mt-5 text-[11px] text-cream-200/70">
           Undangan akan memutar musik saat dibuka
         </p>
       </div>

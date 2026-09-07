@@ -66,7 +66,7 @@ export default function EventDetails() {
   const { pemberkatan, resepsi } = weddingConfig.events;
 
   return (
-    <section id="acara" className="scroll-mt-4 bg-white/70 px-6 py-20 text-center">
+    <section id="acara" className="scroll-mt-4 bg-surface/70 px-6 py-20 text-center">
       <Reveal>
         <p className="eyebrow">Save The Date</p>
         <h2 className="section-title mt-3">Rangkaian Acara</h2>

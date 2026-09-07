@@ -40,14 +40,14 @@ function StatCard({
   return (
     <div
       className={`rounded-2xl px-5 py-4 ${
-        accent ? "bg-sage-700 text-ivory-50 shadow-lg shadow-sage-700/20" : "bg-white shadow-sm"
+        accent ? "bg-sage-700 text-onprimary shadow-lg shadow-sage-700/20" : "bg-surface shadow-sm"
       }`}
     >
       <div className={`font-serif text-3xl font-light ${accent ? "" : "text-sage-800"}`}>
         {value}
         {suffix && <span className="ml-1 text-base">{suffix}</span>}
       </div>
-      <div className={`mt-1 text-xs ${accent ? "text-ivory-200" : "text-sage-400"}`}>{label}</div>
+      <div className={`mt-1 text-xs ${accent ? "text-onprimary/70" : "text-sage-400"}`}>{label}</div>
     </div>
   );
 }
@@ -105,7 +105,7 @@ export default async function AdminPage() {
 
         <AddGuestForm />
 
-        <div className="mt-8 overflow-x-auto rounded-2xl bg-white shadow-sm">
+        <div className="mt-8 overflow-x-auto rounded-2xl bg-surface shadow-sm">
           <table className="w-full min-w-[680px] text-left text-sm">
             <thead>
               <tr className="border-b border-ivory-200 text-[11px] uppercase tracking-wider text-sage-400">

@@ -39,7 +39,7 @@ export default function MusicPlayer({ play }: { play: boolean }) {
         onClick={toggle}
         aria-label={playing ? "Hentikan musik" : "Putar musik"}
         title={weddingConfig.music.title}
-        className="fixed right-4 top-4 z-40 flex h-11 w-11 items-center justify-center rounded-full border border-white/60 bg-white/80 text-sage-700 shadow-lg backdrop-blur-md transition active:scale-90 hover:bg-white"
+        className="fixed right-4 top-4 z-40 flex h-11 w-11 items-center justify-center rounded-full border border-edge/60 bg-surface/80 text-sage-700 shadow-lg backdrop-blur-md transition active:scale-90 hover:bg-surface"
       >
         {playing ? (
           // Ikon nada dengan batang yang "menari" saat musik berjalan

@@ -89,7 +89,7 @@ export default function UcapanWall({ guest }: { guest: Guest | null }) {
   }
 
   return (
-    <section className="bg-white/70 px-6 py-20">
+    <section className="bg-surface/70 px-6 py-20">
       <Reveal className="text-center">
         <p className="eyebrow">Wishes</p>
         <h2 className="section-title mt-3">Ucapan &amp; Doa</h2>
@@ -141,7 +141,7 @@ export default function UcapanWall({ guest }: { guest: Guest | null }) {
             </p>
             <div className="max-h-[26rem] space-y-3 overflow-y-auto pr-1">
               {daftar.map((u) => (
-                <div key={u.id} className="rounded-2xl border border-ivory-200 bg-white/80 px-5 py-4">
+                <div key={u.id} className="rounded-2xl border border-ivory-200 bg-surface/80 px-5 py-4">
                   <div className="flex items-baseline justify-between gap-3">
                     <p className="truncate font-semibold text-sage-700">{u.nama}</p>
                     <p className="shrink-0 text-[11px] text-sage-400">

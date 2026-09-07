@@ -1,36 +1,56 @@
 import type { Config } from "tailwindcss";
 
+// Setiap warna menunjuk ke CSS variable supaya seluruh tampilan bisa berganti
+// tema hanya dengan menukar nilai variabel (lihat app/globals.css & lib/themes.ts).
+// Format "rgb(var(--x) / <alpha-value>)" dipakai agar modifier transparansi
+// Tailwind (mis. bg-surface/70) tetap berfungsi.
+const warna = (nama: string) => `rgb(var(${nama}) / <alpha-value>)`;
+
 const config: Config = {
   content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
-        // Palet hangat yang serasi dengan foto: gading, sage, dan emas sampanye
+        // Latar halaman & permukaan terang
         ivory: {
-          50: "#FDFBF7",
-          100: "#F8F4EC",
-          200: "#EFE8DA",
-          300: "#E2D7C3",
+          50: warna("--ivory-50"),
+          100: warna("--ivory-100"),
+          200: warna("--ivory-200"),
+          300: warna("--ivory-300"),
         },
+        // Warna utama: teks, tombol, dan permukaan gelap
         sage: {
-          100: "#DFE5DA",
-          200: "#C3CDBB",
-          300: "#A2B097",
-          400: "#818F76",
-          500: "#67735D",
-          600: "#4F5A47",
-          700: "#3C4536",
-          800: "#2C3327",
-          900: "#1E231B",
+          100: warna("--sage-100"),
+          200: warna("--sage-200"),
+          300: warna("--sage-300"),
+          400: warna("--sage-400"),
+          500: warna("--sage-500"),
+          600: warna("--sage-600"),
+          700: warna("--sage-700"),
+          800: warna("--sage-800"),
+          900: warna("--sage-900"),
         },
+        // Aksen
         gold: {
-          200: "#EBD9B4",
-          300: "#DCC08A",
-          400: "#C9A76A",
-          500: "#B08D57",
-          600: "#8F7044",
+          200: warna("--gold-200"),
+          300: warna("--gold-300"),
+          400: warna("--gold-400"),
+          500: warna("--gold-500"),
+          600: warna("--gold-600"),
         },
-        ink: "#23261F",
+        // Selalu terang di tema mana pun — dipakai untuk teks di atas foto
+        // gelap (cover, lightbox, footer) yang memang gelap di semua tema.
+        cream: {
+          50: "#FDFBF7",
+          100: "#F1EADD",
+          200: "#D8CFC0",
+        },
+        ink: warna("--ink"),
+        // Permukaan kartu / panel melayang, dan garis tepinya
+        surface: warna("--surface"),
+        edge: warna("--edge"),
+        // Warna teks di atas tombol utama
+        onprimary: warna("--onprimary"),
       },
       fontFamily: {
         serif: ["var(--font-cormorant)", "Georgia", "serif"],
@@ -53,16 +73,11 @@ const config: Config = {
           "0%, 100%": { transform: "translateY(0)" },
           "50%": { transform: "translateY(-8px)" },
         },
-        shimmer: {
-          "0%": { backgroundPosition: "-200% 0" },
-          "100%": { backgroundPosition: "200% 0" },
-        },
       },
       animation: {
         "fade-up": "fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) both",
         "slow-zoom": "slow-zoom 12s ease-out both",
         float: "float 3.5s ease-in-out infinite",
-        shimmer: "shimmer 3s linear infinite",
       },
     },
   },

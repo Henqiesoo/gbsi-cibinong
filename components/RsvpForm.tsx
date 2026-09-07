@@ -109,8 +109,8 @@ export default function RsvpForm({
                       aria-pressed={status === nilai}
                       className={`rounded-2xl border px-4 py-3.5 text-sm font-medium transition active:scale-[0.97] ${
                         status === nilai
-                          ? "border-sage-700 bg-sage-700 text-ivory-50 shadow-lg shadow-sage-700/20"
-                          : "border-ivory-300 bg-white/80 text-sage-600"
+                          ? "border-sage-700 bg-sage-700 text-onprimary shadow-lg shadow-sage-700/20"
+                          : "border-ivory-300 bg-surface/80 text-sage-600"
                       }`}
                     >
                       {label}

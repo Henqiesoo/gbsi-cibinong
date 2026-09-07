@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Invitation from "@/components/Invitation";
 import { getSupabaseServer } from "@/lib/supabase/server";
 import { SUPABASE_URL } from "@/lib/supabase/config";
+import { bacaTema, cssTema } from "@/lib/themes";
 import { weddingConfig } from "@/lib/wedding-config";
 import type { Guest, RsvpAwal, RsvpStatus, UndanganRow } from "@/lib/types";
 
@@ -52,7 +53,21 @@ export async function generateMetadata({
   return { title: guest ? `Untuk ${guest.nama} · ${title}` : title };
 }
 
-export default async function InvitePage({ params }: { params: { slug: string } }) {
+export default async function InvitePage({
+  params,
+  searchParams,
+}: {
+  params: { slug: string };
+  searchParams: { tema?: string };
+}) {
   const { guest, rsvpAwal } = await getUndangan(params.slug);
-  return <Invitation guest={guest} rsvpAwal={rsvpAwal} />;
+  const css = cssTema(bacaTema(searchParams.tema));
+
+  return (
+    <>
+      {/* Dirender di server sehingga warna sudah benar sejak cat pertama */}
+      {css && <style dangerouslySetInnerHTML={{ __html: css }} />}
+      <Invitation guest={guest} rsvpAwal={rsvpAwal} />
+    </>
+  );
 }
