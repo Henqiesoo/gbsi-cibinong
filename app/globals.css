@@ -31,7 +31,17 @@
   --edge: 255 255 255;
   --onprimary: 253 251 247;
 
-  /* Bayangan kartu — pada tema gelap dibuat lebih pekat */
+  /* Font, bentuk sudut, tekstur, dan bayangan — semuanya ikut tema */
+  --font-display: var(--font-cormorant);
+  --font-script: var(--font-parisienne);
+  --font-body: var(--font-jakarta);
+
+  --r-md: 1rem;
+  --r-lg: 1.5rem;
+  --r-foto: 5rem;
+
+  --tekstur: none;
+
   --bayangan-kartu: 0 8px 40px -12px rgb(60 69 54 / 0.25);
   --bayangan-dok: 0 10px 40px -8px rgb(60 69 54 / 0.4);
 }
@@ -44,6 +54,9 @@ html {
 
 body {
   overscroll-behavior-y: none;
+  /* Tekstur latar khas tiap tema (sapuan cat air, kilau emas, motif batik) */
+  background-image: var(--tekstur);
+  background-attachment: fixed;
 }
 
 ::-webkit-scrollbar {

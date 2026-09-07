@@ -23,12 +23,12 @@ function PersonCard({ person, delay }: { person: Person; delay: number }) {
       <div className="text-center">
         <div className="relative mx-auto w-44">
           {/* Bingkai emas tipis di belakang foto */}
-          <div className="absolute inset-0 translate-x-2.5 translate-y-2.5 rounded-[5rem] border border-gold-400/60" />
+          <div className="absolute inset-0 translate-x-2.5 translate-y-2.5 rounded-foto border border-gold-400/60" />
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={person.photo}
             alt={person.fullName}
-            className="relative aspect-square w-44 rounded-[5rem] object-cover shadow-xl"
+            className="relative aspect-square w-44 rounded-foto object-cover shadow-xl"
           />
         </div>
 

@@ -61,13 +61,14 @@ export default async function InvitePage({
   searchParams: { tema?: string };
 }) {
   const { guest, rsvpAwal } = await getUndangan(params.slug);
-  const css = cssTema(bacaTema(searchParams.tema));
+  const tema = bacaTema(searchParams.tema);
+  const css = cssTema(tema);
 
   return (
     <>
       {/* Dirender di server sehingga warna sudah benar sejak cat pertama */}
       {css && <style dangerouslySetInnerHTML={{ __html: css }} />}
-      <Invitation guest={guest} rsvpAwal={rsvpAwal} />
+      <Invitation guest={guest} rsvpAwal={rsvpAwal} tema={tema} />
     </>
   );
 }

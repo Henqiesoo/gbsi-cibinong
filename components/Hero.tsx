@@ -28,7 +28,7 @@ export default function Hero() {
       </Reveal>
 
       <Reveal delay={150} className="relative mx-auto mt-12 max-w-sm">
-        <div className="overflow-hidden rounded-[2rem] shadow-[0_20px_60px_-20px_rgba(60,69,54,0.5)]">
+        <div className="overflow-hidden rounded-3xl shadow-[0_20px_60px_-20px_rgba(60,69,54,0.5)]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={weddingConfig.heroPhoto}

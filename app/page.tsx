@@ -15,7 +15,7 @@ export default function HomePage({
     <>
       {/* Dirender di server sehingga warna sudah benar sejak cat pertama */}
       {css && <style dangerouslySetInnerHTML={{ __html: css }} />}
-      <Invitation guest={null} rsvpAwal={null} />
+      <Invitation guest={null} rsvpAwal={null} tema={tema} />
     </>
   );
 }

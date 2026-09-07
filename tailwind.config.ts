@@ -52,10 +52,18 @@ const config: Config = {
         // Warna teks di atas tombol utama
         onprimary: warna("--onprimary"),
       },
+      // Font mengikuti tema aktif (lihat lib/themes.ts)
       fontFamily: {
-        serif: ["var(--font-cormorant)", "Georgia", "serif"],
-        sans: ["var(--font-jakarta)", "system-ui", "sans-serif"],
-        script: ["var(--font-parisienne)", "cursive"],
+        serif: ["var(--font-display)", "Georgia", "serif"],
+        sans: ["var(--font-body)", "system-ui", "sans-serif"],
+        script: ["var(--font-script)", "cursive"],
+      },
+      // Bahasa bentuk juga ikut tema: ada yang membulat, ada yang tegas,
+      // dan tema Royal Red memakai lengkung gerbang untuk foto.
+      borderRadius: {
+        "2xl": "var(--r-md)",
+        "3xl": "var(--r-lg)",
+        foto: "var(--r-foto)",
       },
       letterSpacing: {
         widest: "0.28em",

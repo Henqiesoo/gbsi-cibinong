@@ -15,14 +15,18 @@ import Footer from "@/components/Footer";
 import MusicPlayer from "@/components/MusicPlayer";
 import NavDock from "@/components/NavDock";
 import AutoScroll from "@/components/AutoScroll";
+import { TemaProvider } from "@/components/TemaProvider";
+import type { NamaTema } from "@/lib/themes";
 import type { Guest, RsvpAwal } from "@/lib/types";
 
 export default function Invitation({
   guest,
   rsvpAwal,
+  tema,
 }: {
   guest: Guest | null;
   rsvpAwal: RsvpAwal;
+  tema: NamaTema;
 }) {
   const [dibuka, setDibuka] = useState(false);
   // Saat gulir otomatis berjalan, dok navigasi disembunyikan agar rekaman bersih
@@ -36,19 +40,20 @@ export default function Invitation({
   const handleModeRekam = useCallback((aktif: boolean) => setModeRekam(aktif), []);
 
   return (
-    <div className="relative">
-      <Cover guestName={guest?.nama ?? null} opened={dibuka} onOpen={buka} />
+    <TemaProvider tema={tema}>
+      <div className="relative">
+        <Cover guestName={guest?.nama ?? null} opened={dibuka} onOpen={buka} />
 
-      {dibuka && (
-        <>
-          <MusicPlayer play={dibuka} />
-          <AutoScroll onModeRekam={handleModeRekam} />
-          <NavDock visible={dibuka && !modeRekam} />
-        </>
-      )}
+        {dibuka && (
+          <>
+            <MusicPlayer play={dibuka} />
+            <AutoScroll onModeRekam={handleModeRekam} />
+            <NavDock visible={dibuka && !modeRekam} />
+          </>
+        )}
 
-      <main
-        aria-hidden={!dibuka}
+        <main
+          aria-hidden={!dibuka}
         className={`mx-auto max-w-lg overflow-hidden bg-ivory-50 md:max-w-xl ${
           dibuka ? "" : "h-screen overflow-hidden"
         }`}
@@ -63,7 +68,8 @@ export default function Invitation({
         <GiftSection />
         <UcapanWall guest={guest} />
         <Footer />
-      </main>
-    </div>
+        </main>
+      </div>
+    </TemaProvider>
   );
 }

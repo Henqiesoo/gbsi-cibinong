@@ -2,14 +2,18 @@
 
 Website undangan pernikahan digital: **Next.js 14 (App Router) + Tailwind CSS + Supabase**, siap deploy ke **Vercel**. Dirancang mobile-first karena mayoritas tamu membukanya dari WhatsApp di HP.
 
-**Demo langsung — dua tema:**
+**Katalog seluruh tema:** https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/tema
 
-| Tema | Link |
-|---|---|
-| **Sage & Gold** (terang, natural) | https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app |
-| **Dark Luxury** (hitam & emas) | https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/?tema=dark |
+| # | Tema | Pratinjau | Karakter |
+|---|---|---|---|
+| 1 | **Sage & Gold** | [buka](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/) | Gading & sage, serif Cormorant, sudut lembut, ornamen daun |
+| 2 | **Dark Luxury** | [buka](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/?tema=dark) | Hitam & emas, kapital Cinzel, ornamen art deco |
+| 3 | **Floral Watercolor** | [buka](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/?tema=floral) | Blush & mawar, Playfair + Great Vibes, foto bulat, sapuan cat air |
+| 4 | **Minimalis Modern** | [buka](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/?tema=minimal) | Putih–hitam, Jost geometris, sudut tegas, garis polos |
+| 5 | **Nusantara** | [buka](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/?tema=adat) | Cokelat soga & kunyit, Marcellus, motif batik, ornamen kawung |
+| 6 | **Royal Red** | [buka](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/?tema=royal) | Marun & emas, Cinzel + Pinyon, foto berbentuk gerbang, kilau emas |
 
-Tema dipilih lewat parameter `?tema=dark` di URL mana pun, termasuk link undangan personal — mis. `https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/invite/rudi-hartono?tema=dark`.
+Tema dipilih lewat parameter `?tema=` di URL mana pun, termasuk link undangan personal — mis. `https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/invite/rudi-hartono?tema=royal`.
 
 Contoh undangan personal per tamu:
 
@@ -38,16 +42,21 @@ Contoh undangan personal per tamu:
 | **Gulir otomatis** | Tombol khusus untuk merekam video undangan tanpa menyentuh layar |
 | **Panel admin** | `/admin` berpassword: statistik, rekap RSVP, tambah/ubah/hapus tamu, export CSV |
 
-### 🎨 Tema
+### 🎨 Sistem tema
 
-Dua tema tersedia dan seluruhnya diatur dari [`lib/themes.ts`](lib/themes.ts):
+Sebuah tema di sini bukan sekadar ganti warna. Setiap tema di [`lib/themes.ts`](lib/themes.ts) menentukan lima hal sekaligus:
 
-| Tema | Parameter URL | Nuansa |
+| Aspek | Token | Contoh perbedaan |
 |---|---|---|
-| **Sage & Gold** (bawaan) | — | Gading, sage, emas sampanye — hangat & natural |
-| **Dark Luxury** | `?tema=dark` | Hitam pekat, krem, emas terang — mewah & elegan |
+| Palet warna | `--sage-*`, `--ivory-*`, `--gold-*` | Sage hangat vs marun royal |
+| Pasangan font | `--font-display`, `--font-script`, `--font-body` | Cormorant vs Cinzel vs Jost |
+| Bahasa bentuk | `--r-md`, `--r-lg`, `--r-foto` | Sudut membulat vs tegas; foto bulat vs **lengkung gerbang** |
+| Tekstur latar | `--tekstur` | Sapuan cat air, kilau emas, motif batik |
+| Gaya ornamen | field `ornamen` | Daun · art deco · bunga · garis · kawung · gerbang |
 
-Semua warna adalah CSS variable, jadi menambah tema ketiga cukup dengan menyalin satu objek di `lib/themes.ts` — tanpa menyentuh satu pun komponen. Font: serif *Cormorant Garamond* dan skrip *Parisienne* untuk nama pasangan.
+Komponen tidak pernah tahu tema apa yang aktif, jadi **menambah tema ketujuh cukup menyalin satu objek** di `lib/themes.ts` — tanpa menyentuh satu pun komponen, dan seluruh tema langsung ikut menerima perbaikan fitur apa pun.
+
+Font non-bawaan dimuat dengan `preload: false`, sehingga berkas font tema lain tidak ikut membebani halaman.
 
 ## 🚀 Menjalankan secara lokal
 
