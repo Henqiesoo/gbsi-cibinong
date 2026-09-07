@@ -14,7 +14,7 @@ export default function Footer() {
         alt=""
         className="absolute inset-0 h-full w-full object-cover opacity-15"
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-sage-800/85 to-sage-900" />
+      <div className="absolute inset-0 bg-gradient-to-b from-sage-900/80 to-sage-900" />
 
       <Reveal className="relative">
         <p className="mx-auto max-w-sm text-sm leading-relaxed text-cream-200">
