@@ -140,6 +140,68 @@ body {
 }
 
 /* =====================================================================
+   Lapisan sinematik untuk latar foto (tema Royal Red)
+   Tujuannya membuat foto terasa seperti potongan film, bukan gambar diam
+   yang ditempel — vignette, butiran film, bokeh lilin, dan gerak kamera.
+   ===================================================================== */
+
+/* Tepi gelap supaya mata tertuju ke tengah bingkai */
+.sinema-vignette {
+  background: radial-gradient(
+    115% 78% at 50% 42%,
+    transparent 28%,
+    rgb(12 4 6 / 0.5) 70%,
+    rgb(8 3 4 / 0.9) 100%
+  );
+}
+
+/* Butiran film halus — dihasilkan langsung oleh browser, tanpa berkas gambar */
+.sinema-butir {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 170px 170px;
+  opacity: 0.1;
+  mix-blend-mode: overlay;
+}
+
+/* Titik cahaya lilin & lampu gantung yang kabur */
+.sinema-bokeh {
+  background-image:
+    radial-gradient(circle at 11% 76%, rgb(255 212 148 / 0.55) 0, transparent 7%),
+    radial-gradient(circle at 88% 82%, rgb(255 206 140 / 0.45) 0, transparent 6%),
+    radial-gradient(circle at 24% 18%, rgb(255 226 176 / 0.35) 0, transparent 5%),
+    radial-gradient(circle at 79% 24%, rgb(255 214 152 / 0.4) 0, transparent 6%),
+    radial-gradient(circle at 52% 8%, rgb(255 232 190 / 0.3) 0, transparent 5%),
+    radial-gradient(circle at 64% 92%, rgb(255 200 132 / 0.35) 0, transparent 6%);
+  filter: blur(2px);
+}
+
+/* Gerak kamera: dolly maju perlahan menyusuri lorong */
+.art-dolly {
+  animation: art-dolly 18s ease-out both;
+}
+@keyframes art-dolly {
+  from {
+    transform: scale(1.05) translateY(1.6%);
+  }
+  to {
+    transform: scale(1.26) translateY(-1.6%);
+  }
+}
+
+/* Gerak kamera: geser menyamping, untuk adegan dekorasi */
+.art-geser {
+  animation: art-geser 20s ease-in-out both;
+}
+@keyframes art-geser {
+  from {
+    transform: scale(1.18) translateX(3.5%);
+  }
+  to {
+    transform: scale(1.18) translateX(-3.5%);
+  }
+}
+
+/* =====================================================================
    Animasi mode sinematik (tema Royal Red)
    Adegan berganti sendiri, jadi setiap elemen perlu gerak masuk sendiri.
    ===================================================================== */

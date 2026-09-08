@@ -79,7 +79,9 @@ Kelima format non-gulir punya tombol **putar otomatis** sendiri (`components/for
 
 Tema **Royal Red** paling jauh bedanya: satu layar penuh berisi **13 adegan yang berganti sendiri**, mengikuti alur undangan video — gerbang pelaminan, untaian bunga turun, lingkaran inisial, mempelai melangkah ke altar, lalu bingkai undangan.
 
-- Latar pelaminan dan bingkai ornamen **digambar sendiri dengan SVG** (`components/royal/`) — bebas lisensi dan sangat ringan
+- Semua latarnya **foto asli**, bukan gambar vektor. Tiap adegan digarap seperti potongan film: gerak kamera pelan (dolly maju / pan menyamping), gradasi warna hangat kemerahan, bokeh cahaya lilin, vignette, dan butiran film halus — semuanya dari CSS, tanpa berkas tambahan (`components/royal/LatarFoto.tsx`)
+- Foto latar tiap adegan diatur dari satu konstanta `FOTO` di `components/CinematicInvitation.tsx`
+- Bingkai ornamen emas dengan salib tetap berupa SVG — ini memang dimaksudkan sebagai *overlay* di atas foto, bukan latar
 - Adegan ke-4 memakai **foto asli** lorong menuju altar, supaya terasa nyata seperti undangan video pada umumnya
 - Adegan isi (mempelai, acara, galeri, RSVP, amplop, ucapan) memakai **latar pelaminan yang sama** seperti adegan pembuka, bukan lembar putih; warna teksnya ditukar lewat token di satu tempat sehingga komponennya tidak perlu diubah
 - Bernuansa pemberkatan Kristen: salib di puncak bingkai, ayat Kejadian 2:24

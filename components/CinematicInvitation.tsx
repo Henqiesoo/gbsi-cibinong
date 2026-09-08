@@ -8,26 +8,24 @@ import RsvpForm from "@/components/RsvpForm";
 import GiftSection from "@/components/GiftSection";
 import UcapanWall from "@/components/UcapanWall";
 import SceneStage, { type Adegan } from "@/components/royal/SceneStage";
-import ArtPelaminan from "@/components/royal/ArtPelaminan";
+import LatarFoto from "@/components/royal/LatarFoto";
 import BingkaiOrnamen from "@/components/royal/BingkaiOrnamen";
 import type { Guest, RsvpAwal } from "@/lib/types";
 
-// Latar pelaminan yang dipakai berulang di beberapa adegan pembuka
-function Panggung({ fase, children }: { fase: number; children?: React.ReactNode }) {
-  return (
-    <div className="relative h-full w-full overflow-hidden">
-      <ArtPelaminan fase={fase} />
-      <div className="absolute inset-0 bg-gradient-to-b from-[#2a1010]/55 via-transparent to-[#2a1010]/70" />
-      <div className="relative flex h-full flex-col items-center justify-center px-7 text-center">
-        {children}
-      </div>
-    </div>
-  );
-}
+/* Foto yang dipakai sebagai latar adegan. Semuanya foto asli — tema ini
+   sengaja tidak lagi memakai gambar vektor supaya tidak terbaca sebagai
+   animasi 2D datar. Ganti jalurnya di sini untuk mengganti seluruh
+   suasana adegan sekaligus. */
+const FOTO = {
+  lorong: "/photos/lorong-altar.jpg", // lorong menuju altar
+  altarBunga: "/photos/g-bangku-mawar-putih.jpg", // rangkaian mawar putih
+  gereja: "/photos/g-pemberkatan-bangku.jpg", // muka gereja saat senja
+  pelukan: "/photos/g-pelukan-bangku.jpg", // seusai pemberkatan
+} as const;
 
-/* Adegan isi (mempelai, acara, galeri, formulir) memakai latar pelaminan
-   yang sama seperti adegan pembuka — bukan lembar putih — supaya seluruh
-   undangan terasa satu suasana dari awal sampai akhir.
+/* Adegan isi (mempelai, acara, galeri, formulir) memakai foto yang sama
+   dengan adegan pembuka, hanya dikaburkan — supaya seluruh undangan terasa
+   satu suasana dari awal sampai akhir, bukan berpindah ke lembar putih.
 
    Latar gelap membuat warna teks bawaan tema jadi terlalu tua, jadi di
    dalam lembar ini token warnanya ditukar: judul & isi menjadi krem,
@@ -68,9 +66,11 @@ function Lembar({
 }) {
   return (
     <div className="relative h-full w-full overflow-hidden" style={TOKEN_LEMBAR_GELAP}>
-      <ArtPelaminan fase={1} />
-      {/* Kerudung gelap supaya isi tetap terbaca di atas gambar pelaminan */}
-      <div className="absolute inset-0 bg-[#210b0b]/80 backdrop-blur-[2px]" />
+      {/* Foto yang sama, dikaburkan kuat — jadi kedalaman ruang tetap terasa
+          tetapi teks di atasnya tetap terbaca */}
+      <div className="absolute inset-0">
+        <LatarFoto src={FOTO.altarBunga} gerak="diam" buram={16} gelap={0.58} />
+      </div>
       <div
         className={`tanpa-bar relative h-full ${
           gulir ? "overflow-y-auto" : "flex flex-col justify-center"
@@ -108,27 +108,27 @@ export default function CinematicInvitation({
       id: "pembuka",
       durasi: 4600,
       isi: (
-        <Panggung fase={0}>
+        <LatarFoto src={FOTO.lorong} posisi="center 45%" gerak="dolly" gelap={0.3}>
           <p className="art-naik text-[11px] uppercase tracking-[0.42em] text-gold-200">
             The Wedding of
           </p>
           <p className="art-naik mt-6 font-serif text-sm tracking-[0.3em] text-cream-100" style={{ animationDelay: "500ms" }}>
             {weddingConfig.eventDateShort}
           </p>
-        </Panggung>
+        </LatarFoto>
       ),
     },
 
-    // 2 — Untaian bunga & lilin bermunculan
+    // 2 — Rangkaian bunga & cahaya di sekitar altar
     {
       id: "dekorasi",
       durasi: 4200,
       isi: (
-        <Panggung fase={1}>
-          <p className="art-naik font-script text-4xl text-cream-50" style={{ animationDelay: "700ms" }}>
+        <LatarFoto src={FOTO.altarBunga} posisi="center 35%" gerak="geser" gelap={0.32} taruh="bawah">
+          <p className="art-naik font-script text-[2.15rem] leading-tight text-cream-50" style={{ animationDelay: "700ms" }}>
             Pemberkatan Pernikahan
           </p>
-        </Panggung>
+        </LatarFoto>
       ),
     },
 
@@ -137,49 +137,37 @@ export default function CinematicInvitation({
       id: "inisial",
       durasi: 4200,
       isi: (
-        <Panggung fase={1}>
+        <LatarFoto src={FOTO.gereja} gerak="diam" buram={12} gelap={0.42}>
           <div className="art-lingkaran relative flex h-52 w-52 items-center justify-center rounded-full bg-[#7a1e1e]/90 shadow-2xl ring-1 ring-gold-300/60">
             <span className="art-naik font-script text-7xl text-cream-50" style={{ animationDelay: "600ms" }}>
               {inisial}
             </span>
           </div>
-        </Panggung>
+        </LatarFoto>
       ),
     },
 
-    // 4 — Foto asli: mempelai wanita melangkah di lorong menuju altar.
-    //     Sebelumnya adegan ini berupa siluet gambar; diganti foto supaya
-    //     terasa nyata seperti undangan video pada umumnya.
+    // 4 — Pasangan melangkah menuju altar, diambil dari belakang
     {
       id: "pasangan",
       durasi: 6200,
       isi: (
-        <div className="relative h-full w-full overflow-hidden bg-[#1b0a0a]">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/photos/lorong-altar.jpg"
-            alt="Mempelai wanita melangkah di lorong menuju altar"
-            className="absolute inset-0 h-full w-full animate-slow-zoom object-cover object-[center_38%]"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#2a1010]/40 via-[#2a1010]/10 to-[#1b0a0a]/90" />
+        <LatarFoto src={FOTO.lorong} posisi="center 38%" gerak="dolly" gelap={0.3} taruh="bawah">
           {/* Bingkai emas tipis mengikuti bentuk gerbang khas tema ini */}
           <div
             className="pointer-events-none absolute inset-4 border border-gold-300/40"
             style={{ borderRadius: "var(--r-foto)" }}
           />
-
-          <div className="relative flex h-full flex-col items-center justify-end px-9 pb-16 text-center">
-            <p className="art-naik font-script text-[2.75rem] leading-tight text-cream-50">
-              Melangkah bersama
-            </p>
-            <p
-              className="art-naik mt-3 text-[10px] uppercase tracking-[0.32em] text-gold-200"
-              style={{ animationDelay: "500ms" }}
-            >
-              menuju altar pemberkatan
-            </p>
-          </div>
-        </div>
+          <p className="art-naik font-script text-[2.75rem] leading-tight text-cream-50">
+            Melangkah bersama
+          </p>
+          <p
+            className="art-naik mt-3 text-[10px] uppercase tracking-[0.32em] text-gold-200"
+            style={{ animationDelay: "500ms" }}
+          >
+            menuju altar pemberkatan
+          </p>
+        </LatarFoto>
       ),
     },
 
@@ -188,8 +176,8 @@ export default function CinematicInvitation({
       id: "undangan",
       durasi: 7000,
       isi: (
-        <Panggung fase={1}>
-          <div className="relative w-full max-w-[19rem] px-2 py-4">
+        <LatarFoto src={FOTO.lorong} gerak="diam" buram={9} gelap={0.4}>
+          <div className="relative w-full max-w-[20rem] px-2 py-2">
             {/* Lapisan gelap mengikuti lengkung bingkai supaya teks tetap
                 terbaca di atas jalan setapak yang terang */}
             <div
@@ -197,8 +185,10 @@ export default function CinematicInvitation({
               style={{ borderRadius: "46% 46% 14px 14px / 30% 30% 14px 14px" }}
             />
             <BingkaiOrnamen className="absolute inset-0 h-full w-full text-gold-300" />
-            <div className="relative px-7 py-10 text-center">
-              <p className="art-naik text-[9px] uppercase leading-relaxed tracking-[0.2em] text-gold-200">
+            {/* Lengkung bingkai menyempit di atas dan sulur ornamen ada di
+                dua sudut bawah — jadi ruang tulisannya dibuat lebih dalam */}
+            <div className="relative px-10 pb-20 pt-16 text-center">
+              <p className="art-naik text-[8.5px] uppercase leading-relaxed tracking-[0.18em] text-gold-200">
                 Dengan sukacita kami mengundang
                 <br />
                 Bapak/Ibu/Saudara/i pada pemberkatan
@@ -221,16 +211,14 @@ export default function CinematicInvitation({
                   {pemberkatan.time}
                 </p>
               </div>
-              <p className="art-naik mt-4 text-[10px] uppercase leading-relaxed tracking-[0.15em] text-cream-200" style={{ animationDelay: "900ms" }}>
+              <p className="art-naik mt-4 text-[9px] uppercase leading-relaxed tracking-[0.08em] text-cream-200" style={{ animationDelay: "900ms" }}>
                 {pemberkatan.venue}
                 <br />
                 {pemberkatan.address.split(",")[0]}
-                <br />
-                {pemberkatan.address.split(",").slice(1).join(",").trim()}
               </p>
             </div>
           </div>
-        </Panggung>
+        </LatarFoto>
       ),
     },
 
@@ -239,7 +227,7 @@ export default function CinematicInvitation({
       id: "ayat",
       durasi: 6200,
       isi: (
-        <Panggung fase={1}>
+        <LatarFoto src={FOTO.gereja} posisi="center 35%" gerak="dolly" buram={7} gelap={0.48}>
           <svg className="art-naik h-9 w-9 text-gold-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true">
             <path d="M12 2v20M6 8h12" strokeLinecap="round" />
           </svg>
@@ -249,7 +237,7 @@ export default function CinematicInvitation({
           <p className="art-naik mt-4 text-[10px] font-semibold uppercase tracking-[0.3em] text-gold-300" style={{ animationDelay: "700ms" }}>
             {weddingConfig.quote.source}
           </p>
-        </Panggung>
+        </LatarFoto>
       ),
     },
 
@@ -398,7 +386,7 @@ export default function CinematicInvitation({
       id: "penutup",
       durasi: 7000,
       isi: (
-        <Panggung fase={1}>
+        <LatarFoto src={FOTO.pelukan} posisi="center 28%" gerak="dolly" gelap={0.52}>
           <p className="art-naik max-w-xs text-xs leading-relaxed text-cream-200">
             Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila
             Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan doa restu.
@@ -411,7 +399,7 @@ export default function CinematicInvitation({
             <span className="block text-lg">&amp;</span>
             {bride.nickname}
           </p>
-        </Panggung>
+        </LatarFoto>
       ),
     },
   ];
@@ -422,7 +410,7 @@ export default function CinematicInvitation({
           sekaligus izin dari browser untuk memutar musik */}
       {!dibuka && (
         <div className="fixed inset-0 z-50">
-          <Panggung fase={0}>
+          <LatarFoto src={FOTO.lorong} posisi="center 42%" gerak="dolly" gelap={0.4}>
             <p className="text-[11px] uppercase tracking-[0.4em] text-gold-200">
               The Wedding of
             </p>
@@ -453,7 +441,7 @@ export default function CinematicInvitation({
             <p className="mt-4 text-[10px] text-cream-200/70">
               Undangan berjalan sendiri — cukup ditonton
             </p>
-          </Panggung>
+          </LatarFoto>
         </div>
       )}
 
