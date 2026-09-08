@@ -99,6 +99,8 @@ Tema **Royal Red** paling jauh bedanya: satu layar penuh berisi **13 adegan yang
 - Semua latarnya **foto asli**, bukan gambar vektor. Tiap adegan digarap seperti potongan film: gerak kamera pelan (dolly maju / pan menyamping), gradasi warna hangat kemerahan, bokeh cahaya lilin, vignette, dan butiran film halus — semuanya dari CSS, tanpa berkas tambahan (`components/royal/LatarFoto.tsx`)
 - Foto latar tiap adegan diatur dari satu konstanta `FOTO` di `components/CinematicInvitation.tsx`
 - Bingkai ornamen emas dengan salib tetap berupa SVG — ini memang dimaksudkan sebagai *overlay* di atas foto, bukan latar
+- Garis bingkainya digambar dua kali: bayangan gelap yang digeser turun, lalu foil emas bergradasi tujuh titik warna di atasnya, jadi terbaca timbul seperti cetakan foil. Kartunya diberi bayangan jatuh dan bidang marun bergradasi supaya terangkat dari latar
+- Kartu monogram (satu-satunya) memakai kemiringan 3D ringan — maksimal 7°, mengikuti tetikus di komputer dan kemiringan perangkat di HP, murni CSS transform tanpa WebGL, dan diam bila tamu menyalakan "kurangi gerak"
 - Adegan ke-4 memakai **foto asli** lorong menuju altar, supaya terasa nyata seperti undangan video pada umumnya
 - Adegan isi (mempelai, acara, galeri, RSVP, amplop, ucapan) memakai **latar pelaminan yang sama** seperti adegan pembuka, bukan lembar putih; warna teksnya ditukar lewat token di satu tempat sehingga komponennya tidak perlu diubah
 - Bernuansa pemberkatan Kristen: salib di puncak bingkai, ayat Kejadian 2:24

@@ -10,6 +10,7 @@ import UcapanWall from "@/components/UcapanWall";
 import SceneStage, { type Adegan } from "@/components/royal/SceneStage";
 import LatarFoto from "@/components/royal/LatarFoto";
 import BingkaiOrnamen from "@/components/royal/BingkaiOrnamen";
+import KartuMiring from "@/components/royal/KartuMiring";
 import type { Guest, RsvpAwal } from "@/lib/types";
 
 /* Foto yang dipakai sebagai latar adegan. Semuanya foto asli — tema ini
@@ -138,11 +139,39 @@ export default function CinematicInvitation({
       durasi: 4200,
       isi: (
         <LatarFoto src={FOTO.gereja} gerak="diam" buram={12} gelap={0.42}>
-          <div className="art-lingkaran relative flex h-52 w-52 items-center justify-center rounded-full bg-[#7a1e1e]/90 shadow-2xl ring-1 ring-gold-300/60">
-            <span className="art-naik font-script text-7xl text-cream-50" style={{ animationDelay: "600ms" }}>
-              {inisial}
-            </span>
-          </div>
+          {/* Satu-satunya bagian yang memakai kemiringan 3D — kartu monogram */}
+          <KartuMiring className="art-lingkaran">
+            <div
+              className="relative flex h-52 w-52 items-center justify-center rounded-full"
+              style={{
+                // Marun bergradasi: lebih terang di kiri atas, gelap di tepi
+                background:
+                  "radial-gradient(120% 120% at 32% 26%, #9c2a2a 0%, #7a1e1e 45%, #43100f 100%)",
+                boxShadow:
+                  "0 26px 60px rgb(0 0 0 / 0.55), inset 0 2px 10px rgb(255 214 152 / 0.22), inset 0 -8px 22px rgb(20 4 6 / 0.6)",
+              }}
+            >
+              {/* Cincin foil emas — gradasi, bukan garis rata */}
+              <span
+                className="pointer-events-none absolute inset-0 rounded-full"
+                style={{
+                  padding: "2px",
+                  background:
+                    "linear-gradient(135deg, #fdf0c9, #f5d584 22%, #8b6508 52%, #e8c877 76%, #b8860b)",
+                  WebkitMask:
+                    "linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)",
+                  WebkitMaskComposite: "xor",
+                  maskComposite: "exclude",
+                }}
+              />
+              <span
+                className="art-naik emas-timbul font-script text-7xl text-cream-50"
+                style={{ animationDelay: "600ms" }}
+              >
+                {inisial}
+              </span>
+            </div>
+          </KartuMiring>
         </LatarFoto>
       ),
     },
@@ -181,10 +210,19 @@ export default function CinematicInvitation({
             {/* Lapisan gelap mengikuti lengkung bingkai supaya teks tetap
                 terbaca di atas jalan setapak yang terang */}
             <div
-              className="absolute inset-x-3 inset-y-5 bg-[#2a0f0f]/60 backdrop-blur-[3px]"
-              style={{ borderRadius: "46% 46% 14px 14px / 30% 30% 14px 14px" }}
+              className="absolute inset-x-3 inset-y-5 backdrop-blur-[3px]"
+              style={{
+                borderRadius: "46% 46% 14px 14px / 30% 30% 14px 14px",
+                // Bidang kartu ikut bergradasi supaya tidak terasa blok rata
+                background:
+                  "radial-gradient(118% 88% at 50% 30%, rgb(92 24 26 / 0.72) 0%, rgb(52 14 16 / 0.8) 55%, rgb(26 6 8 / 0.88) 100%)",
+                // Bayangan membuat kartu terangkat dari latar, plus garis
+                // emas setipis rambut di tepinya
+                boxShadow:
+                  "0 22px 60px rgb(0 0 0 / 0.55), 0 6px 18px rgb(0 0 0 / 0.4), 0 0 0 1px rgb(212 175 55 / 0.16)",
+              }}
             />
-            <BingkaiOrnamen className="absolute inset-0 h-full w-full text-gold-300" />
+            <BingkaiOrnamen className="absolute inset-0 h-full w-full" />
             {/* Lengkung bingkai menyempit di atas dan sulur ornamen ada di
                 dua sudut bawah — jadi ruang tulisannya dibuat lebih dalam */}
             <div className="relative px-10 pb-20 pt-16 text-center">
@@ -193,7 +231,7 @@ export default function CinematicInvitation({
                 <br />
                 Bapak/Ibu/Saudara/i pada pemberkatan
               </p>
-              <p className="art-naik mt-5 font-script text-[2rem] leading-[1.1] text-cream-50" style={{ animationDelay: "350ms" }}>
+              <p className="art-naik emas-timbul mt-5 font-script text-[2rem] leading-[1.1] text-cream-50" style={{ animationDelay: "350ms" }}>
                 {groom.nickname}
                 <span className="block text-base text-gold-300">&amp;</span>
                 {bride.nickname}
@@ -204,7 +242,7 @@ export default function CinematicInvitation({
                 &amp; {bride.fullName}
               </p>
               <div className="art-naik mt-5 border-y border-gold-300/40 py-3" style={{ animationDelay: "750ms" }}>
-                <p className="font-serif text-lg tracking-wide text-gold-200">
+                <p className="foil-emas font-serif text-lg tracking-wide">
                   {weddingConfig.eventDateLabel}
                 </p>
                 <p className="mt-1 text-[10px] tracking-wide text-cream-200">

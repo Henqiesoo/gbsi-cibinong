@@ -140,6 +140,37 @@ body {
 }
 
 /* =====================================================================
+   Foil emas timbul (tema Royal Red)
+   Tulisan emas diberi gradasi banyak titik warna lalu dipotong mengikuti
+   bentuk hurufnya, ditambah bayangan tipis di bawah — supaya terbaca
+   seperti cetakan foil, bukan teks berwarna emas rata.
+   ===================================================================== */
+.foil-emas {
+  background-image: linear-gradient(
+    105deg,
+    #fdf0c9 0%,
+    #f5d584 20%,
+    #c79a3c 40%,
+    #a97c1c 54%,
+    #e8c877 72%,
+    #f7e3a8 88%,
+    #b8860b 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 1px 0 rgb(20 5 8 / 0.65));
+}
+
+/* Untuk tulisan krem di atas kartu — sekadar terangkat sedikit */
+.emas-timbul {
+  text-shadow:
+    0 1px 0 rgb(20 5 8 / 0.6),
+    0 0 18px rgb(247 219 130 / 0.22);
+}
+
+/* =====================================================================
    Lapisan sinematik untuk latar foto (tema Royal Red)
    Tujuannya membuat foto terasa seperti potongan film, bukan gambar diam
    yang ditempel — vignette, butiran film, bokeh lilin, dan gerak kamera.
