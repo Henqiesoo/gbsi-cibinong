@@ -2,7 +2,7 @@ import { weddingConfig } from "@/lib/wedding-config";
 import Ornament from "@/components/Ornament";
 import Reveal from "@/components/Reveal";
 import Countdown from "@/components/Countdown";
-import ArtBali from "@/components/nusantara/ArtBali";
+import LatarPura from "@/components/nusantara/LatarPura";
 
 // Pita poleng — kain kotak hitam-putih yang di Bali dililitkan pada pura,
 // pohon, dan patung. Dipakai di sini sebagai pemisah antar bagian.
@@ -29,8 +29,8 @@ export default function KepalaBali() {
     <section id="beranda" className="relative">
       {/* Panggung candi bentar */}
       <div className="relative h-[80vh] min-h-[560px] overflow-hidden">
-        <ArtBali />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#2b1b10]/50 via-[#2b1b10]/25 to-[#2b1b10]/70" />
+        <LatarPura />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#2b1b10]/70 via-[#2b1b10]/45 to-[#2b1b10]/85" />
 
         <div className="relative flex h-full flex-col items-center justify-start px-7 pt-14 text-center">
           <p className="text-[11px] font-semibold uppercase tracking-[0.34em] text-gold-200">
@@ -40,9 +40,9 @@ export default function KepalaBali() {
             Undangan Pernikahan
           </p>
 
-          <h1 className="mt-6 font-script text-[3.9rem] leading-[1.02] text-cream-50 drop-shadow-sm sm:text-7xl">
+          <h1 className="mt-5 font-script text-[3.4rem] leading-[1.06] text-cream-50 drop-shadow-sm sm:text-6xl">
             {groom.nickname}
-            <span className="mx-2 text-gold-300">&amp;</span>
+            <span className="block py-0.5 text-2xl text-gold-300">&amp;</span>
             {bride.nickname}
           </h1>
 

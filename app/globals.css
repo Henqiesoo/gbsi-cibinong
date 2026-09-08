@@ -41,6 +41,9 @@
   --r-foto: 5rem;
 
   --tekstur: none;
+  /* Ukuran gambar latar. Tema yang memakai foto mengubahnya jadi "cover";
+     tema yang memakai motif berulang membiarkannya "auto". */
+  --tekstur-size: auto;
 
   --bayangan-kartu: 0 8px 40px -12px rgb(60 69 54 / 0.25);
   --bayangan-dok: 0 10px 40px -8px rgb(60 69 54 / 0.4);
@@ -54,9 +57,13 @@ html {
 
 body {
   overscroll-behavior-y: none;
-  /* Tekstur latar khas tiap tema (sapuan cat air, kilau emas, motif batik) */
+  /* Tekstur latar khas tiap tema (sapuan cat air, kilau emas, foto pura).
+     Isi undangan lebarnya dibatasi, jadi bidang ini yang terlihat di sisi
+     kiri-kanan layar lebar. */
   background-image: var(--tekstur);
   background-attachment: fixed;
+  background-size: var(--tekstur-size);
+  background-position: center;
 }
 
 ::-webkit-scrollbar {

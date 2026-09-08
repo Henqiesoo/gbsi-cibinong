@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { weddingConfig } from "@/lib/wedding-config";
 import Ornament from "@/components/Ornament";
-import ArtBali from "@/components/nusantara/ArtBali";
+import LatarPura from "@/components/nusantara/LatarPura";
 import { useTema } from "@/components/TemaProvider";
 
 type Props = {
@@ -34,7 +34,7 @@ export default function Cover({ guestName, opened, onOpen }: Props) {
     >
       {/* Latar + gradasi gelap agar teks terbaca */}
       {tema === "adat" ? (
-        <ArtBali className="animate-slow-zoom" />
+        <LatarPura className="animate-slow-zoom" />
       ) : (
         // eslint-disable-next-line @next/next/no-img-element
         <img
@@ -43,21 +43,16 @@ export default function Cover({ guestName, opened, onOpen }: Props) {
           className="absolute inset-0 h-full w-full animate-slow-zoom object-cover object-[center_30%]"
         />
       )}
-      <div
-        className={`absolute inset-0 bg-gradient-to-b ${
-          // Gambar candi bentar perlu tirai yang lebih tipis daripada foto
-          tema === "adat"
-            ? "from-sage-900/45 via-sage-900/20 to-sage-900/85"
-            : "from-sage-900/75 via-sage-900/55 to-sage-900/90"
-        }`}
-      />
+      <div className="absolute inset-0 bg-gradient-to-b from-sage-900/75 via-sage-900/55 to-sage-900/90" />
 
       <div className="relative flex h-full flex-col items-center justify-center px-7 text-center text-cream-50">
         <p className="eyebrow !text-gold-300">The Wedding Of</p>
 
-        <h1 className="mt-5 font-script text-[3.75rem] leading-[1.05] text-cream-50 drop-shadow-sm sm:text-7xl">
+        {/* Nama ditumpuk, bukan disambung: nama yang panjang tetap utuh
+            per baris dan tidak patah di tengah kata */}
+        <h1 className="mt-5 font-script text-[3.4rem] leading-[1.06] text-cream-50 drop-shadow-sm sm:text-6xl">
           {groom.nickname}
-          <span className="mx-2 text-gold-300">&amp;</span>
+          <span className="block py-0.5 text-2xl text-gold-300">&amp;</span>
           {bride.nickname}
         </h1>
 

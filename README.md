@@ -1,4 +1,4 @@
-# 💍 Undangan Pernikahan Digital — Jonny & Veren
+# 💍 Undangan Pernikahan Digital — Kim Jun Lung & Song Ve Ren
 
 Website undangan pernikahan digital: **Next.js 14 (App Router) + Tailwind CSS + Supabase**, siap deploy ke **Vercel**. Dirancang mobile-first karena mayoritas tamu membukanya dari WhatsApp di HP.
 
@@ -10,7 +10,7 @@ Website undangan pernikahan digital: **Next.js 14 (App Router) + Tailwind CSS + 
 | 2 | **Dark Luxury** | [buka](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/?tema=dark) | **Panel geser** — satu bagian satu layar, digeser ke samping | Hitam & emas, kapital Cinzel, ornamen art deco |
 | 3 | **Floral Watercolor** | [buka](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/?tema=floral) | **Buku dibalik** — halaman dibalik satu per satu | Blush & mawar, Playfair + Great Vibes, foto bulat, sapuan cat air |
 | 4 | **Minimalis Modern** | [buka](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/?tema=minimal) | **Menu aplikasi** — lima menu di bawah layar | Putih–hitam, Jost geometris, sudut tegas, garis polos |
-| 5 | **Nusantara Bali** | [buka](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/?tema=adat) | **Lipatan** — bagian terlipat, terbuka saat disentuh | Cokelat soga & kunyit, Marcellus, candi bentar & kain poleng |
+| 5 | **Nusantara Bali** | [buka](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/?tema=adat) | **Lipatan** — bagian terlipat, terbuka saat disentuh | Cokelat soga & kunyit, Marcellus, foto pura Bali & pita poleng |
 | 6 | **Royal Red** | [buka](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/?tema=royal) | **Adegan berjalan** — 13 adegan berganti sendiri seperti video | Marun & emas, Cinzel + Pinyon, lengkung gerbang pelaminan |
 
 Tema dipilih lewat parameter `?tema=` di URL mana pun, termasuk link undangan personal — mis. `https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/invite/rudi-hartono?tema=royal`.
@@ -70,6 +70,8 @@ Yang paling membedakan satu tema dari tema lain bukan warnanya, melainkan **cara
 | `tab` | Minimalis Modern | Menu tetap di bawah layar, isi berganti seketika tanpa animasi | Diringkas jadi **lima menu**; mempelai & kisah menyatu ke Beranda, amplop menyatu ke RSVP |
 | `lipat` | Nusantara Bali | Seluruh isi tersimpan dalam lipatan bernomor, terbuka saat disentuh | Halaman jadi pendek: pembuka + tujuh lipatan + penutup |
 | `adegan` | Royal Red | Satu layar yang berganti sendiri seperti video | 13 adegan, tiga di antaranya berhenti menunggu tamu |
+
+Tema **Nusantara Bali** memakai foto pura Bali (gapura berdaun pintu emas) sebagai pembuka dan sampulnya, foto interior pura sebagai latar sisi kiri-kanan saat dibuka di tablet/komputer, serta pita poleng hitam-putih sebagai pemisah bagian.
 
 Kelima format non-gulir punya tombol **putar otomatis** sendiri (`components/format/PutarOtomatis.tsx`): undangan berpindah panel sendiri dan menggulir isi tiap panel pelan-pelan — pengganti gulir otomatis saat merekam video.
 
@@ -175,7 +177,7 @@ Kepada Yth. Bapak/Ibu Budi Santoso & Keluarga
 Dengan memohon berkat Tuhan Yang Maha Kuasa,
 kami mengundang Bapak/Ibu ke pernikahan kami:
 
-✨ Jonny & Veren ✨
+✨ Kim Jun Lung & Song Ve Ren ✨
 Sabtu, 15 Mei 2027
 
 Undangan lengkap:

@@ -203,9 +203,9 @@ export default function CinematicInvitation({
                 <br />
                 Bapak/Ibu/Saudara/i pada pemberkatan
               </p>
-              <p className="art-naik mt-5 font-script text-4xl leading-tight text-cream-50" style={{ animationDelay: "350ms" }}>
+              <p className="art-naik mt-5 font-script text-[2rem] leading-[1.1] text-cream-50" style={{ animationDelay: "350ms" }}>
                 {groom.nickname}
-                <span className="mx-1.5 text-gold-300">&amp;</span>
+                <span className="block text-base text-gold-300">&amp;</span>
                 {bride.nickname}
               </p>
               <p className="art-naik mt-3 text-[10px] uppercase tracking-[0.18em] text-cream-200" style={{ animationDelay: "550ms" }}>
@@ -406,8 +406,10 @@ export default function CinematicInvitation({
           <p className="art-naik mt-8 text-[10px] uppercase tracking-[0.3em] text-gold-200" style={{ animationDelay: "400ms" }}>
             Kami yang berbahagia
           </p>
-          <p className="art-naik mt-4 font-script text-5xl text-gold-300" style={{ animationDelay: "600ms" }}>
-            {groom.nickname} &amp; {bride.nickname}
+          <p className="art-naik mt-4 font-script text-[2.6rem] leading-[1.1] text-gold-300" style={{ animationDelay: "600ms" }}>
+            {groom.nickname}
+            <span className="block text-lg">&amp;</span>
+            {bride.nickname}
           </p>
         </Panggung>
       ),
@@ -424,9 +426,9 @@ export default function CinematicInvitation({
             <p className="text-[11px] uppercase tracking-[0.4em] text-gold-200">
               The Wedding of
             </p>
-            <h1 className="mt-5 font-script text-6xl leading-tight text-cream-50">
+            <h1 className="mt-5 font-script text-5xl leading-[1.08] text-cream-50">
               {groom.nickname}
-              <span className="mx-2 text-gold-300">&amp;</span>
+              <span className="block py-0.5 text-xl text-gold-300">&amp;</span>
               {bride.nickname}
             </h1>
             <p className="mt-4 font-serif text-sm tracking-[0.28em] text-cream-100">

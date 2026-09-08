@@ -10,17 +10,17 @@
 export const weddingConfig = {
   couple: {
     groom: {
-      nickname: "Jonny",
-      fullName: "Jonathan Wijaya Kusuma",
-      parents: "Putra pertama dari Bapak Hendrawan Kusuma & Ibu Lianawati",
-      instagram: "jonny.kusuma",
+      nickname: "Jun Lung",
+      fullName: "Kim Jun Lung",
+      parents: "Putra pertama dari Bapak Kim Dae Ho & Ibu Park Soo Jin",
+      instagram: "junlung.kim",
       photo: "/photos/jonny-sq.jpg",
     },
     bride: {
-      nickname: "Veren",
-      fullName: "Verenita Anggraini",
-      parents: "Putri kedua dari Bapak Surya Anggara & Ibu Mariana Dewi",
-      instagram: "veren.anggraini",
+      nickname: "Ve Ren",
+      fullName: "Song Ve Ren",
+      parents: "Putri kedua dari Bapak Song Min Ki & Ibu Lee Hae Won",
+      instagram: "veren.song",
       photo: "/photos/veren-sq.jpg",
     },
   },
@@ -100,8 +100,8 @@ export const weddingConfig = {
 
   gift: {
     accounts: [
-      { bank: "BCA", number: "5271884390", holder: "Jonathan Wijaya Kusuma" },
-      { bank: "BNI", number: "0817246513", holder: "Verenita Anggraini" },
+      { bank: "BCA", number: "5271884390", holder: "Kim Jun Lung" },
+      { bank: "BNI", number: "0817246513", holder: "Song Ve Ren" },
     ],
     qrisImage: "/qris.svg",
     // Alamat kirim hadiah fisik

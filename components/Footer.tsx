@@ -25,8 +25,10 @@ export default function Footer() {
         <p className="mt-10 text-[11px] uppercase tracking-widest text-cream-200/80">
           Kami yang berbahagia
         </p>
-        <p className="mt-4 font-script text-5xl text-gold-300">
-          {groom.nickname} &amp; {bride.nickname}
+        <p className="mt-4 font-script text-[2.75rem] leading-[1.1] text-gold-300">
+          {groom.nickname}
+          <span className="block text-lg">&amp;</span>
+          {bride.nickname}
         </p>
 
         <Ornament className="mx-auto mt-8 w-40 text-gold-300/80" />

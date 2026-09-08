@@ -281,9 +281,12 @@ const adat: Tema = {
     "--font-display": "var(--font-marcellus)",
     "--font-script": "var(--font-pinyon)",
     "--font-body": "var(--font-jakarta)",
-    // Kotak-kotak halus menyerupai kain poleng, dengan bayang pahatan batu
+    // Foto interior pura Bali sebagai latar halaman — yang terlihat di sisi
+    // kiri-kanan saat undangan dibuka di tablet atau komputer. Diberi lapisan
+    // gelap supaya kolom undangan tetap menonjol.
     "--tekstur":
-      "repeating-linear-gradient(90deg, rgb(33 26 20 / 0.045) 0 11px, transparent 11px 22px), repeating-linear-gradient(0deg, rgb(33 26 20 / 0.045) 0 11px, transparent 11px 22px), radial-gradient(120% 40% at 50% 0%, rgb(206 165 66 / 0.14), transparent 62%)",
+      "linear-gradient(rgb(32 21 13 / 0.62), rgb(32 21 13 / 0.72)), url('/photos/bali-latar-samping.jpg')",
+    "--tekstur-size": "cover",
     "--r-md": "0.5rem",
     "--r-lg": "0.75rem",
     "--r-foto": "9999px",
