@@ -11,6 +11,7 @@ import SceneStage, { type Adegan } from "@/components/royal/SceneStage";
 import LatarFoto from "@/components/royal/LatarFoto";
 import BingkaiOrnamen from "@/components/royal/BingkaiOrnamen";
 import KartuMiring from "@/components/royal/KartuMiring";
+import KartuFoil from "@/components/royal/KartuFoil";
 import type { Guest, RsvpAwal } from "@/lib/types";
 
 /* Foto yang dipakai sebagai latar adegan. Semuanya foto asli — tema ini
@@ -91,6 +92,11 @@ function Lembar({
   );
 }
 
+/* Lengkung gapura kartu undangan. Bidang dalamnya memakai sudut siku yang
+   2 px lebih kecil, seperti kartu cetak yang tepinya menyisakan foil. */
+const LENGKUNG_LUAR = "46% 46% 14px 14px / 30% 30% 14px 14px";
+const LENGKUNG_DALAM = "46% 46% 12px 12px / 30% 30% 12px 12px";
+
 export default function CinematicInvitation({
   guest,
   rsvpAwal,
@@ -141,36 +147,16 @@ export default function CinematicInvitation({
         <LatarFoto src={FOTO.gereja} gerak="diam" buram={12} gelap={0.42}>
           {/* Satu-satunya bagian yang memakai kemiringan 3D — kartu monogram */}
           <KartuMiring className="art-lingkaran">
-            <div
-              className="relative flex h-52 w-52 items-center justify-center rounded-full"
-              style={{
-                // Marun bergradasi: lebih terang di kiri atas, gelap di tepi
-                background:
-                  "radial-gradient(120% 120% at 32% 26%, #9c2a2a 0%, #7a1e1e 45%, #43100f 100%)",
-                boxShadow:
-                  "0 26px 60px rgb(0 0 0 / 0.55), inset 0 2px 10px rgb(255 214 152 / 0.22), inset 0 -8px 22px rgb(20 4 6 / 0.6)",
-              }}
-            >
-              {/* Cincin foil emas — gradasi, bukan garis rata */}
-              <span
-                className="pointer-events-none absolute inset-0 rounded-full"
-                style={{
-                  padding: "2px",
-                  background:
-                    "linear-gradient(135deg, #fdf0c9, #f5d584 22%, #8b6508 52%, #e8c877 76%, #b8860b)",
-                  WebkitMask:
-                    "linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)",
-                  WebkitMaskComposite: "xor",
-                  maskComposite: "exclude",
-                }}
-              />
-              <span
-                className="art-naik emas-timbul font-script text-7xl text-cream-50"
-                style={{ animationDelay: "600ms" }}
-              >
-                {inisial}
-              </span>
-            </div>
+            <KartuFoil radiusLuar="50%" radiusDalam="50%" glow="kecil">
+              <div className="flex h-52 w-52 items-center justify-center">
+                <span
+                  className="art-naik emas-timbul font-script text-7xl text-cream-50"
+                  style={{ animationDelay: "600ms" }}
+                >
+                  {inisial}
+                </span>
+              </div>
+            </KartuFoil>
           </KartuMiring>
         </LatarFoto>
       ),
@@ -206,26 +192,16 @@ export default function CinematicInvitation({
       durasi: 7000,
       isi: (
         <LatarFoto src={FOTO.lorong} gerak="diam" buram={9} gelap={0.4}>
-          <div className="relative w-full max-w-[20rem] px-2 py-2">
-            {/* Lapisan gelap mengikuti lengkung bingkai supaya teks tetap
-                terbaca di atas jalan setapak yang terang */}
-            <div
-              className="absolute inset-x-3 inset-y-5 backdrop-blur-[3px]"
-              style={{
-                borderRadius: "46% 46% 14px 14px / 30% 30% 14px 14px",
-                // Bidang kartu ikut bergradasi supaya tidak terasa blok rata
-                background:
-                  "radial-gradient(118% 88% at 50% 30%, rgb(92 24 26 / 0.72) 0%, rgb(52 14 16 / 0.8) 55%, rgb(26 6 8 / 0.88) 100%)",
-                // Bayangan membuat kartu terangkat dari latar, plus garis
-                // emas setipis rambut di tepinya
-                boxShadow:
-                  "0 22px 60px rgb(0 0 0 / 0.55), 0 6px 18px rgb(0 0 0 / 0.4), 0 0 0 1px rgb(212 175 55 / 0.16)",
-              }}
-            />
-            <BingkaiOrnamen className="absolute inset-0 h-full w-full" />
-            {/* Lengkung bingkai menyempit di atas dan sulur ornamen ada di
-                dua sudut bawah — jadi ruang tulisannya dibuat lebih dalam */}
-            <div className="relative px-10 pb-20 pt-16 text-center">
+          <KartuFoil
+            radiusLuar={LENGKUNG_LUAR}
+            radiusDalam={LENGKUNG_DALAM}
+            bayangan={2}
+            className="w-full max-w-[19rem]"
+          >
+            <BingkaiOrnamen className="pointer-events-none absolute inset-0 h-full w-full" />
+            {/* Lengkung kartu menyempit di atas dan sulur ornamen ada di dua
+                sudut bawah — jadi ruang tulisannya dibuat lebih dalam */}
+            <div className="relative px-9 pb-[5.5rem] pt-[4.5rem] text-center">
               <p className="art-naik text-[8.5px] uppercase leading-relaxed tracking-[0.18em] text-gold-200">
                 Dengan sukacita kami mengundang
                 <br />
@@ -255,7 +231,7 @@ export default function CinematicInvitation({
                 {pemberkatan.address.split(",")[0]}
               </p>
             </div>
-          </div>
+          </KartuFoil>
         </LatarFoto>
       ),
     },
@@ -317,9 +293,19 @@ export default function CinematicInvitation({
           judul="Rangkaian Acara"
           gulir
           anak={
-            <div className="mx-auto max-w-sm space-y-4">
+            <div className="mx-auto max-w-sm space-y-6 px-1">
               {[pemberkatan, resepsi].map((a, i) => (
-                <div key={a.title} className="glass art-naik px-5 py-5 text-center" style={{ animationDelay: `${i * 200}ms` }}>
+                <KartuFoil
+                  key={a.title}
+                  radiusLuar="1.25rem"
+                  radiusDalam="1.125rem"
+                  /* Satu lapis bayangan saja: dua kartu tampil bersamaan,
+                     dan dua lapis blur per kartu memberatkan HP kelas bawah */
+                  bayangan={1}
+                  className="art-naik"
+                  gaya={{ animationDelay: `${i * 200}ms` }}
+                  isiClassName="px-5 py-5 text-center"
+                >
                   <h3 className="font-serif text-2xl text-sage-800">{a.title}</h3>
                   <p className="mt-2 text-sm text-sage-600">{a.date}</p>
                   <p className="text-sm text-sage-600">{a.time}</p>
@@ -335,7 +321,7 @@ export default function CinematicInvitation({
                       Petunjuk Arah
                     </a>
                   </div>
-                </div>
+                </KartuFoil>
               ))}
             </div>
           }
