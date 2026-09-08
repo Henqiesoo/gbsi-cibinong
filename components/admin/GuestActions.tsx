@@ -2,23 +2,30 @@
 
 import { useState } from "react";
 import { deleteGuestAction, editGuestAction } from "@/app/admin/actions";
+import type { NamaTema } from "@/lib/themes";
 
 type Props = {
   id: string;
   nama: string;
   slug: string;
   jumlahTamuMax: number;
+  /* Tema yang sedang dipilih di panel admin. Link yang disalin selalu
+     membawa tema ini — sebelumnya link disalin polos tanpa ?tema= sehingga
+     undangan yang dikirim selalu terbuka dengan tema bawaan. */
+  tema: NamaTema;
 };
 
-// Tombol salin link + ubah nama + hapus untuk satu baris tamu
-export default function GuestActions({ id, nama, slug, jumlahTamuMax }: Props) {
+// Tombol salin link + buka + ubah nama + hapus untuk satu baris tamu
+export default function GuestActions({ id, nama, slug, jumlahTamuMax, tema }: Props) {
   const [disalin, setDisalin] = useState(false);
   const [bukaUbah, setBukaUbah] = useState(false);
   const [proses, setProses] = useState(false);
   const [galat, setGalat] = useState<string | null>(null);
 
+  const jalan = `/invite/${slug}?tema=${tema}`;
+
   async function salinLink() {
-    const url = `${window.location.origin}/invite/${slug}`;
+    const url = `${window.location.origin}${jalan}`;
     try {
       await navigator.clipboard.writeText(url);
     } catch {
@@ -60,11 +67,20 @@ export default function GuestActions({ id, nama, slug, jumlahTamuMax }: Props) {
       <div className="flex flex-wrap gap-1.5">
         <button
           onClick={salinLink}
-          title={`/invite/${slug}`}
+          title={jalan}
           className="rounded-full border border-ivory-300 px-3 py-1.5 text-xs text-sage-600 transition hover:border-gold-400 hover:text-gold-600"
         >
           {disalin ? "✓ Tersalin" : "Salin link"}
         </button>
+        <a
+          href={jalan}
+          target="_blank"
+          rel="noopener noreferrer"
+          title={jalan}
+          className="rounded-full border border-ivory-300 px-3 py-1.5 text-xs text-sage-600 transition hover:border-gold-400 hover:text-gold-600"
+        >
+          Buka
+        </a>
         <button
           onClick={() => setBukaUbah((v) => !v)}
           className="rounded-full border border-ivory-300 px-3 py-1.5 text-xs text-sage-600 transition hover:border-gold-400 hover:text-gold-600"

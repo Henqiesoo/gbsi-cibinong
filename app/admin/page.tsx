@@ -5,6 +5,7 @@ import AddGuestForm from "@/components/admin/AddGuestForm";
 import GuestActions from "@/components/admin/GuestActions";
 import { logoutAction } from "@/app/admin/actions";
 import { weddingConfig } from "@/lib/wedding-config";
+import { bacaTema, DAFTAR_TEMA, FORMAT, type NamaTema } from "@/lib/themes";
 import type { RekapRow } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -52,11 +53,20 @@ function StatCard({
   );
 }
 
-export default async function AdminPage() {
+export default async function AdminPage({
+  searchParams,
+}: {
+  searchParams: { tema?: string };
+}) {
   if (!(await isAdminAuthenticated())) return <LoginForm />;
 
   const { rows, error } = await getRekap();
   const { groom, bride } = weddingConfig.couple;
+  // Satu panel admin per tema: /admin?tema=dark, /admin?tema=royal, dst.
+  // Tema yang dipilih di sini ikut menempel pada setiap link tamu.
+  const tema: NamaTema = bacaTema(searchParams.tema);
+  const temaAktif = DAFTAR_TEMA.find((t) => t.id === tema)!;
+  const nomorTema = DAFTAR_TEMA.findIndex((t) => t.id === tema) + 1;
 
   const stats = rows.reduce(
     (acc, r) => {
@@ -102,6 +112,54 @@ export default async function AdminPage() {
           <StatCard label="Berhalangan" value={stats.tidakHadir} />
           <StatCard label="Belum konfirmasi" value={stats.belum} />
         </div>
+
+        {/* Pemilih tema — inilah yang menentukan tema pada semua link tamu */}
+        <section className="mt-8 rounded-2xl bg-surface p-5 shadow-sm">
+          <h2 className="font-serif text-xl font-light text-sage-800">Tema link undangan</h2>
+          <p className="mt-1.5 text-sm leading-relaxed text-sage-500">
+            Pilih tema di bawah ini, lalu tombol <b>Salin link</b> pada setiap tamu akan
+            menyalin link yang sudah membawa tema tersebut. Setiap tema punya alamat panel
+            sendiri, jadi boleh disimpan sebagai bookmark terpisah.
+          </p>
+
+          <div className="mt-4 flex flex-wrap gap-2">
+            {DAFTAR_TEMA.map((t, i) => {
+              const aktif = t.id === tema;
+              return (
+                <a
+                  key={t.id}
+                  href={`/admin?tema=${t.id}`}
+                  aria-current={aktif ? "page" : undefined}
+                  className={`rounded-full px-4 py-2 text-xs font-medium transition ${
+                    aktif
+                      ? "bg-sage-700 text-onprimary shadow-sm"
+                      : "border border-ivory-300 text-sage-600 hover:border-gold-400 hover:text-gold-600"
+                  }`}
+                >
+                  {i + 1}. {t.nama}
+                </a>
+              );
+            })}
+          </div>
+
+          <div className="mt-4 space-y-2 rounded-xl bg-ivory-100/70 p-4 text-xs text-sage-600">
+            <p>
+              <span className="text-sage-400">Sedang dipilih:</span>{" "}
+              <b>
+                Tema {nomorTema} — {temaAktif.nama}
+              </b>{" "}
+              <span className="text-sage-400">({FORMAT[temaAktif.format].nama})</span>
+            </p>
+            <p className="break-all">
+              <span className="text-sage-400">Panel admin tema ini:</span>{" "}
+              <code className="rounded bg-surface px-1.5 py-0.5">/admin?tema={tema}</code>
+            </p>
+            <p className="break-all">
+              <span className="text-sage-400">Link umum tanpa nama tamu:</span>{" "}
+              <code className="rounded bg-surface px-1.5 py-0.5">/?tema={tema}</code>
+            </p>
+          </div>
+        </section>
 
         <AddGuestForm />
 
@@ -157,6 +215,7 @@ export default async function AdminPage() {
                       nama={r.nama}
                       slug={r.slug}
                       jumlahTamuMax={r.jumlah_tamu_max}
+                      tema={tema}
                     />
                   </td>
                 </tr>

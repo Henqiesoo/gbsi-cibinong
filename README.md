@@ -15,6 +15,21 @@ Website undangan pernikahan digital: **Next.js 14 (App Router) + Tailwind CSS + 
 
 Tema dipilih lewat parameter `?tema=` di URL mana pun, termasuk link undangan personal — mis. `https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/invite/rudi-hartono?tema=royal`.
 
+### Panel admin, satu per tema
+
+Daftar tamunya satu untuk semua tema; yang membedakan hanyalah tema apa yang menempel pada link yang disalin. Buka panel sesuai tema yang mau dikirim, lalu klik **Salin link** pada tamu yang bersangkutan — link yang tersalin sudah membawa `?tema=` yang benar. Tombol **Buka** di sebelahnya untuk memeriksanya lebih dulu.
+
+| Tema | Panel admin |
+|---|---|
+| 1 Sage & Gold | [`/admin?tema=sage`](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/admin?tema=sage) |
+| 2 Dark Luxury | [`/admin?tema=dark`](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/admin?tema=dark) |
+| 3 Floral Watercolor | [`/admin?tema=floral`](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/admin?tema=floral) |
+| 4 Minimalis Modern | [`/admin?tema=minimal`](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/admin?tema=minimal) |
+| 5 Nusantara Bali | [`/admin?tema=adat`](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/admin?tema=adat) |
+| 6 Royal Red | [`/admin?tema=royal`](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/admin?tema=royal) |
+
+Pindah tema cukup lewat deretan tombol di dalam panel — tidak perlu login ulang.
+
 Contoh undangan personal per tamu:
 
 | Tamu | Link |
@@ -43,7 +58,7 @@ Contoh undangan personal per tamu:
 | **Musik latar** | Balada piano orisinal, dengan tombol putar/berhenti mengambang |
 | **Galeri satu sumber** | Daftar foto ada di `lib/wedding-config.ts` — menggantinya mengganti galeri di keenam tema sekaligus |
 | **Putar otomatis** | Tombol khusus untuk merekam video undangan tanpa menyentuh layar — menggulir sendiri di format gulir, berpindah panel sendiri di format lain |
-| **Panel admin** | `/admin` berpassword: statistik, rekap RSVP, tambah/ubah/hapus tamu, export CSV |
+| **Panel admin per tema** | `/admin?tema=<id>` berpassword: statistik, rekap RSVP, tambah/ubah/hapus tamu, export CSV. Tema yang dipilih di panel ikut menempel pada setiap link tamu yang disalin |
 
 ### 🎨 Sistem tema
 
@@ -168,12 +183,12 @@ Ada dua jenis nama yang berbeda:
 
 | Yang diganti | Caranya |
 |---|---|
-| **Nama tamu** (yang muncul di cover, per orang) | Buka `/admin` → tabel tamu → tombol **Ubah**. Bisa juga menambah tamu baru lewat formulir di atas tabel. Kolom "Link baru" dikosongkan saja agar link yang sudah disebar tetap hidup. |
+| **Nama tamu** (yang muncul di cover, per orang) | Buka `/admin?tema=<tema yang dipakai>` → tabel tamu → tombol **Ubah**. Bisa juga menambah tamu baru lewat formulir di atas tabel. Kolom "Link baru" dikosongkan saja agar link yang sudah disebar tetap hidup. |
 | **Nama mempelai & data acara** | Edit [`lib/wedding-config.ts`](lib/wedding-config.ts), lalu deploy ulang |
 
 ## 📱 Membagikan undangan lewat WhatsApp
 
-Tambah tamu di `/admin`, klik **Salin link**, lalu kirim:
+Tambah tamu di `/admin`, pilih temanya di bagian **Tema link undangan**, klik **Salin link**, lalu kirim:
 
 ```
 Kepada Yth. Bapak/Ibu Budi Santoso & Keluarga
