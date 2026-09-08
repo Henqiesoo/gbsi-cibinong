@@ -19,15 +19,45 @@ export type NamaTema = "sage" | "dark" | "floral" | "minimal" | "adat" | "royal"
 
 export type GayaOrnamen = "daun" | "deco" | "bunga" | "garis" | "batik" | "mandala";
 
+/* Format = cara tamu menyusuri undangan. Ini yang membuat dua tema terasa
+   benar-benar beda produk, bukan sekadar beda warna: urutan bagian, cara
+   berpindah, bahkan pengelompokan isinya ikut berubah. */
+export type FormatTema = "gulir" | "geser" | "buku" | "tab" | "lipat" | "adegan";
+
+export const FORMAT: Record<FormatTema, { nama: string; jelas: string }> = {
+  gulir: {
+    nama: "Gulir panjang",
+    jelas: "Satu halaman panjang, digulir dari atas ke bawah",
+  },
+  geser: {
+    nama: "Panel geser",
+    jelas: "Satu bagian satu layar penuh, digeser ke samping",
+  },
+  buku: {
+    nama: "Buku dibalik",
+    jelas: "Halaman dibalik satu per satu seperti buku acara",
+  },
+  tab: {
+    nama: "Menu aplikasi",
+    jelas: "Menu di bawah layar, isi berganti tanpa gulir panjang",
+  },
+  lipat: {
+    nama: "Lipatan",
+    jelas: "Bagian tersimpan terlipat, terbuka saat disentuh",
+  },
+  adegan: {
+    nama: "Adegan berjalan",
+    jelas: "Satu layar yang berganti sendiri seperti video",
+  },
+};
+
 type Token = Record<string, string>;
 
 export type Tema = {
   nama: string;
   deskripsi: string;
   ornamen: GayaOrnamen;
-  /* "gulir" = halaman panjang yang digulir tamu.
-     "adegan" = satu halaman yang isinya berganti sendiri seperti video. */
-  format: "gulir" | "adegan";
+  format: FormatTema;
   token: Token;
 };
 
@@ -98,7 +128,7 @@ const dark: Tema = {
   nama: "Dark Luxury",
   deskripsi: "Hitam pekat, krem, emas — mewah bergaya malam gala",
   ornamen: "deco",
-  format: "gulir",
+  format: "geser",
   token: {
     "--ivory-50": "12 11 14",
     "--ivory-100": "23 21 27",
@@ -140,7 +170,7 @@ const floral: Tema = {
   nama: "Floral Watercolor",
   deskripsi: "Blush, mawar kering, dan sapuan cat air yang lembut",
   ornamen: "bunga",
-  format: "gulir",
+  format: "buku",
   token: {
     "--ivory-50": "255 250 250",
     "--ivory-100": "253 242 242",
@@ -183,7 +213,7 @@ const minimal: Tema = {
   nama: "Minimalis Modern",
   deskripsi: "Putih bersih, sudut tegas, tipografi geometris tanpa hiasan",
   ornamen: "garis",
-  format: "gulir",
+  format: "tab",
   token: {
     "--ivory-50": "250 250 249",
     "--ivory-100": "244 244 242",
@@ -224,7 +254,7 @@ const adat: Tema = {
   nama: "Nusantara",
   deskripsi: "Cokelat tanah, kuning kunyit, dan motif batik — bernuansa adat",
   ornamen: "batik",
-  format: "gulir",
+  format: "lipat",
   token: {
     "--ivory-50": "250 245 235",
     "--ivory-100": "243 234 217",

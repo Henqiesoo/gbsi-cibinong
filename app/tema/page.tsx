@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DAFTAR_TEMA, TEMA_BAWAAN } from "@/lib/themes";
+import { DAFTAR_TEMA, FORMAT, TEMA_BAWAAN } from "@/lib/themes";
 import { weddingConfig } from "@/lib/wedding-config";
 
 export const metadata: Metadata = {
@@ -21,8 +21,9 @@ export default function TemaPage() {
           </p>
           <h1 className="mt-4 font-serif text-4xl font-light md:text-5xl">Pilihan Tema</h1>
           <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-[#67735d]">
-            Enam tema dengan warna, tipografi, bentuk, dan ornamen yang berbeda. Semua fitur
-            (RSVP, galeri, amplop digital, gulir otomatis) sama di setiap tema.
+            Enam tema dengan warna, tipografi, ornamen — dan yang terpenting, cara
+            menyusuri undangan yang berbeda-beda. Fiturnya sama semua (RSVP, galeri, amplop
+            digital, putar otomatis untuk direkam), hanya bentuk halamannya yang berlainan.
           </p>
         </header>
 
@@ -59,6 +60,15 @@ export default function TemaPage() {
                 </div>
 
                 <p className="mt-3 text-sm leading-relaxed text-[#67735d]">{t.deskripsi}</p>
+
+                <div className="mt-3 rounded-xl bg-[#f8f4ec] px-3 py-2.5">
+                  <p className="text-[10px] font-semibold uppercase tracking-widest text-[#b08d57]">
+                    Format · {FORMAT[t.format].nama}
+                  </p>
+                  <p className="mt-1 text-xs leading-relaxed text-[#67735d]">
+                    {FORMAT[t.format].jelas}
+                  </p>
+                </div>
 
                 <p className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-[#3c4536] group-hover:text-[#b08d57]">
                   Lihat pratinjau

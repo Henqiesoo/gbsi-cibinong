@@ -4,14 +4,14 @@ Website undangan pernikahan digital: **Next.js 14 (App Router) + Tailwind CSS + 
 
 **Katalog seluruh tema:** https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/tema
 
-| # | Tema | Pratinjau | Karakter |
-|---|---|---|---|
-| 1 | **Sage & Gold** | [buka](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/) | Gading & sage, serif Cormorant, sudut lembut, ornamen daun |
-| 2 | **Dark Luxury** | [buka](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/?tema=dark) | Hitam & emas, kapital Cinzel, ornamen art deco |
-| 3 | **Floral Watercolor** | [buka](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/?tema=floral) | Blush & mawar, Playfair + Great Vibes, foto bulat, sapuan cat air |
-| 4 | **Minimalis Modern** | [buka](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/?tema=minimal) | Putih–hitam, Jost geometris, sudut tegas, garis polos |
-| 5 | **Nusantara** | [buka](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/?tema=adat) | Cokelat soga & kunyit, Marcellus, motif batik, ornamen kawung |
-| 6 | **Royal Red** | [buka](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/?tema=royal) | **Format berbeda**: bukan halaman gulir, melainkan 13 adegan yang berganti sendiri seperti video |
+| # | Tema | Pratinjau | Format halaman | Karakter |
+|---|---|---|---|---|
+| 1 | **Sage & Gold** | [buka](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/) | **Gulir panjang** — dari atas ke bawah | Gading & sage, serif Cormorant, sudut lembut, ornamen daun |
+| 2 | **Dark Luxury** | [buka](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/?tema=dark) | **Panel geser** — satu bagian satu layar, digeser ke samping | Hitam & emas, kapital Cinzel, ornamen art deco |
+| 3 | **Floral Watercolor** | [buka](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/?tema=floral) | **Buku dibalik** — halaman dibalik satu per satu | Blush & mawar, Playfair + Great Vibes, foto bulat, sapuan cat air |
+| 4 | **Minimalis Modern** | [buka](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/?tema=minimal) | **Menu aplikasi** — lima menu di bawah layar | Putih–hitam, Jost geometris, sudut tegas, garis polos |
+| 5 | **Nusantara** | [buka](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/?tema=adat) | **Lipatan** — bagian terlipat, terbuka saat disentuh | Cokelat soga & kunyit, Marcellus, motif batik, ornamen kawung |
+| 6 | **Royal Red** | [buka](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/?tema=royal) | **Adegan berjalan** — 13 adegan berganti sendiri seperti video | Marun & emas, Cinzel + Pinyon, lengkung gerbang pelaminan |
 
 Tema dipilih lewat parameter `?tema=` di URL mana pun, termasuk link undangan personal — mis. `https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/invite/rudi-hartono?tema=royal`.
 
@@ -25,6 +25,8 @@ Contoh undangan personal per tamu:
 | Sdri. Clara Gunawan | [`/invite/clara-gunawan`](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/invite/clara-gunawan) |
 
 > Data di dalam repo ini (nama lengkap, tanggal, alamat, rekening, kisah) adalah **contoh** untuk demo. Semuanya diganti dari satu file: [`lib/wedding-config.ts`](lib/wedding-config.ts).
+>
+> Foto di `public/photos/` juga **contoh** — ganti dengan foto pasangan yang bersangkutan sebelum undangan dipakai untuk acara sungguhan.
 
 ## ✨ Fitur
 
@@ -39,7 +41,7 @@ Contoh undangan personal per tamu:
 | **Ucapan & doa** | Kirim pesan + daftar realtime dari tabel `ucapan` |
 | **Amplop digital** | Rekening dengan tombol salin, QRIS, alamat kirim hadiah |
 | **Musik latar** | Balada piano orisinal, dengan tombol putar/berhenti mengambang |
-| **Gulir otomatis** | Tombol khusus untuk merekam video undangan tanpa menyentuh layar |
+| **Putar otomatis** | Tombol khusus untuk merekam video undangan tanpa menyentuh layar — menggulir sendiri di format gulir, berpindah panel sendiri di format lain |
 | **Panel admin** | `/admin` berpassword: statistik, rekap RSVP, tambah/ubah/hapus tamu, export CSV |
 
 ### 🎨 Sistem tema
@@ -53,19 +55,36 @@ Sebuah tema di sini bukan sekadar ganti warna. Setiap tema di [`lib/themes.ts`](
 | Bahasa bentuk | `--r-md`, `--r-lg`, `--r-foto` | Sudut membulat vs tegas; foto bulat vs **lengkung gerbang** |
 | Tekstur latar | `--tekstur` | Sapuan cat air, kilau emas, motif batik |
 | Gaya ornamen | field `ornamen` | Daun · art deco · bunga · garis · kawung · gerbang |
-| **Format halaman** | field `format` | `gulir` (halaman panjang) vs `adegan` (berganti sendiri) |
+| **Format halaman** | field `format` | Cara tamu menyusuri undangan — lihat di bawah |
 
-#### Tema 6 memakai format berbeda
+#### Enam tema, enam format halaman
 
-Lima tema pertama adalah halaman gulir dengan urutan bagian yang sama. Tema **Royal Red** sengaja dibuat lain: satu layar penuh berisi **13 adegan yang berganti sendiri**, mengikuti alur undangan video — gerbang pelaminan, untaian bunga turun, lingkaran inisial, siluet pasangan berjalan ke altar, lalu bingkai undangan.
+Yang paling membedakan satu tema dari tema lain bukan warnanya, melainkan **cara tamu menyusurinya**. Setiap tema memakai tata letak sendiri di `components/format/`, dengan urutan — bahkan pengelompokan — bagian yang berbeda:
 
-- Latar pelaminan, siluet pasangan, dan bingkai ornamen semuanya **digambar sendiri dengan SVG** (`components/royal/`) — tidak memakai foto stok, jadi bebas lisensi dan sangat ringan
-- Siluet dibuat bernuansa pemberkatan Kristen: gaun putih + veil, setelan hitam, salib di puncak bingkai
+| Format | Tema | Cara jalan | Urutan bagian |
+|---|---|---|---|
+| `gulir` | Sage & Gold | Halaman panjang, digulir ke bawah | Urutan klasik, sembilan bagian berurutan |
+| `geser` | Dark Luxury | Digeser ke samping, satu bagian satu layar penuh, ada titik penanda & panah | Galeri dimajukan ke urutan kedua — suasana dijual lebih dulu |
+| `buku` | Floral Watercolor | Halaman dibalik dengan tombol, ada animasi balik halaman & garis lipat | Urutan buku acara: kenalan → kisah → acara → ucapan → konfirmasi |
+| `tab` | Minimalis Modern | Menu tetap di bawah layar, isi berganti seketika tanpa animasi | Diringkas jadi **lima menu**; mempelai & kisah menyatu ke Beranda, amplop menyatu ke RSVP |
+| `lipat` | Nusantara | Seluruh isi tersimpan dalam lipatan bernomor, terbuka saat disentuh | Halaman jadi pendek: pembuka + tujuh lipatan + penutup |
+| `adegan` | Royal Red | Satu layar yang berganti sendiri seperti video | 13 adegan, tiga di antaranya berhenti menunggu tamu |
+
+Kelima format non-gulir punya tombol **putar otomatis** sendiri (`components/format/PutarOtomatis.tsx`): undangan berpindah panel sendiri dan menggulir isi tiap panel pelan-pelan — pengganti gulir otomatis saat merekam video.
+
+#### Tema 6 — format adegan
+
+Tema **Royal Red** paling jauh bedanya: satu layar penuh berisi **13 adegan yang berganti sendiri**, mengikuti alur undangan video — gerbang pelaminan, untaian bunga turun, lingkaran inisial, mempelai melangkah ke altar, lalu bingkai undangan.
+
+- Latar pelaminan dan bingkai ornamen **digambar sendiri dengan SVG** (`components/royal/`) — bebas lisensi dan sangat ringan
+- Adegan ke-4 memakai **foto asli** lorong menuju altar, supaya terasa nyata seperti undangan video pada umumnya
+- Adegan isi (mempelai, acara, galeri, RSVP, amplop, ucapan) memakai **latar pelaminan yang sama** seperti adegan pembuka, bukan lembar putih; warna teksnya ditukar lewat token di satu tempat sehingga komponennya tidak perlu diubah
+- Bernuansa pemberkatan Kristen: salib di puncak bingkai, ayat Kejadian 2:24
 - Adegan berjalan otomatis; adegan interaktif (RSVP, amplop, ucapan) berhenti menunggu tamu dan punya tombol **Lanjut**
 - Ada bilah kemajuan seperti cerita media sosial, tombol jeda, ketuk kiri/kanan, dan tombol panah keyboard
-- Karena berjalan sendiri, tema ini **tidak perlu gulir otomatis** untuk direkam jadi video
+- Karena berjalan sendiri, tema ini **tidak perlu putar otomatis** untuk direkam jadi video
 
-Komponen tidak pernah tahu tema apa yang aktif, jadi **menambah tema ketujuh cukup menyalin satu objek** di `lib/themes.ts` — tanpa menyentuh satu pun komponen, dan seluruh tema langsung ikut menerima perbaikan fitur apa pun.
+Komponen isi tidak pernah tahu tema apa yang aktif. Menambah tema ketujuh dengan format yang sudah ada cukup **menyalin satu objek** di `lib/themes.ts`; format baru cukup menambah satu komponen tata letak di `components/format/`. Kedua-duanya tidak menyentuh komponen isi, dan seluruh tema langsung ikut menerima perbaikan fitur apa pun.
 
 Font non-bawaan dimuat dengan `preload: false`, sehingga berkas font tema lain tidak ikut membebani halaman.
 

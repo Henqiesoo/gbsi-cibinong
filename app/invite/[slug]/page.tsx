@@ -3,7 +3,7 @@ import Invitation from "@/components/Invitation";
 import CinematicInvitation from "@/components/CinematicInvitation";
 import { getSupabaseServer } from "@/lib/supabase/server";
 import { SUPABASE_URL } from "@/lib/supabase/config";
-import { bacaTema, cssTema } from "@/lib/themes";
+import { bacaTema, cssTema, TEMA } from "@/lib/themes";
 import { weddingConfig } from "@/lib/wedding-config";
 import type { Guest, RsvpAwal, RsvpStatus, UndanganRow } from "@/lib/types";
 
@@ -69,8 +69,9 @@ export default async function InvitePage({
     <>
       {/* Dirender di server sehingga warna sudah benar sejak cat pertama */}
       {css && <style dangerouslySetInnerHTML={{ __html: css }} />}
-      {/* Tema Royal Red memakai tata letak adegan berjalan, bukan gulir */}
-      {tema === "royal" ? (
+      {/* Tema dengan format "adegan" memakai tata letak berjalan sendiri;
+          format lain ditangani komponen Invitation */}
+      {TEMA[tema].format === "adegan" ? (
         <CinematicInvitation guest={guest} rsvpAwal={rsvpAwal} />
       ) : (
         <Invitation guest={guest} rsvpAwal={rsvpAwal} tema={tema} />

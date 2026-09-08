@@ -9,7 +9,6 @@ import GiftSection from "@/components/GiftSection";
 import UcapanWall from "@/components/UcapanWall";
 import SceneStage, { type Adegan } from "@/components/royal/SceneStage";
 import ArtPelaminan from "@/components/royal/ArtPelaminan";
-import SiluetPasangan from "@/components/royal/SiluetPasangan";
 import BingkaiOrnamen from "@/components/royal/BingkaiOrnamen";
 import type { Guest, RsvpAwal } from "@/lib/types";
 
@@ -26,7 +25,38 @@ function Panggung({ fase, children }: { fase: number; children?: React.ReactNode
   );
 }
 
-// Kartu isi untuk adegan yang memuat detail (acara, galeri, formulir)
+/* Adegan isi (mempelai, acara, galeri, formulir) memakai latar pelaminan
+   yang sama seperti adegan pembuka — bukan lembar putih — supaya seluruh
+   undangan terasa satu suasana dari awal sampai akhir.
+
+   Latar gelap membuat warna teks bawaan tema jadi terlalu tua, jadi di
+   dalam lembar ini token warnanya ditukar: judul & isi menjadi krem,
+   tombol utama menjadi emas dengan tulisan marun. Komponen di dalamnya
+   (RsvpForm, GiftSection, UcapanWall) tidak perlu diubah sama sekali —
+   semuanya sudah memakai nama token yang sama. */
+const TOKEN_LEMBAR_GELAP = {
+  "--ivory-50": "42 16 16",
+  "--ivory-100": "56 22 22",
+  "--ivory-200": "92 40 40",
+  "--ivory-300": "116 54 54",
+  "--surface": "58 22 22",
+  "--edge": "224 186 74",
+  "--ink": "255 246 224",
+  "--sage-100": "78 32 32",
+  "--sage-200": "104 46 46",
+  "--sage-300": "196 160 150",
+  "--sage-400": "214 186 172",
+  "--sage-500": "234 214 190",
+  "--sage-600": "244 228 206",
+  "--sage-700": "224 186 74", // tombol utama jadi emas
+  "--sage-800": "255 246 224", // judul jadi krem
+  "--sage-900": "32 12 12",
+  "--gold-400": "224 186 74",
+  "--gold-500": "247 219 130",
+  "--gold-600": "247 219 130",
+  "--onprimary": "48 12 12",
+} as React.CSSProperties;
+
 function Lembar({
   judul,
   anak,
@@ -37,9 +67,15 @@ function Lembar({
   gulir?: boolean;
 }) {
   return (
-    <div className="relative h-full w-full overflow-hidden bg-ivory-50">
-      <div className="pointer-events-none absolute inset-0 opacity-70" style={{ backgroundImage: "var(--tekstur)" }} />
-      <div className={`relative h-full ${gulir ? "overflow-y-auto" : "flex flex-col justify-center"} px-6 pb-16 pt-14`}>
+    <div className="relative h-full w-full overflow-hidden" style={TOKEN_LEMBAR_GELAP}>
+      <ArtPelaminan fase={1} />
+      {/* Kerudung gelap supaya isi tetap terbaca di atas gambar pelaminan */}
+      <div className="absolute inset-0 bg-[#210b0b]/80 backdrop-blur-[2px]" />
+      <div
+        className={`tanpa-bar relative h-full ${
+          gulir ? "overflow-y-auto" : "flex flex-col justify-center"
+        } px-6 pb-16 pt-14`}
+      >
         {judul && (
           <div className="mb-5 text-center">
             <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-gold-500">
@@ -111,16 +147,39 @@ export default function CinematicInvitation({
       ),
     },
 
-    // 4 — Siluet pasangan berjalan menuju altar
+    // 4 — Foto asli: mempelai wanita melangkah di lorong menuju altar.
+    //     Sebelumnya adegan ini berupa siluet gambar; diganti foto supaya
+    //     terasa nyata seperti undangan video pada umumnya.
     {
       id: "pasangan",
-      durasi: 5200,
+      durasi: 6200,
       isi: (
-        <Panggung fase={1}>
-          <div className="h-[62vh] w-full max-w-xs">
-            <SiluetPasangan jalan />
+        <div className="relative h-full w-full overflow-hidden bg-[#1b0a0a]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/photos/lorong-altar.jpg"
+            alt="Mempelai wanita melangkah di lorong menuju altar"
+            className="absolute inset-0 h-full w-full animate-slow-zoom object-cover object-[center_38%]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#2a1010]/40 via-[#2a1010]/10 to-[#1b0a0a]/90" />
+          {/* Bingkai emas tipis mengikuti bentuk gerbang khas tema ini */}
+          <div
+            className="pointer-events-none absolute inset-4 border border-gold-300/40"
+            style={{ borderRadius: "var(--r-foto)" }}
+          />
+
+          <div className="relative flex h-full flex-col items-center justify-end px-9 pb-16 text-center">
+            <p className="art-naik font-script text-[2.75rem] leading-tight text-cream-50">
+              Melangkah bersama
+            </p>
+            <p
+              className="art-naik mt-3 text-[10px] uppercase tracking-[0.32em] text-gold-200"
+              style={{ animationDelay: "500ms" }}
+            >
+              menuju altar pemberkatan
+            </p>
           </div>
-        </Panggung>
+        </div>
       ),
     },
 
@@ -134,7 +193,7 @@ export default function CinematicInvitation({
             {/* Lapisan gelap mengikuti lengkung bingkai supaya teks tetap
                 terbaca di atas jalan setapak yang terang */}
             <div
-              className="absolute inset-x-3 inset-y-5 bg-[#2a0f0f]/62 backdrop-blur-[3px]"
+              className="absolute inset-x-3 inset-y-5 bg-[#2a0f0f]/60 backdrop-blur-[3px]"
               style={{ borderRadius: "46% 46% 14px 14px / 30% 30% 14px 14px" }}
             />
             <BingkaiOrnamen className="absolute inset-0 h-full w-full text-gold-300" />
