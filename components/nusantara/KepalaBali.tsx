@@ -62,7 +62,7 @@ export default function KepalaBali() {
           <div className="overflow-hidden rounded-3xl border-4 border-gold-400/30 shadow-[var(--bayangan-kartu)]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={weddingConfig.heroPhoto}
+              src={weddingConfig.bali.heroPhoto}
               alt={`${groom.nickname} dan ${bride.nickname}`}
               className="aspect-[3/4] w-full object-cover"
             />

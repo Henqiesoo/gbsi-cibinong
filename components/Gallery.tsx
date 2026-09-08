@@ -3,9 +3,13 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { weddingConfig } from "@/lib/wedding-config";
 import Reveal from "@/components/Reveal";
+import { useTema } from "@/components/TemaProvider";
 
 export default function Gallery() {
-  const photos = weddingConfig.gallery;
+  // Tema Nusantara Bali memakai galerinya sendiri — foto pengantin
+  // berbusana adat Bali, bukan foto kasual yang dipakai tema lain.
+  const tema = useTema();
+  const photos = tema === "adat" ? weddingConfig.bali.gallery : weddingConfig.gallery;
   const [aktif, setAktif] = useState<number | null>(null);
   const sentuhX = useRef<number | null>(null);
 

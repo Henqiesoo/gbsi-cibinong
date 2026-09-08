@@ -29,6 +29,23 @@ export const weddingConfig = {
   coverPhoto: "/photos/cover.jpg",
   heroPhoto: "/photos/couple-bench.jpg",
 
+  // Foto khusus tema Nusantara Bali. Tema itu punya suasananya sendiri,
+  // jadi memakai foto pengantin berbusana adat Bali — bukan foto kasual
+  // yang dipakai tema lain.
+  bali: {
+    coverPhoto: "/photos/bali-pengantin-emas.jpg", // sampul & pembuka
+    heroPhoto: "/photos/bali-pengantin-berdiri.jpg", // foto di badan halaman
+    latarSamping: "/photos/bali-latar-samping.jpg", // latar sisi layar lebar
+    gallery: [
+      { src: "/photos/bali-pengantin-emas.jpg", alt: "Busana agung hitam & emas" },
+      { src: "/photos/bali-pengantin-ungu.jpg", alt: "Busana adat ungu di balai pura" },
+      { src: "/photos/bali-pengantin-berdiri.jpg", alt: "Berdiri di depan gapura pura" },
+      { src: "/photos/bali-pengantin-bangku.jpg", alt: "Sore hari di pelataran batu" },
+      { src: "/photos/bali-pura.jpg", alt: "Gapura pura berdaun pintu emas" },
+      { src: "/photos/bali-latar-samping.jpg", alt: "Balai pura dengan sesajen" },
+    ],
+  },
+
   // Tanggal & waktu acara utama untuk countdown (WIB / UTC+7)
   eventDateISO: "2027-05-15T10:00:00+07:00",
   eventDateLabel: "Sabtu, 15 Mei 2027",

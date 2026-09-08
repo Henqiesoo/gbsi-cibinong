@@ -15,6 +15,7 @@ import Footer from "@/components/Footer";
 import MusicPlayer from "@/components/MusicPlayer";
 import NavDock from "@/components/NavDock";
 import AutoScroll from "@/components/AutoScroll";
+import HiasanTepi from "@/components/HiasanTepi";
 import LayoutGeser from "@/components/format/LayoutGeser";
 import LayoutBuku from "@/components/format/LayoutBuku";
 import LayoutTab from "@/components/format/LayoutTab";
@@ -166,9 +167,12 @@ export default function Invitation({
                 <NavDock visible={dibuka && !modeRekam} />
               </>
             )}
+            {/* Hiasan sisi kiri-kanan untuk layar lebar — khusus tema 1.
+                Tema lain punya latar sendiri lewat token --tekstur. */}
+            {tema === "sage" && <HiasanTepi />}
             <main
               aria-hidden={!dibuka}
-              className={`mx-auto max-w-lg overflow-hidden bg-ivory-50 md:max-w-xl ${
+              className={`relative z-10 mx-auto max-w-lg overflow-hidden bg-ivory-50 md:max-w-xl lg:shadow-[0_0_70px_-18px_rgb(60_69_54_/_0.35)] ${
                 dibuka ? "" : "h-screen overflow-hidden"
               }`}
             >

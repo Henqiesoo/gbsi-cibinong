@@ -71,7 +71,9 @@ Yang paling membedakan satu tema dari tema lain bukan warnanya, melainkan **cara
 | `lipat` | Nusantara Bali | Seluruh isi tersimpan dalam lipatan bernomor, terbuka saat disentuh | Halaman jadi pendek: pembuka + tujuh lipatan + penutup |
 | `adegan` | Royal Red | Satu layar yang berganti sendiri seperti video | 13 adegan, tiga di antaranya berhenti menunggu tamu |
 
-Tema **Nusantara Bali** memakai foto pura Bali (gapura berdaun pintu emas) sebagai pembuka dan sampulnya, foto interior pura sebagai latar sisi kiri-kanan saat dibuka di tablet/komputer, serta pita poleng hitam-putih sebagai pemisah bagian.
+Tema **Nusantara Bali** memakai foto pengantin berbusana adat Bali untuk sampul, pembuka, dan galerinya sendiri (`weddingConfig.bali`), foto interior pura sebagai latar sisi kiri-kanan saat dibuka di tablet/komputer, serta pita poleng hitam-putih sebagai pemisah bagian.
+
+Tema **Sage & Gold** mengisi sisi kiri-kanan layar lebar dengan motif ranting daun tipis, garis emas, dan ornamen yang mengapit kolom isi (`components/HiasanTepi.tsx`). Semuanya CSS + SVG sebaris — tanpa berkas gambar, tanpa pustaka tambahan — dan hanya dirender pada lebar ≥ 1024px, sehingga tampilan HP tidak berubah sama sekali.
 
 Kelima format non-gulir punya tombol **putar otomatis** sendiri (`components/format/PutarOtomatis.tsx`): undangan berpindah panel sendiri dan menggulir isi tiap panel pelan-pelan — pengganti gulir otomatis saat merekam video.
 
