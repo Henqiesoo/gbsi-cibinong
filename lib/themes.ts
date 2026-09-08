@@ -17,7 +17,7 @@
 
 export type NamaTema = "sage" | "dark" | "floral" | "minimal" | "adat" | "royal";
 
-export type GayaOrnamen = "daun" | "deco" | "bunga" | "garis" | "batik" | "mandala";
+export type GayaOrnamen = "daun" | "deco" | "bunga" | "garis" | "bali" | "mandala";
 
 /* Format = cara tamu menyusuri undangan. Ini yang membuat dua tema terasa
    benar-benar beda produk, bukan sekadar beda warna: urutan bagian, cara
@@ -248,12 +248,12 @@ const minimal: Tema = {
 };
 
 // ---------------------------------------------------------------------
-// 5. Nusantara — cokelat tanah, kuning kunyit, motif batik
+// 5. Nusantara Bali — cokelat tanah, kuning emas, candi bentar & poleng
 // ---------------------------------------------------------------------
 const adat: Tema = {
-  nama: "Nusantara",
-  deskripsi: "Cokelat tanah, kuning kunyit, dan motif batik — bernuansa adat",
-  ornamen: "batik",
+  nama: "Nusantara Bali",
+  deskripsi: "Candi bentar, penjor, dan kain poleng — nuansa budaya Bali",
+  ornamen: "bali",
   format: "lipat",
   token: {
     "--ivory-50": "250 245 235",
@@ -281,9 +281,9 @@ const adat: Tema = {
     "--font-display": "var(--font-marcellus)",
     "--font-script": "var(--font-pinyon)",
     "--font-body": "var(--font-jakarta)",
-    // Motif garis miring berulang menyerupai kain lurik
+    // Kotak-kotak halus menyerupai kain poleng, dengan bayang pahatan batu
     "--tekstur":
-      "repeating-linear-gradient(45deg, rgb(206 165 66 / 0.07) 0 2px, transparent 2px 14px), repeating-linear-gradient(-45deg, rgb(108 60 24 / 0.05) 0 2px, transparent 2px 14px)",
+      "repeating-linear-gradient(90deg, rgb(33 26 20 / 0.045) 0 11px, transparent 11px 22px), repeating-linear-gradient(0deg, rgb(33 26 20 / 0.045) 0 11px, transparent 11px 22px), radial-gradient(120% 40% at 50% 0%, rgb(206 165 66 / 0.14), transparent 62%)",
     "--r-md": "0.5rem",
     "--r-lg": "0.75rem",
     "--r-foto": "9999px",

@@ -10,7 +10,7 @@ Website undangan pernikahan digital: **Next.js 14 (App Router) + Tailwind CSS + 
 | 2 | **Dark Luxury** | [buka](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/?tema=dark) | **Panel geser** — satu bagian satu layar, digeser ke samping | Hitam & emas, kapital Cinzel, ornamen art deco |
 | 3 | **Floral Watercolor** | [buka](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/?tema=floral) | **Buku dibalik** — halaman dibalik satu per satu | Blush & mawar, Playfair + Great Vibes, foto bulat, sapuan cat air |
 | 4 | **Minimalis Modern** | [buka](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/?tema=minimal) | **Menu aplikasi** — lima menu di bawah layar | Putih–hitam, Jost geometris, sudut tegas, garis polos |
-| 5 | **Nusantara** | [buka](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/?tema=adat) | **Lipatan** — bagian terlipat, terbuka saat disentuh | Cokelat soga & kunyit, Marcellus, motif batik, ornamen kawung |
+| 5 | **Nusantara Bali** | [buka](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/?tema=adat) | **Lipatan** — bagian terlipat, terbuka saat disentuh | Cokelat soga & kunyit, Marcellus, candi bentar & kain poleng |
 | 6 | **Royal Red** | [buka](https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/?tema=royal) | **Adegan berjalan** — 13 adegan berganti sendiri seperti video | Marun & emas, Cinzel + Pinyon, lengkung gerbang pelaminan |
 
 Tema dipilih lewat parameter `?tema=` di URL mana pun, termasuk link undangan personal — mis. `https://gbsi-cibinong-git-claude-digital-wedding-invit-e04395-henqiesoo.vercel.app/invite/rudi-hartono?tema=royal`.
@@ -41,6 +41,7 @@ Contoh undangan personal per tamu:
 | **Ucapan & doa** | Kirim pesan + daftar realtime dari tabel `ucapan` |
 | **Amplop digital** | Rekening dengan tombol salin, QRIS, alamat kirim hadiah |
 | **Musik latar** | Balada piano orisinal, dengan tombol putar/berhenti mengambang |
+| **Galeri satu sumber** | Daftar foto ada di `lib/wedding-config.ts` — menggantinya mengganti galeri di keenam tema sekaligus |
 | **Putar otomatis** | Tombol khusus untuk merekam video undangan tanpa menyentuh layar — menggulir sendiri di format gulir, berpindah panel sendiri di format lain |
 | **Panel admin** | `/admin` berpassword: statistik, rekap RSVP, tambah/ubah/hapus tamu, export CSV |
 
@@ -54,7 +55,7 @@ Sebuah tema di sini bukan sekadar ganti warna. Setiap tema di [`lib/themes.ts`](
 | Pasangan font | `--font-display`, `--font-script`, `--font-body` | Cormorant vs Cinzel vs Jost |
 | Bahasa bentuk | `--r-md`, `--r-lg`, `--r-foto` | Sudut membulat vs tegas; foto bulat vs **lengkung gerbang** |
 | Tekstur latar | `--tekstur` | Sapuan cat air, kilau emas, motif batik |
-| Gaya ornamen | field `ornamen` | Daun · art deco · bunga · garis · kawung · gerbang |
+| Gaya ornamen | field `ornamen` | Daun · art deco · bunga · garis · jepun Bali · gerbang |
 | **Format halaman** | field `format` | Cara tamu menyusuri undangan — lihat di bawah |
 
 #### Enam tema, enam format halaman
@@ -67,7 +68,7 @@ Yang paling membedakan satu tema dari tema lain bukan warnanya, melainkan **cara
 | `geser` | Dark Luxury | Digeser ke samping, satu bagian satu layar penuh, ada titik penanda & panah | Galeri dimajukan ke urutan kedua — suasana dijual lebih dulu |
 | `buku` | Floral Watercolor | Halaman dibalik dengan tombol, ada animasi balik halaman & garis lipat | Urutan buku acara: kenalan → kisah → acara → ucapan → konfirmasi |
 | `tab` | Minimalis Modern | Menu tetap di bawah layar, isi berganti seketika tanpa animasi | Diringkas jadi **lima menu**; mempelai & kisah menyatu ke Beranda, amplop menyatu ke RSVP |
-| `lipat` | Nusantara | Seluruh isi tersimpan dalam lipatan bernomor, terbuka saat disentuh | Halaman jadi pendek: pembuka + tujuh lipatan + penutup |
+| `lipat` | Nusantara Bali | Seluruh isi tersimpan dalam lipatan bernomor, terbuka saat disentuh | Halaman jadi pendek: pembuka + tujuh lipatan + penutup |
 | `adegan` | Royal Red | Satu layar yang berganti sendiri seperti video | 13 adegan, tiga di antaranya berhenti menunggu tamu |
 
 Kelima format non-gulir punya tombol **putar otomatis** sendiri (`components/format/PutarOtomatis.tsx`): undangan berpindah panel sendiri dan menggulir isi tiap panel pelan-pelan — pengganti gulir otomatis saat merekam video.

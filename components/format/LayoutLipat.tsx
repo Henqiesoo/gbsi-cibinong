@@ -24,11 +24,27 @@ export default function LayoutLipat({
 
   const ke = useCallback((i: number) => {
     setTerbuka(i);
-    // Bawa lipatan yang dibuka ke bagian atas layar
-    requestAnimationFrame(() => {
+
+    // Bawa lipatan yang dibuka ke bagian atas layar. Dilakukan dua kali:
+    // tinggi lipatan masih beranimasi selama 700 ms, dan lipatan yang tadi
+    // terbuka ikut menutup — keduanya menggeser posisi akhir. Tanpa koreksi
+    // kedua, lipatan pertama tampak pas tetapi lipatan berikutnya berhenti
+    // di posisi yang salah karena diukur sebelum tata letak selesai.
+    const bawaKeAtas = () =>
       kepalaLipatRef.current[i]?.scrollIntoView({ behavior: "smooth", block: "start" });
-    });
+    requestAnimationFrame(bawaKeAtas);
+    window.setTimeout(bawaKeAtas, 780);
   }, []);
+
+  // Menyentuh kepala lipatan: yang tertutup dibuka lalu dibawa ke atas layar,
+  // yang sedang terbuka ditutup tanpa menggeser layar.
+  const sentuh = useCallback(
+    (i: number, sedangBuka: boolean) => {
+      if (sedangBuka) setTerbuka(-1);
+      else ke(i);
+    },
+    [ke]
+  );
 
   const wadahAktif = useCallback(() => isiRef.current[terbuka] ?? null, [terbuka]);
 
@@ -45,7 +61,7 @@ export default function LayoutLipat({
                 ref={(el) => {
                   kepalaLipatRef.current[i] = el;
                 }}
-                onClick={() => setTerbuka(buka ? -1 : i)}
+                onClick={() => sentuh(i, buka)}
                 aria-expanded={buka}
                 /* Ruang di kanan disisakan untuk tombol musik & putar
                    otomatis yang mengambang di pojok kanan atas layar. */

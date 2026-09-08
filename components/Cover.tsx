@@ -3,6 +3,8 @@
 import { useEffect } from "react";
 import { weddingConfig } from "@/lib/wedding-config";
 import Ornament from "@/components/Ornament";
+import ArtBali from "@/components/nusantara/ArtBali";
+import { useTema } from "@/components/TemaProvider";
 
 type Props = {
   guestName: string | null;
@@ -12,6 +14,9 @@ type Props = {
 
 export default function Cover({ guestName, opened, onOpen }: Props) {
   const { groom, bride } = weddingConfig.couple;
+  // Tema Nusantara membuka dengan gerbang candi bentar, bukan foto —
+  // supaya nuansa Bali-nya terlihat sejak layar pertama.
+  const tema = useTema();
 
   // Kunci scroll selama cover masih menutupi layar
   useEffect(() => {
@@ -27,14 +32,25 @@ export default function Cover({ guestName, opened, onOpen }: Props) {
         opened ? "pointer-events-none -translate-y-full opacity-0" : "translate-y-0 opacity-100"
       }`}
     >
-      {/* Foto latar + gradasi gelap agar teks terbaca */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={weddingConfig.coverPhoto}
-        alt=""
-        className="absolute inset-0 h-full w-full animate-slow-zoom object-cover object-[center_30%]"
+      {/* Latar + gradasi gelap agar teks terbaca */}
+      {tema === "adat" ? (
+        <ArtBali className="animate-slow-zoom" />
+      ) : (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={weddingConfig.coverPhoto}
+          alt=""
+          className="absolute inset-0 h-full w-full animate-slow-zoom object-cover object-[center_30%]"
+        />
+      )}
+      <div
+        className={`absolute inset-0 bg-gradient-to-b ${
+          // Gambar candi bentar perlu tirai yang lebih tipis daripada foto
+          tema === "adat"
+            ? "from-sage-900/45 via-sage-900/20 to-sage-900/85"
+            : "from-sage-900/75 via-sage-900/55 to-sage-900/90"
+        }`}
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-sage-900/75 via-sage-900/55 to-sage-900/90" />
 
       <div className="relative flex h-full flex-col items-center justify-center px-7 text-center text-cream-50">
         <p className="eyebrow !text-gold-300">The Wedding Of</p>

@@ -19,6 +19,7 @@ import LayoutGeser from "@/components/format/LayoutGeser";
 import LayoutBuku from "@/components/format/LayoutBuku";
 import LayoutTab from "@/components/format/LayoutTab";
 import LayoutLipat from "@/components/format/LayoutLipat";
+import KepalaBali from "@/components/nusantara/KepalaBali";
 import { IKON, type Bagian } from "@/components/format/tipe";
 import { TemaProvider } from "@/components/TemaProvider";
 import { TEMA, type NamaTema } from "@/lib/themes";
@@ -47,12 +48,18 @@ export default function Invitation({
 
   // Potongan isi yang sama untuk semua format — yang berbeda hanyalah
   // bagaimana potongan ini dikelompokkan dan disusuri.
-  const beranda = (
-    <>
-      <Hero />
-      <Countdown />
-    </>
-  );
+  // Tema Nusantara memakai pembuka bergaya Bali (candi bentar, penjor,
+  // kain poleng) menggantikan Hero — supaya "Nusantara"-nya benar-benar
+  // terlihat, bukan hanya terasa dari warna cokelat-kunyitnya.
+  const beranda =
+    tema === "adat" ? (
+      <KepalaBali />
+    ) : (
+      <>
+        <Hero />
+        <Countdown />
+      </>
+    );
   const mempelai = <CoupleSection />;
   const kisah = <LoveStory />;
   const acara = <EventDetails />;

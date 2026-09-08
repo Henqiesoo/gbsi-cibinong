@@ -59,17 +59,24 @@ const bentuk: Record<GayaOrnamen, React.ReactNode> = {
     </>
   ),
 
-  // Motif kawung/tumpal berulang — nuansa batik
-  batik: (
+  // Bunga jepun (kamboja) di antara pahatan belah ketupat — nuansa Bali
+  bali: (
     <>
-      <path d="M4 14h56M140 14h56" stroke="currentColor" strokeWidth="0.9" strokeLinecap="round" opacity="0.6" />
-      {[70, 100, 130].map((x) => (
+      <path d="M4 14h52M144 14h52" stroke="currentColor" strokeWidth="0.9" strokeLinecap="round" opacity="0.6" />
+      {[68, 132].map((x) => (
         <g key={x}>
-          <path d={`M${x} 4l7 10-7 10-7-10z`} fill="none" stroke="currentColor" strokeWidth="1.1" />
-          <circle cx={x} cy="14" r="2.4" fill="currentColor" />
+          <path d={`M${x} 5l6 9-6 9-6-9z`} fill="none" stroke="currentColor" strokeWidth="1.1" />
+          <circle cx={x} cy="14" r="2" fill="currentColor" />
         </g>
       ))}
-      <path d="M64 14h4M132 14h4" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" />
+      {/* Bunga jepun berkelopak lima */}
+      <g transform="translate(100 14)">
+        {[0, 72, 144, 216, 288].map((sudut) => (
+          <ellipse key={sudut} rx="3.1" ry="6" cy="-4.2" fill="currentColor" opacity="0.9" transform={`rotate(${sudut})`} />
+        ))}
+        <circle r="2.4" fill="rgb(255 255 255 / 0.9)" />
+      </g>
+      <path d="M80 14h6M114 14h6" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" />
     </>
   ),
 

@@ -83,13 +83,19 @@ export const weddingConfig = {
     },
   ],
 
+  // Galeri dipakai bersama oleh keenam tema — mengganti daftar ini
+  // otomatis mengganti galeri di semua tema sekaligus.
   gallery: [
-    { src: "/photos/couple-bench.jpg", alt: "Jonny & Veren di taman" },
-    { src: "/photos/cafe-both.jpg", alt: "Pertemuan di kedai kopi" },
-    { src: "/photos/veren.jpg", alt: "Veren" },
-    { src: "/photos/jonny.jpg", alt: "Jonny" },
-    { src: "/photos/bench-wide.jpg", alt: "Senja di bawah lampu taman" },
-    { src: "/photos/cafe-detail.jpg", alt: "Suasana kedai kopi" },
+    { src: "/photos/g-pemberkatan-bangku.jpg", alt: "Setelah pemberkatan di depan gereja" },
+    { src: "/photos/g-prewedding-studio.jpg", alt: "Prewedding busana tradisional" },
+    { src: "/photos/g-bangku-mawar-putih.jpg", alt: "Di bangku berhias mawar putih" },
+    { src: "/photos/g-pelukan-bangku.jpg", alt: "Momen hangat seusai pemberkatan" },
+    { src: "/photos/g-jalan-berdua.jpg", alt: "Berjalan berdua sambil bergandengan" },
+    { src: "/photos/g-lorong-taman.jpg", alt: "Menyusuri lorong taman berbunga" },
+    { src: "/photos/g-halaman-batu.jpg", alt: "Halaman berbatu di sore hari" },
+    { src: "/photos/g-tawa-bangku.jpg", alt: "Tertawa bersama di bangku taman" },
+    { src: "/photos/g-tawa-malu.jpg", alt: "Tawa kecil di bawah lampu gantung" },
+    { src: "/photos/g-tawa-bangku-lebar.jpg", alt: "Senja di pelataran batu" },
   ],
 
   gift: {

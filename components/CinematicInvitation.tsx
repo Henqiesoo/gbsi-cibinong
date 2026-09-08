@@ -326,7 +326,9 @@ export default function CinematicInvitation({
           judul="Momen Kami"
           anak={
             <div className="mx-auto grid max-w-sm grid-cols-3 gap-2">
-              {weddingConfig.gallery.map((f, i) => (
+              {/* Sembilan foto saja — adegan ini tidak digulir, jadi
+                  kisinya dibuat pas 3x3 dalam satu layar */}
+              {weddingConfig.gallery.slice(0, 9).map((f, i) => (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   key={f.src}
